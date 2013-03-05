@@ -1,0 +1,37 @@
+<Alloy>
+	<Tab id="tab1" title="Tab 1" icon="KS_nav_views.png">
+	    <Window id='child_window' title="My Duppp" class="container">
+	    	<View id="pullingContainer" class="pullingContainer">
+	    		<View class="border" />
+	    		<View id="arrow" class="arrow" />
+	    		<Label id="statusLabel" class="statusLabel" text="Pull to reload"/>
+	    		<Label id="lastUpdatedLabel" class="lastUpdatedLabel" text="Last update :"/>
+	    		<ActivityIndicator id="actInd" class="actInd" message="Loading..."/>
+	    	</View>
+			<TableView id="table" allowsSelection="false"/>
+			<LeftNavButton>
+	        	<Button id="menuBtn" class="menuBtn" onClick="openMenu" />
+			</LeftNavButton>
+			<View id="menu" class="menu" visible="false" layout="vertical">
+				<Button id="menutest" class="test" title="test du caca" />
+				<Button class="test" title="ss du caca" />
+			</View>
+			<RightNavButton>
+	        	<Button id="cameraBtn" class="cameraBtn" onClick="openTooltip" />
+			</RightNavButton>
+			<View id="tooltipContainer" class="tooltipContainer" visible="false">
+				<View id="tooltip" class="tooltip" layout="vertical">
+					<Label class="modalTitle" text="Let's go !"/>
+					<Label class="modalDesc" text="You want to capture in which events ?"/>
+					<Button class="eventBtn" onClick="openCamera" title="Event 1" />
+					<Label class="modalDesc" text="or"/>
+					<Button class="createEvent" onClick="createEvent" title="Create Event" />
+				</View>
+			</View>
+			<View id="overlay" visible="false" layout="vertical">
+				<Button id="capture" class="eventBtn" title="Event 1" />
+				<Button class="createEvent" onClick="createEvent" title="Create Event" />
+			</View>
+		</Window>
+	</Tab>
+</Alloy>

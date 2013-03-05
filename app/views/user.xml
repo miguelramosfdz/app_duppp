@@ -1,0 +1,20 @@
+<Alloy>
+	<Window id="userLogin">
+		<ScrollView id="loginView" class="container">
+			<View class="content" layout="vertical">
+				<TextField id="loginUsr" class="loginUsr field" value="Username" autocapitalization="Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE" />
+				<TextField id="loginPwd" class="loginPwd field" passwordMask="true" value="Password" autocapitalization="Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE" />
+				<Button id="loginBtn" class="submit" onClick="login" title="Login" />
+			</View>
+		</ScrollView>
+		<ScrollView id="registerView" class="container" visible="false">
+			<View class="content" layout="vertical">
+				<TextField id="usernameField" class="field" value="Username" autocapitalization="Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE" />
+				<TextField id="emailField" class="field" value="Email" keyboardType="Titanium.UI.KEYBOARD_EMAIL" autocapitalization="Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE" />
+				<TextField id="passwordRegisterField" class="field" passwordMask="true" value="Password" autocapitalization="Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE" />
+				<Button id="registerBtn" class="submit" onClick="register" title="Register" />
+			</View>
+		</ScrollView>
+		<Button id="switchBtn" class="switchBtn" onClick="switchViews" title="Get Duppp Account" />
+	</Window>
+</Alloy>

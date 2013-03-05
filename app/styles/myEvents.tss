@@ -1,0 +1,145 @@
+".container": {
+	barImage: "bgNavBar.png",
+	barColor: "#3B9DCB",
+	backgroundColor: "#F3F3F3",
+	tabBarHidden: true
+}
+
+".menu": {
+	backgroundColor: "#3B9DCB",
+	width: 205,
+	height: Titanium.UI.SIZE,
+	top: 0,
+	left: 3
+}
+
+".menuBtn": {
+	backgroundImage: "menuBtn@2x.png",
+	top: 5,
+	width: 43.5,
+	height: 32.5
+}
+
+".cameraBtn": {
+	backgroundImage: "photoBtn@2x.png",
+	top: 5,
+	width: 43.5,
+	height: 32.5
+}
+
+".tooltip": {
+	backgroundColor: "#0C2754",
+	width: 265,
+	height: Titanium.UI.SIZE,
+	opacity: 1,
+	zIndex: 2
+}
+
+".tooltipContainer": {
+	backgroundColor: "#000",
+	width: Titanium.UI.FILL,
+	height: Titanium.UI.FILL,
+	opacity: 0.8,
+	zIndex: 1
+}
+
+".modalTitle": {
+	font:{fontSize:18,fontWeight:"bold", fontFamily:'Helvetica Neue'},
+	color: "white",
+	textAlign: Titanium.UI.TEXT_ALIGNMENT_CENTER,
+	top: 15
+}
+
+".modalDesc": {
+	font:{fontSize:16, fontFamily:'Helvetica Neue'},
+	color: "white",
+	textAlign: Titanium.UI.TEXT_ALIGNMENT_CENTER,
+	right: 30,
+	left: 30
+}
+
+".eventBtn": {
+	backgroundImage: "none",
+	backgroundGradient: {
+        type: 'linear',
+        startPoint: { x: '50%', y: '0%' },
+        endPoint: { x: '50%', y: '100%' },
+        colors: [ { color: '#0C99FC', offset: 0.0}, { color: '#0E76FC', offset: 1.0 } ],
+  	},
+  	width: Titanium.UI.FILL,
+  	font:{fontSize:18, fontWeight:"bold", fontFamily:'Helvetica Neue'},
+  	right: 10,
+  	bottom: 10,
+  	top: 10,
+  	height: 40,
+  	borderRadius: 5,
+  	left: 10,
+  	shadowColor:"#999",
+	shadowOffset:{x:0,y:1}
+}
+
+".createEvent": {
+	backgroundImage: "none",
+	font:{fontSize:18, fontWeight:"bold", fontFamily:'Helvetica Neue'},
+	backgroundColor: "#79CF19",
+	width: Titanium.UI.FILL,
+	right: 10,
+	bottom: 10,
+	top: 10,
+  	height: 40,
+  	borderRadius: 5,
+  	left: 10,
+  	shadowColor:"#999",
+	shadowOffset:{x:0,y:1}
+}
+
+".border": {
+	backgroundColor: "#576c89",
+	height:2,
+	bottom:0
+}
+".arrow": {
+	backgroundImage: "whiteArrow.png",
+	width:23,
+	height:60,
+	bottom:10,
+	left:20
+}
+
+".statusLabel": {
+	left:55,
+	width:200,
+	bottom:30,
+	height:"auto",
+	color:"#576c89",
+	textAlign:"center",
+	font:{fontSize:13,fontWeight:"bold"},
+	shadowColor:"#999",
+	shadowOffset:{x:0,y:1}
+}
+
+".pullingContainer": {
+	backgroundColor: "#e2e7ed",
+	width: 320,
+	height: 60
+}
+
+".lastUpdatedLabel": {
+	left:55,
+	width:200,
+	bottom:15,
+	height:"auto",
+	color:"#576c89",
+	textAlign:"center",
+	font:{fontSize:12},
+	shadowColor:"#999",
+	shadowOffset:{x:0,y:1}
+}
+
+".actInd": {
+	style: Titanium.UI.iPhone.ActivityIndicatorStyle.DARK,
+	left:20,
+	bottom:13,
+	width:30,
+	height:30
+}

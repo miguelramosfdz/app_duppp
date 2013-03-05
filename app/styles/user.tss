@@ -1,0 +1,60 @@
+".container": {
+	backgroundImage: "bg.png",
+	contentWidth: 'auto', 
+    contentHeight: 'auto', 
+    top: 0, 
+    showVerticalScrollIndicator: true, 
+    showHorizontalScrollIndicator: true 
+}
+
+".content": {
+	top: 180
+}
+
+".label": {
+	font: {fontSize: 14, fontWeight: "bold"},
+	left: 10,
+	top: 10,
+	width: 300
+}
+
+".field": {
+	clearOnEdit: true,
+	height: 40,
+	backgroundColor: "#fff",
+	top: 10,
+	left: 10,
+	width: 300,
+	paddingLeft: 10,
+	font: {fontSize: 14},
+	borderWidth: 1,
+	borderColor: '#bbb',
+	borderRadius: 5
+}
+
+".submit": {
+	top: 10,
+	backgroundGradient: {
+        type: 'linear',
+        startPoint: { x: '50%', y: '0%' },
+        endPoint: { x: '50%', y: '100%' },
+        colors: [ { color: '#6a7179', offset: 0.0}, { color: '#2d3032', offset: 1.0 } ],
+   },
+	backgroundImage: "none",
+	backgroundFocusedColor: "#2d3032",
+	font: {fontSize: 20, fontWeight: "bold"},
+	color: "white",
+	height: 40,
+	width: 300,
+	borderRadius: 5
+}
+".switchBtn": {
+	bottom: 10,
+	width: 140,
+	height: 25,
+	font: {fontSize: 13},
+	color: "white",
+	backgroundImage: "none",
+	backgroundColor: "#b7544b",
+	borderRadius: 13
+}

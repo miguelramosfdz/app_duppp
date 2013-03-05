@@ -1,0 +1,19 @@
+<Alloy>
+	<TableViewRow id="row" class="row">
+		<View id="cropView" class="cropView">
+			<ImageView id="f_image" class="image" />
+		</View>
+		<View id="actions" class="caption" layout="horizontal">
+			<ImageView image="love.png" class="actionBtn love" />
+			<ImageView image="comment.png" class="actionBtn comment" />
+			<ImageView image="share.png" class="actionBtn share" />
+			<ImageView image="extra.png" class="actionBtn extra" />
+		</View>
+		<View id="caption" class="caption">
+			<ImageView id="author_image" class="author_image" />
+			<Label id="author" class="author" />
+			<Label id="f_title" class="title" />
+			<Label id="f_date" class="date" />
+		</View>
+	</TableViewRow>
+</Alloy>

@@ -1,0 +1,14 @@
+".container": {
+	backgroundColor: "#F3F3F3"
+}
+
+".profilePage": {
+	barImage: "bgNavBar.png",
+	barColor: "#3B9DCB",
+	backgroundColor: "#F3F3F3"
+}
+
+".author_image": {
+	height: 106.6,
+	width: 106.6
+} 

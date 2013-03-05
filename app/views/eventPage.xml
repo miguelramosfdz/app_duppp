@@ -1,0 +1,14 @@
+<Alloy>
+	<Window id="eventPage" class="eventPage">
+		<ScrollView id="scrollView" class="container" layout='vertical'>
+			<VideoPlayer id="videoPlayer" ns="Ti.Media" top="0" url="http://stage.duppp.com/medias/eventmedia/1471/videofinale.mp4" height="300" width="320" backgroundColor="black" autoplay="false" />
+			<ImageView id="author_image" class="author_image" />
+			<Label id="author" class="author" text="author"/>
+			<Label id="f_title" class="title" text="title"/>
+			<Label id="f_date" class="date" text="date"/>
+		</ScrollView>
+		<LeftNavButton>
+        	<Button id="menuBtn" class="menuBtn" onClick="close" title="Close" />
+		</LeftNavButton>
+	</Window>
+</Alloy>

@@ -1,0 +1,14 @@
+<Alloy>
+	<Window id="profilePage" class="profilePage">
+		<View id="printView" class="container" layout='horizontal'>
+			<ImageView id="author_image" class="author_image" />
+			<Label id="author" class="author" text="author"/>
+		</View>
+		<View id="editView" class="container-2" layout='vertical' visible="false">
+			<Label id="test" class="test" text="test"/>
+		</View>
+		<LeftNavButton>
+        	<Button id="menuBtn" class="menuBtn" onClick="close" title="Close" />
+		</LeftNavButton>
+	</Window>
+</Alloy>
