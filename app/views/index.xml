@@ -1,5 +1,6 @@
 <Alloy>
 	<TabGroup id="indexView">
+		<Require src="activity" />
         <Require src="myEvents" />
     </TabGroup>
     <Require src="user" />

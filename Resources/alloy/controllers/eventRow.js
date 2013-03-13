@@ -16,6 +16,7 @@ function Controller() {
     $.__views.row.add($.__views.cropView);
     $.__views.f_image = Ti.UI.createImageView({
         top: "-230",
+        width: Titanium.UI.FILL,
         id: "f_image"
     });
     $.__views.cropView.add($.__views.f_image);
@@ -28,38 +29,38 @@ function Controller() {
         layout: "horizontal"
     });
     $.__views.row.add($.__views.actions);
-    $.__views.__alloyId1 = Ti.UI.createImageView({
+    $.__views.__alloyId2 = Ti.UI.createImageView({
         top: 20,
         right: 20,
         height: 30,
         image: "love.png",
-        id: "__alloyId1"
-    });
-    $.__views.actions.add($.__views.__alloyId1);
-    $.__views.__alloyId2 = Ti.UI.createImageView({
-        top: 20,
-        right: 20,
-        width: 32.5,
-        image: "comment.png",
         id: "__alloyId2"
     });
     $.__views.actions.add($.__views.__alloyId2);
     $.__views.__alloyId3 = Ti.UI.createImageView({
         top: 20,
         right: 20,
-        height: 30,
-        image: "share.png",
+        width: 32.5,
+        image: "comment.png",
         id: "__alloyId3"
     });
     $.__views.actions.add($.__views.__alloyId3);
     $.__views.__alloyId4 = Ti.UI.createImageView({
+        top: 20,
+        right: 20,
+        height: 30,
+        image: "share.png",
+        id: "__alloyId4"
+    });
+    $.__views.actions.add($.__views.__alloyId4);
+    $.__views.__alloyId5 = Ti.UI.createImageView({
         top: 30,
         right: 20,
         width: 36,
         image: "extra.png",
-        id: "__alloyId4"
+        id: "__alloyId5"
     });
-    $.__views.actions.add($.__views.__alloyId4);
+    $.__views.actions.add($.__views.__alloyId5);
     $.__views.caption = Ti.UI.createView({
         backgroundImage: "infoBg.png",
         width: "100%",
@@ -115,35 +116,29 @@ function Controller() {
     var args = arguments[0] || {};
     $.f_title.text = args.node_title;
     $.f_date.text = moment.unix(args.node_created).fromNow();
+    $.author_image.image = args.avatar;
+    $.author.text = args.user_name;
     $.f_image.image = "http://stage.duppp.com/medias/eventmedia/1471/preview.jpg";
-    var xhr2 = Titanium.Network.createHTTPClient(), getUser = REST_PATH + "/user/user/" + args.uid + ".json";
-    xhr2.open("GET", getUser);
-    xhr2.send();
-    xhr2.onload = function() {
-        var userStatusCode = xhr2.status;
-        if (userStatusCode == 200) {
-            var userResponse = xhr2.responseText, user = JSON.parse(userResponse);
-            $.author.text = "@" + user.name;
-            $.author_image.image = SITE_PATH + "/sites/default/files/styles/profil/public/pictures/" + user.picture.filename;
-        }
-    };
-    $.author_image.addEventListener("touchstart", function(e) {
+    $.author_image.addEventListener("touchend", function(e) {
         var win = Alloy.createController("profilePage", args.uid).getView();
         win.title = $.author.text;
         win.open({
             modal: !0
         });
     });
-    $.f_image.addEventListener("touchstart", function(e) {
-        var win = Alloy.createController("eventPage", args.nid).getView();
+    $.f_image.addEventListener("touchend", function(e) {
+        var node = {
+            nid: args.nid,
+            user_name: args.user_name,
+            avatar: args.avatar
+        }, win = Alloy.createController("eventPage", node).getView();
         win.title = "Event";
         win.open({
-            modal: !0,
-            transition: Titanium.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT
+            modal: !0
         });
     });
     var current_row;
-    $.row.addEventListener("swipe", function(e) {
+    $.caption.addEventListener("swipe", function(e) {
         !current_row || $.caption.animate({
             right: 0,
             duration: 300

@@ -25,28 +25,58 @@ function Controller() {
         height: "300",
         width: "320",
         backgroundColor: "black",
-        autoplay: "false"
+        autoplay: "true"
     });
     $.__views.scrollView.add($.__views.videoPlayer);
+    $.__views.caption = Ti.UI.createView({
+        backgroundImage: "infoBgPage@2x.png",
+        width: "100%",
+        height: 80,
+        top: -10,
+        id: "caption"
+    });
+    $.__views.scrollView.add($.__views.caption);
     $.__views.author_image = Ti.UI.createImageView({
+        borderRadius: 5,
+        left: 5,
+        top: 15,
+        width: 60,
+        height: 60,
         id: "author_image"
     });
-    $.__views.scrollView.add($.__views.author_image);
+    $.__views.caption.add($.__views.author_image);
     $.__views.author = Ti.UI.createLabel({
-        id: "author",
-        text: "author"
+        font: {
+            fontSize: 14,
+            font: "HelveticaNeue",
+            fontWeight: "semibold"
+        },
+        top: 13,
+        left: 70,
+        id: "author"
     });
-    $.__views.scrollView.add($.__views.author);
+    $.__views.caption.add($.__views.author);
     $.__views.f_title = Ti.UI.createLabel({
-        id: "f_title",
-        text: "title"
+        width: 250,
+        font: {
+            fontSize: 12,
+            font: "HelveticaNeue"
+        },
+        top: 32,
+        left: 70,
+        id: "f_title"
     });
-    $.__views.scrollView.add($.__views.f_title);
+    $.__views.caption.add($.__views.f_title);
     $.__views.f_date = Ti.UI.createLabel({
-        id: "f_date",
-        text: "date"
+        font: {
+            fontSize: 11,
+            font: "HelveticaNeue"
+        },
+        bottom: 2,
+        right: 5,
+        id: "f_date"
     });
-    $.__views.scrollView.add($.__views.f_date);
+    $.__views.caption.add($.__views.f_date);
     $.__views.menuBtn = Ti.UI.createButton({
         id: "menuBtn",
         title: "Close"
@@ -56,7 +86,10 @@ function Controller() {
     exports.destroy = function() {};
     _.extend($, $.__views);
     Ti.include("config.js");
-    var args = arguments[0] || {}, xhr2 = Titanium.Network.createHTTPClient(), getNode = REST_PATH + "/events/node/" + args + ".json";
+    var args = arguments[0] || {};
+    $.author.text = args.user_name;
+    $.author_image.image = args.avatar;
+    var xhr2 = Titanium.Network.createHTTPClient(), getNode = REST_PATH + "/events/node/" + args.nid + ".json";
     xhr2.open("GET", getNode);
     xhr2.send();
     xhr2.onload = function() {
@@ -65,7 +98,6 @@ function Controller() {
             var nodeResponse = xhr2.responseText, node = JSON.parse(nodeResponse);
             $.f_date.text = moment.unix(node.created).fromNow();
             $.f_title.text = node.title;
-            $.author_image.image = SITE_PATH + "/sites/default/files/styles/profil/public/pictures/" + user.picture.filename;
         }
     };
     __defers["$.__views.menuBtn!click!close"] && $.__views.menuBtn.addEventListener("click", close);

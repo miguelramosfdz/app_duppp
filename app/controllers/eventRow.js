@@ -2,31 +2,17 @@ Ti.include('config.js');
 
 var args = arguments[0] || {};
 
+// Map fields with correct values.
 $.f_title.text = args.node_title;
-$.f_date.text = moment.unix(args.node_created).fromNow();;
+$.f_date.text = moment.unix(args.node_created).fromNow();
+$.author_image.image = args.avatar;
+$.author.text = args.user_name
+
+// Put dynamic the image.
 $.f_image.image = 'http://stage.duppp.com/medias/eventmedia/1471/preview.jpg';
 
-// Create another connection to get the user
-var xhr2 = Titanium.Network.createHTTPClient();
-
-var getUser = REST_PATH + '/user/user/' + args.uid + '.json';
-
-xhr2.open("GET", getUser);
-xhr2.send();
-
-xhr2.onload = function() {
-	var userStatusCode = xhr2.status;
-
-	if(userStatusCode == 200) {
-		var userResponse = xhr2.responseText;
-		var user = JSON.parse(userResponse);
-		
-		$.author.text = '@' + user.name;
-		$.author_image.image = SITE_PATH + '/sites/default/files/styles/profil/public/pictures/'+user.picture.filename;
-	}
-}
-
-$.author_image.addEventListener('touchstart', function(e){
+// Open profile page when you click on the avatar image.
+$.author_image.addEventListener('touchend', function(e){
 	var win = Alloy.createController('profilePage', args.uid).getView();
 	win.title = $.author.text;
 	
@@ -35,19 +21,26 @@ $.author_image.addEventListener('touchstart', function(e){
 	})
 });
 
-$.f_image.addEventListener('touchstart', function(e){
-	var win = Alloy.createController('eventPage', args.nid).getView();
+// Open event page when you click on thumbnail.
+$.f_image.addEventListener('touchend', function(e){
+  var node = {
+    nid: args.nid,
+    user_name: args.user_name,
+    avatar: args.avatar
+  } 
+  
+	var win = Alloy.createController('eventPage', node).getView();
 	win.title = "Event";
 	
 	win.open({
 		modal: true,
-		transition : Titanium.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT
 	})
 });
 
 var current_row; 
 
-$.row.addEventListener('swipe', function(e) {
+// Let appear the actions caption.
+$.caption.addEventListener('swipe', function(e) {
 
 	if (!!current_row) {
 		$.caption.animate({

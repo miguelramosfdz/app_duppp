@@ -1,40 +1,4 @@
 function Controller() {
-    function beginReloading() {
-        setTimeout(endReloading, 2000);
-    }
-    function endReloading() {
-        var xhr2 = Ti.Network.createHTTPClient({
-            onload: function(e) {
-                data = [];
-                json = JSON.parse(this.responseText);
-                json.forEach(function(event) {
-                    if (event.closed === "1") {
-                        var newsItem = Alloy.createController("eventRow", event).getView();
-                        data.push(newsItem);
-                    }
-                });
-                Titanium.API.fireEvent("refreshEvents");
-                $.table.setData(data);
-            },
-            onerror: function(e) {
-                Ti.API.debug(e.error);
-                alert("error");
-            },
-            timeout: 5000
-        });
-        xhr2.open("GET", url);
-        xhr2.send();
-        $.table.setContentInsets({
-            top: 0
-        }, {
-            animated: !0
-        });
-        reloading = !1;
-        $.lastUpdatedLabel.text = "Last Updated:";
-        $.statusLabel.text = "Pull down to refresh...";
-        $.actInd.hide();
-        $.arrow.show();
-    }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     $model = arguments[0] ? arguments[0].$model : null;
     var $ = this, exports = {}, __defers = {};
@@ -44,7 +8,7 @@ function Controller() {
         backgroundColor: "#F3F3F3",
         tabBarHidden: !0,
         id: "child_window",
-        title: "My Events"
+        title: "Activity"
     });
     $.__views.pullingContainer = Ti.UI.createView({
         backgroundColor: "#e2e7ed",
@@ -53,13 +17,13 @@ function Controller() {
         id: "pullingContainer"
     });
     $.__views.child_window.add($.__views.pullingContainer);
-    $.__views.__alloyId10 = Ti.UI.createView({
+    $.__views.__alloyId0 = Ti.UI.createView({
         backgroundColor: "#576c89",
         height: 2,
         bottom: 0,
-        id: "__alloyId10"
+        id: "__alloyId0"
     });
-    $.__views.pullingContainer.add($.__views.__alloyId10);
+    $.__views.pullingContainer.add($.__views.__alloyId0);
     $.__views.arrow = Ti.UI.createView({
         backgroundImage: "whiteArrow.png",
         width: 23,
@@ -123,18 +87,18 @@ function Controller() {
         allowsSelection: "false"
     });
     $.__views.child_window.add($.__views.table);
-    $.__views.tab2 = Ti.UI.createTab({
+    $.__views.tab1 = Ti.UI.createTab({
         window: $.__views.child_window,
-        id: "tab2",
-        title: "Tab 2",
+        id: "tab1",
+        title: "Tab 1",
         icon: "KS_nav_views.png"
     });
-    $.addTopLevelView($.__views.tab2);
+    $.addTopLevelView($.__views.tab1);
     exports.destroy = function() {};
     _.extend($, $.__views);
     Ti.include("config.js");
     Ti.include("tiajax.js");
-    var data = [], dataOpen = [], current_row, url = REST_PATH + "/events/views/my_events.json?display_id=services_1", pulling = !1, reloading = !1, ajax = Titanium.Network.ajax, nav = Alloy.createController("navActions");
+    var data = [], url = REST_PATH + "/events/views/activity.json?display_id=services_1", ajax = Titanium.Network.ajax, nav = Alloy.createController("navActions");
     $.child_window.setLeftNavButton(nav.getView("menuBtn"));
     $.child_window.setRightNavButton(nav.getView("cameraBtn"));
     $.child_window.add(nav.getView("tooltipContainer"));
@@ -159,35 +123,6 @@ function Controller() {
     $.child_window.addEventListener("open", function() {
         xhr.open("GET", url);
         xhr.send();
-    });
-    $.table.headerPullView = $.pullingContainer;
-    $.table.addEventListener("scroll", function(e) {
-        var offset = e.contentOffset.y;
-        if (offset <= -65 && !pulling && !reloading) {
-            var t = Ti.UI.create2DMatrix();
-            t = t.rotate(-180);
-            pulling = !0;
-            $.statusLabel.text = "Release to refresh...";
-        } else if (pulling && offset > -65 && offset < 0 && !reloading) {
-            pulling = !1;
-            var t = Ti.UI.create2DMatrix();
-            $.statusLabel.text = "Pull down to refresh...";
-        }
-    });
-    $.table.addEventListener("dragend", function(e) {
-        if (pulling && !reloading) {
-            reloading = !0;
-            pulling = !1;
-            $.arrow.hide();
-            $.actInd.show();
-            $.statusLabel.text = "Reloading...";
-            $.table.setContentInsets({
-                top: 60
-            }, {
-                animated: !0
-            });
-            beginReloading();
-        }
     });
     _.extend($, exports);
 }

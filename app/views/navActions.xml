@@ -1,0 +1,21 @@
+<Alloy>
+	<View>
+	   	<Button id="menuBtn" class="menuBtn" onClick="openMenu" />
+		<View id="menu" class="menu" visible="false" layout="vertical">
+			<Button class="menuItem" index="0" title="Home" onClick="menuChild" />
+			<Button class="menuItem" index="1" title="My Events" onClick="menuChild" />
+			<Button class="menuItem" index="2" title="Explore" onClick="menuChild" />
+			<Button class="menuItem" index="3" title="Log out" onClick="menuChild" />
+		</View>
+	   	<Button id="cameraBtn" class="cameraBtn" onClick="openTooltip" />
+		<View id="tooltipContainer" class="tooltipContainer" visible="false">
+			<View id="tooltip" class="tooltip" layout="vertical">
+				<Label class="modalTitle" text="Let's go !"/>
+				<Label class="modalDesc" text="You want to capture in which events ?"/>
+				<ScrollView id="tableOpen" layout="vertical" />
+				<Label class="modalDesc" text="or"/>
+				<Button class="createEvent" onClick="createEvent" title="Create Event" />
+			</View>
+		</View>
+	</View>
+</Alloy>

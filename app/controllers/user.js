@@ -92,6 +92,7 @@ function login(e){
 	}
 };
 
+// Choose betwee Login and Register page.
 function switchViews() {
 	if ($.switchBtn.title === "Login") {
 		$.registerView.hide();

@@ -7,21 +7,26 @@ function close() {
 }
 
 // Create another connection to get the user
-var xhr2 = Titanium.Network.createHTTPClient();
+var url = REST_PATH + '/user/user/' + args + '.json';
 
-var getUser = REST_PATH + '/user/user/' + args + '.json';
+var xhr = Ti.Network.createHTTPClient({
+    onload: function(e) {
+      json = JSON.parse(this.responseText);
+      
+      // map fields with correct values.
+      $.author_image.image = SITE_PATH + '/sites/default/files/styles/profil/public/pictures/'+user.avatar.filename;
+      $.author.text = '@'+user.name;
+    },
+    onerror: function(e) {
+        Ti.API.debug(e.error);
+        alert('error');
+    },
+    timeout: 5000
+});
+ 
 
-xhr2.open("GET", getUser);
-xhr2.send();
+$.profilePage.addEventListener('open', function() {
+  xhr.open("GET", url);
+  xhr.send();
+});
 
-xhr2.onload = function() {
-	var userStatusCode = xhr2.status;
-
-	if(userStatusCode == 200) {
-		var userResponse = xhr2.responseText;
-		var user = JSON.parse(userResponse);
-
-		$.author_image.image = SITE_PATH + '/sites/default/files/styles/profil/public/pictures/'+user.picture.filename;
-		$.author.text = '@'+user.name;
-	}
-}

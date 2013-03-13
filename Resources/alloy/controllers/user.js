@@ -62,12 +62,12 @@ function Controller() {
         id: "loginView"
     });
     $.__views.userLogin.add($.__views.loginView);
-    $.__views.__alloyId19 = Ti.UI.createView({
+    $.__views.__alloyId20 = Ti.UI.createView({
         top: 180,
         layout: "vertical",
-        id: "__alloyId19"
+        id: "__alloyId20"
     });
-    $.__views.loginView.add($.__views.__alloyId19);
+    $.__views.loginView.add($.__views.__alloyId20);
     $.__views.loginUsr = Ti.UI.createTextField({
         clearOnEdit: !0,
         height: 40,
@@ -86,7 +86,7 @@ function Controller() {
         value: "Username",
         autocapitalization: Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE
     });
-    $.__views.__alloyId19.add($.__views.loginUsr);
+    $.__views.__alloyId20.add($.__views.loginUsr);
     $.__views.loginPwd = Ti.UI.createTextField({
         clearOnEdit: !0,
         height: 40,
@@ -106,7 +106,7 @@ function Controller() {
         value: "Password",
         autocapitalization: Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE
     });
-    $.__views.__alloyId19.add($.__views.loginPwd);
+    $.__views.__alloyId20.add($.__views.loginPwd);
     $.__views.loginBtn = Ti.UI.createButton({
         top: 10,
         backgroundGradient: {
@@ -140,7 +140,7 @@ function Controller() {
         id: "loginBtn",
         title: "Login"
     });
-    $.__views.__alloyId19.add($.__views.loginBtn);
+    $.__views.__alloyId20.add($.__views.loginBtn);
     login ? $.__views.loginBtn.addEventListener("click", login) : __defers["$.__views.loginBtn!click!login"] = !0;
     $.__views.registerView = Ti.UI.createScrollView({
         backgroundImage: "bg.png",
@@ -153,12 +153,12 @@ function Controller() {
         visible: "false"
     });
     $.__views.userLogin.add($.__views.registerView);
-    $.__views.__alloyId20 = Ti.UI.createView({
+    $.__views.__alloyId21 = Ti.UI.createView({
         top: 180,
         layout: "vertical",
-        id: "__alloyId20"
+        id: "__alloyId21"
     });
-    $.__views.registerView.add($.__views.__alloyId20);
+    $.__views.registerView.add($.__views.__alloyId21);
     $.__views.usernameField = Ti.UI.createTextField({
         clearOnEdit: !0,
         height: 40,
@@ -177,7 +177,7 @@ function Controller() {
         value: "Username",
         autocapitalization: Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE
     });
-    $.__views.__alloyId20.add($.__views.usernameField);
+    $.__views.__alloyId21.add($.__views.usernameField);
     $.__views.emailField = Ti.UI.createTextField({
         clearOnEdit: !0,
         height: 40,
@@ -197,7 +197,7 @@ function Controller() {
         keyboardType: Titanium.UI.KEYBOARD_EMAIL,
         autocapitalization: Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE
     });
-    $.__views.__alloyId20.add($.__views.emailField);
+    $.__views.__alloyId21.add($.__views.emailField);
     $.__views.passwordRegisterField = Ti.UI.createTextField({
         clearOnEdit: !0,
         height: 40,
@@ -217,7 +217,7 @@ function Controller() {
         value: "Password",
         autocapitalization: Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE
     });
-    $.__views.__alloyId20.add($.__views.passwordRegisterField);
+    $.__views.__alloyId21.add($.__views.passwordRegisterField);
     $.__views.registerBtn = Ti.UI.createButton({
         top: 10,
         backgroundGradient: {
@@ -251,7 +251,7 @@ function Controller() {
         id: "registerBtn",
         title: "Register"
     });
-    $.__views.__alloyId20.add($.__views.registerBtn);
+    $.__views.__alloyId21.add($.__views.registerBtn);
     register ? $.__views.registerBtn.addEventListener("click", register) : __defers["$.__views.registerBtn!click!register"] = !0;
     $.__views.switchBtn = Ti.UI.createButton({
         bottom: 10,

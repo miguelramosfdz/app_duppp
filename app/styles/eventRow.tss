@@ -35,7 +35,8 @@
 	left: 0
 }
 ".image": {
-	top: '-230'
+	top: '-230',
+	width: Titanium.UI.FILL
 }
 
 ".actionBtn": {

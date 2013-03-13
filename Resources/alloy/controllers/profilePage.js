@@ -25,21 +25,9 @@ function Controller() {
     });
     $.__views.printView.add($.__views.author_image);
     $.__views.author = Ti.UI.createLabel({
-        id: "author",
-        text: "author"
+        id: "author"
     });
     $.__views.printView.add($.__views.author);
-    $.__views.editView = Ti.UI.createView({
-        id: "editView",
-        layout: "vertical",
-        visible: "false"
-    });
-    $.__views.profilePage.add($.__views.editView);
-    $.__views.test = Ti.UI.createLabel({
-        id: "test",
-        text: "test"
-    });
-    $.__views.editView.add($.__views.test);
     $.__views.menuBtn = Ti.UI.createButton({
         id: "menuBtn",
         title: "Close"
@@ -49,17 +37,22 @@ function Controller() {
     exports.destroy = function() {};
     _.extend($, $.__views);
     Ti.include("config.js");
-    var args = arguments[0] || {}, xhr2 = Titanium.Network.createHTTPClient(), getUser = REST_PATH + "/user/user/" + args + ".json";
-    xhr2.open("GET", getUser);
-    xhr2.send();
-    xhr2.onload = function() {
-        var userStatusCode = xhr2.status;
-        if (userStatusCode == 200) {
-            var userResponse = xhr2.responseText, user = JSON.parse(userResponse);
-            $.author_image.image = SITE_PATH + "/sites/default/files/styles/profil/public/pictures/" + user.picture.filename;
+    var args = arguments[0] || {}, url = REST_PATH + "/user/user/" + args + ".json", xhr = Ti.Network.createHTTPClient({
+        onload: function(e) {
+            json = JSON.parse(this.responseText);
+            $.author_image.image = SITE_PATH + "/sites/default/files/styles/profil/public/pictures/" + user.avatar.filename;
             $.author.text = "@" + user.name;
-        }
-    };
+        },
+        onerror: function(e) {
+            Ti.API.debug(e.error);
+            alert("error");
+        },
+        timeout: 5000
+    });
+    $.profilePage.addEventListener("open", function() {
+        xhr.open("GET", url);
+        xhr.send();
+    });
     __defers["$.__views.menuBtn!click!close"] && $.__views.menuBtn.addEventListener("click", close);
     _.extend($, exports);
 }

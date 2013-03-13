@@ -7,10 +7,9 @@
 
 ".menu": {
 	backgroundColor: "#3B9DCB",
-	width: 205,
+	width: Titanium.UI.FILL,
 	height: Titanium.UI.SIZE,
-	top: 0,
-	left: 3
+	top: 0
 }
 
 ".menuBtn": {
@@ -33,6 +32,12 @@
 	height: Titanium.UI.SIZE,
 	opacity: 1,
 	zIndex: 2
+}
+
+"#tableOpen": {
+  height: 80,
+  width: "100%",
+  contentWidth: '100%'
 }
 
 ".tooltipContainer": {
@@ -58,26 +63,6 @@
 	left: 30
 }
 
-".eventBtn": {
-	backgroundImage: "none",
-	backgroundGradient: {
-        type: 'linear',
-        startPoint: { x: '50%', y: '0%' },
-        endPoint: { x: '50%', y: '100%' },
-        colors: [ { color: '#0C99FC', offset: 0.0}, { color: '#0E76FC', offset: 1.0 } ],
-  	},
-  	width: Titanium.UI.FILL,
-  	font:{fontSize:18, fontWeight:"bold", fontFamily:'Helvetica Neue'},
-  	right: 10,
-  	bottom: 10,
-  	top: 10,
-  	height: 40,
-  	borderRadius: 5,
-  	left: 10,
-  	shadowColor:"#999",
-	shadowOffset:{x:0,y:1}
-}
-
 ".createEvent": {
 	backgroundImage: "none",
 	font:{fontSize:18, fontWeight:"bold", fontFamily:'Helvetica Neue'},
@@ -91,6 +76,11 @@
   	left: 10,
   	shadowColor:"#999",
 	shadowOffset:{x:0,y:1}
+}
+
+".menuItem": {
+	color: "white",
+	height: 40
 }
 
 ".border": {
