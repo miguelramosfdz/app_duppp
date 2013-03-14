@@ -5,20 +5,18 @@ var args = arguments[0] || {};
 // Map fields with correct values.
 $.f_title.text = args.node_title;
 $.f_date.text = moment.unix(args.node_created).fromNow();
-$.author_image.image = args.avatar;
+$.author_image.image = (args.avatar.length == 0) ? '' : args.avatar;
 $.author.text = args.user_name
-
-// Put dynamic the image.
-$.f_image.image = 'http://stage.duppp.com/medias/eventmedia/1471/preview.jpg';
+$.f_image.image = (args.video_thumbnail.length == 0) ? '' : args.video_thumbnail;
 
 // Open profile page when you click on the avatar image.
 $.author_image.addEventListener('touchend', function(e){
 	var win = Alloy.createController('profilePage', args.uid).getView();
 	win.title = $.author.text;
-	
-	win.open({
-		modal: true
-	})
+
+  Titanium.API.fireEvent('openAsNavigation', {
+    window: win
+  });
 });
 
 // Open event page when you click on thumbnail.
@@ -26,15 +24,16 @@ $.f_image.addEventListener('touchend', function(e){
   var node = {
     nid: args.nid,
     user_name: args.user_name,
-    avatar: args.avatar
-  } 
+    avatar: (args.avatar.length == 0) ? '' : args.avatar,
+    video: (args.video.length == 0) ? '' : args.video
+  }
   
 	var win = Alloy.createController('eventPage', node).getView();
 	win.title = "Event";
-	
-	win.open({
-		modal: true,
-	})
+
+  Titanium.API.fireEvent('openAsNavigation', {
+    window: win
+  });
 });
 
 var current_row; 

@@ -14,7 +14,7 @@
 				<Label class="modalDesc" text="You want to capture in which events ?"/>
 				<ScrollView id="tableOpen" layout="vertical" />
 				<Label class="modalDesc" text="or"/>
-				<Button class="createEvent" onClick="createEvent" title="Create Event" />
+				<Button class="createEvent" onClick="openEventForm" title="Create Event" />
 			</View>
 		</View>
 	</View>

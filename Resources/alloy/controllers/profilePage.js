@@ -28,12 +28,6 @@ function Controller() {
         id: "author"
     });
     $.__views.printView.add($.__views.author);
-    $.__views.menuBtn = Ti.UI.createButton({
-        id: "menuBtn",
-        title: "Close"
-    });
-    close ? $.__views.menuBtn.addEventListener("click", close) : __defers["$.__views.menuBtn!click!close"] = !0;
-    $.__views.profilePage.leftNavButton = $.__views.menuBtn;
     exports.destroy = function() {};
     _.extend($, $.__views);
     Ti.include("config.js");
@@ -53,7 +47,6 @@ function Controller() {
         xhr.open("GET", url);
         xhr.send();
     });
-    __defers["$.__views.menuBtn!click!close"] && $.__views.menuBtn.addEventListener("click", close);
     _.extend($, exports);
 }
 

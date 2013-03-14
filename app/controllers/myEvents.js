@@ -7,11 +7,11 @@ Ti.include("tiajax.js");
 
 var data = [],
     dataOpen = [],
-  	current_row,
-  	url = REST_PATH + "/events/views/my_events.json?display_id=services_1",
-  	pulling = false,
-  	reloading = false,
-  	ajax = Titanium.Network.ajax,
+    current_row,
+    url = REST_PATH + "/events/my_events.json",
+    pulling = false,
+    reloading = false,
+    ajax = Titanium.Network.ajax,
     nav = Alloy.createController('navActions');
 
 // Map fields with correct values.

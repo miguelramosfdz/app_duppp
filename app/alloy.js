@@ -11,4 +11,4 @@
 // Alloy.Globals.someGlobalFunction = function(){};
 
 Ti.include('moment.min.js');
-Titanium.UI.iPhone.StatusBar.OPAQUE_BLACK;
+//Titanium.UI.iPhone.StatusBar.OPAQUE_BLACK;

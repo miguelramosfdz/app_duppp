@@ -1,0 +1,10 @@
+".container": {
+  barImage: "bgNavBar.png",
+  barColor: "#3B9DCB",
+  backgroundColor: "#F3F3F3",
+  tabBarHidden: true
+}
+
+"#textArea": {
+  clearOnEdit: true
+}

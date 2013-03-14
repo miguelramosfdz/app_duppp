@@ -53,13 +53,13 @@ function Controller() {
         id: "pullingContainer"
     });
     $.__views.child_window.add($.__views.pullingContainer);
-    $.__views.__alloyId10 = Ti.UI.createView({
+    $.__views.__alloyId9 = Ti.UI.createView({
         backgroundColor: "#576c89",
         height: 2,
         bottom: 0,
-        id: "__alloyId10"
+        id: "__alloyId9"
     });
-    $.__views.pullingContainer.add($.__views.__alloyId10);
+    $.__views.pullingContainer.add($.__views.__alloyId9);
     $.__views.arrow = Ti.UI.createView({
         backgroundImage: "whiteArrow.png",
         width: 23,
@@ -126,15 +126,14 @@ function Controller() {
     $.__views.tab2 = Ti.UI.createTab({
         window: $.__views.child_window,
         id: "tab2",
-        title: "Tab 2",
-        icon: "KS_nav_views.png"
+        title: "Tab 2"
     });
     $.addTopLevelView($.__views.tab2);
     exports.destroy = function() {};
     _.extend($, $.__views);
     Ti.include("config.js");
     Ti.include("tiajax.js");
-    var data = [], dataOpen = [], current_row, url = REST_PATH + "/events/views/my_events.json?display_id=services_1", pulling = !1, reloading = !1, ajax = Titanium.Network.ajax, nav = Alloy.createController("navActions");
+    var data = [], dataOpen = [], current_row, url = REST_PATH + "/events/my_events.json", pulling = !1, reloading = !1, ajax = Titanium.Network.ajax, nav = Alloy.createController("navActions");
     $.child_window.setLeftNavButton(nav.getView("menuBtn"));
     $.child_window.setRightNavButton(nav.getView("cameraBtn"));
     $.child_window.add(nav.getView("tooltipContainer"));

@@ -97,8 +97,7 @@ function Controller() {
     exports.destroy = function() {};
     _.extend($, $.__views);
     Ti.include("config.js");
-    Ti.include("tiajax.js");
-    var data = [], url = REST_PATH + "/events/views/activity.json?display_id=services_1", ajax = Titanium.Network.ajax, nav = Alloy.createController("navActions");
+    var data = [], url = REST_PATH + "/events/activity.json", nav = Alloy.createController("navActions");
     $.child_window.setLeftNavButton(nav.getView("menuBtn"));
     $.child_window.setRightNavButton(nav.getView("cameraBtn"));
     $.child_window.add(nav.getView("tooltipContainer"));

@@ -29,38 +29,38 @@ function Controller() {
         layout: "horizontal"
     });
     $.__views.row.add($.__views.actions);
-    $.__views.__alloyId2 = Ti.UI.createImageView({
+    $.__views.__alloyId1 = Ti.UI.createImageView({
         top: 20,
         right: 20,
         height: 30,
         image: "love.png",
+        id: "__alloyId1"
+    });
+    $.__views.actions.add($.__views.__alloyId1);
+    $.__views.__alloyId2 = Ti.UI.createImageView({
+        top: 20,
+        right: 20,
+        width: 32.5,
+        image: "comment.png",
         id: "__alloyId2"
     });
     $.__views.actions.add($.__views.__alloyId2);
     $.__views.__alloyId3 = Ti.UI.createImageView({
         top: 20,
         right: 20,
-        width: 32.5,
-        image: "comment.png",
+        height: 30,
+        image: "share.png",
         id: "__alloyId3"
     });
     $.__views.actions.add($.__views.__alloyId3);
     $.__views.__alloyId4 = Ti.UI.createImageView({
-        top: 20,
-        right: 20,
-        height: 30,
-        image: "share.png",
-        id: "__alloyId4"
-    });
-    $.__views.actions.add($.__views.__alloyId4);
-    $.__views.__alloyId5 = Ti.UI.createImageView({
         top: 30,
         right: 20,
         width: 36,
         image: "extra.png",
-        id: "__alloyId5"
+        id: "__alloyId4"
     });
-    $.__views.actions.add($.__views.__alloyId5);
+    $.__views.actions.add($.__views.__alloyId4);
     $.__views.caption = Ti.UI.createView({
         backgroundImage: "infoBg.png",
         width: "100%",
@@ -116,25 +116,26 @@ function Controller() {
     var args = arguments[0] || {};
     $.f_title.text = args.node_title;
     $.f_date.text = moment.unix(args.node_created).fromNow();
-    $.author_image.image = args.avatar;
+    $.author_image.image = args.avatar.length == 0 ? "" : args.avatar;
     $.author.text = args.user_name;
-    $.f_image.image = "http://stage.duppp.com/medias/eventmedia/1471/preview.jpg";
+    $.f_image.image = args.video_thumbnail.length == 0 ? "" : args.video_thumbnail;
     $.author_image.addEventListener("touchend", function(e) {
         var win = Alloy.createController("profilePage", args.uid).getView();
         win.title = $.author.text;
-        win.open({
-            modal: !0
+        Titanium.API.fireEvent("openAsNavigation", {
+            window: win
         });
     });
     $.f_image.addEventListener("touchend", function(e) {
         var node = {
             nid: args.nid,
             user_name: args.user_name,
-            avatar: args.avatar
+            avatar: args.avatar.length == 0 ? "" : args.avatar,
+            video: args.video.length == 0 ? "" : args.video
         }, win = Alloy.createController("eventPage", node).getView();
         win.title = "Event";
-        win.open({
-            modal: !0
+        Titanium.API.fireEvent("openAsNavigation", {
+            window: win
         });
     });
     var current_row;

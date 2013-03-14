@@ -5,23 +5,23 @@ function Controller() {
     $.__views.indexView = Ti.UI.createTabGroup({
         id: "indexView"
     });
-    $.__views.__alloyId7 = Alloy.createController("activity", {
+    $.__views.__alloyId6 = Alloy.createController("activity", {
+        id: "__alloyId6"
+    });
+    $.__views.indexView.addTab($.__views.__alloyId6.getViewEx({
+        recurse: !0
+    }));
+    $.__views.__alloyId7 = Alloy.createController("myEvents", {
         id: "__alloyId7"
     });
     $.__views.indexView.addTab($.__views.__alloyId7.getViewEx({
         recurse: !0
     }));
-    $.__views.__alloyId8 = Alloy.createController("myEvents", {
+    $.addTopLevelView($.__views.indexView);
+    $.__views.__alloyId8 = Alloy.createController("user", {
         id: "__alloyId8"
     });
-    $.__views.indexView.addTab($.__views.__alloyId8.getViewEx({
-        recurse: !0
-    }));
-    $.addTopLevelView($.__views.indexView);
-    $.__views.__alloyId9 = Alloy.createController("user", {
-        id: "__alloyId9"
-    });
-    $.addTopLevelView($.__views.__alloyId9);
+    $.addTopLevelView($.__views.__alloyId8);
     exports.destroy = function() {};
     _.extend($, $.__views);
     var userLoginWin = Alloy.createController("user").getView();
@@ -33,6 +33,9 @@ function Controller() {
     });
     Titanium.API.addEventListener("clickMenuChild", function(data) {
         $.indexView.tabs[data.tab_id].active = !0;
+    });
+    Titanium.API.addEventListener("openAsNavigation", function(data) {
+        $.indexView.activeTab.open(data.window);
     });
     _.extend($, exports);
 }

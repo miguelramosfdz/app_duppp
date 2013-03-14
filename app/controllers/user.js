@@ -25,7 +25,7 @@ function login(e){
     // Create an object to hold the data entered in the form
 	var user = {
 		username: $.loginUsr.value,
-		password: $.loginPwd.value,
+		password: $.loginPwd.value
 	};
 	
 	// Define the url which contains the full url

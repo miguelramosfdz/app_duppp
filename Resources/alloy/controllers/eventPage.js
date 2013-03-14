@@ -1,7 +1,4 @@
 function Controller() {
-    function close() {
-        $.eventPage.close();
-    }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     $model = arguments[0] ? arguments[0].$model : null;
     var $ = this, exports = {}, __defers = {};
@@ -21,7 +18,6 @@ function Controller() {
         id: "videoPlayer",
         ns: Ti.Media,
         top: "0",
-        url: "http://stage.duppp.com/medias/eventmedia/1471/videofinale.mp4",
         height: "300",
         width: "320",
         backgroundColor: "black",
@@ -77,30 +73,24 @@ function Controller() {
         id: "f_date"
     });
     $.__views.caption.add($.__views.f_date);
-    $.__views.menuBtn = Ti.UI.createButton({
-        id: "menuBtn",
-        title: "Close"
-    });
-    close ? $.__views.menuBtn.addEventListener("click", close) : __defers["$.__views.menuBtn!click!close"] = !0;
-    $.__views.eventPage.leftNavButton = $.__views.menuBtn;
     exports.destroy = function() {};
     _.extend($, $.__views);
     Ti.include("config.js");
     var args = arguments[0] || {};
     $.author.text = args.user_name;
     $.author_image.image = args.avatar;
-    var xhr2 = Titanium.Network.createHTTPClient(), getNode = REST_PATH + "/events/node/" + args.nid + ".json";
-    xhr2.open("GET", getNode);
-    xhr2.send();
-    xhr2.onload = function() {
-        var userStatusCode = xhr2.status;
+    $.videoPlayer.url = args.video;
+    var xhr = Titanium.Network.createHTTPClient(), getNode = REST_PATH + "/events/node/" + args.nid + ".json";
+    xhr.open("GET", getNode);
+    xhr.send();
+    xhr.onload = function() {
+        var userStatusCode = xhr.status;
         if (userStatusCode == 200) {
-            var nodeResponse = xhr2.responseText, node = JSON.parse(nodeResponse);
+            var nodeResponse = xhr.responseText, node = JSON.parse(nodeResponse);
             $.f_date.text = moment.unix(node.created).fromNow();
             $.f_title.text = node.title;
         }
     };
-    __defers["$.__views.menuBtn!click!close"] && $.__views.menuBtn.addEventListener("click", close);
     _.extend($, exports);
 }
 

@@ -1,0 +1,11 @@
+<Alloy>
+	<Window id="eventFormWindow" title="New event" class="container" layout="vertical">
+    <TextArea id="textArea"
+              borderWidth="2" borderColor="#bbb" borderRadius="5"
+              color="#888" textAlign="left" value="I am a textarea"
+              top="60" width="300" height="70" />
+
+    <Button id="button" onClick="createEvent" title="Create"
+            top="10" width="100" height="50" />
+	</Window>
+</Alloy>

@@ -1,56 +1,13 @@
 function Controller() {
-    function createEvent() {
-        if (Titanium.App.Properties.getInt("userUid")) {
-            var user = {
-                uid: Titanium.App.Properties.getInt("userUid"),
-                sessid: Titanium.App.Properties.getString("userSessionId"),
-                session_name: Titanium.App.Properties.getString("userSessionName"),
-                name: Titanium.App.Properties.getString("userName")
-            }, node = {
-                node: {
-                    title: "Test",
-                    type: "event",
-                    group_access: {
-                        und: "0"
-                    },
-                    field_event_date: {
-                        und: [ {
-                            show_todate: "1",
-                            value: {
-                                month: "2",
-                                day: "14",
-                                year: "2013",
-                                hour: "20",
-                                minute: "15"
-                            },
-                            value2: {
-                                month: "2",
-                                day: "15",
-                                year: "2013",
-                                hour: "20",
-                                minute: "15"
-                            }
-                        } ]
-                    },
-                    uid: user.uid,
-                    status: 1
-                }
-            }, url = REST_PATH + "/events/node";
-            ajax({
-                type: "POST",
-                url: url,
-                data: JSON.stringify(node),
-                dataType: "json",
-                contentType: "application/json",
-                success: function(data) {
-                    alert("Content created with id " + data.nid);
-                }
-            });
-        } else alert("You need to login first");
-    }
     function removeAllChildren(viewObject) {
         var children = viewObject.children.slice(0);
         for (var i = 0; i < children.length; ++i) viewObject.remove(children[i]);
+    }
+    function openEventForm() {
+        var eventForm = Alloy.createController("eventForm").getView();
+        Titanium.API.fireEvent("openAsNavigation", {
+            window: eventForm
+        });
     }
     function menuChild(e) {
         $.menu.hide();
@@ -59,6 +16,8 @@ function Controller() {
         });
     }
     function openTooltip() {
+        xhr.open("GET", url);
+        xhr.send();
         $.tooltipContainer.show();
     }
     function openMenu() {
@@ -91,7 +50,7 @@ function Controller() {
         layout: "vertical"
     });
     $.__views.navActions.add($.__views.menu);
-    $.__views.__alloyId11 = Ti.UI.createButton({
+    $.__views.__alloyId10 = Ti.UI.createButton({
         backgroundImage: "none",
         height: 40,
         width: Titanium.UI.FILL,
@@ -102,6 +61,21 @@ function Controller() {
         },
         index: "0",
         title: "Home",
+        id: "__alloyId10"
+    });
+    $.__views.menu.add($.__views.__alloyId10);
+    menuChild ? $.__views.__alloyId10.addEventListener("click", menuChild) : __defers["$.__views.__alloyId10!click!menuChild"] = !0;
+    $.__views.__alloyId11 = Ti.UI.createButton({
+        backgroundImage: "none",
+        height: 40,
+        width: Titanium.UI.FILL,
+        font: {
+            fontSize: 18,
+            fontWeight: "bold",
+            fontFamily: "Helvetica Neue"
+        },
+        index: "1",
+        title: "My Events",
         id: "__alloyId11"
     });
     $.__views.menu.add($.__views.__alloyId11);
@@ -115,8 +89,8 @@ function Controller() {
             fontWeight: "bold",
             fontFamily: "Helvetica Neue"
         },
-        index: "1",
-        title: "My Events",
+        index: "2",
+        title: "Explore",
         id: "__alloyId12"
     });
     $.__views.menu.add($.__views.__alloyId12);
@@ -130,27 +104,12 @@ function Controller() {
             fontWeight: "bold",
             fontFamily: "Helvetica Neue"
         },
-        index: "2",
-        title: "Explore",
+        index: "3",
+        title: "Log out",
         id: "__alloyId13"
     });
     $.__views.menu.add($.__views.__alloyId13);
     menuChild ? $.__views.__alloyId13.addEventListener("click", menuChild) : __defers["$.__views.__alloyId13!click!menuChild"] = !0;
-    $.__views.__alloyId14 = Ti.UI.createButton({
-        backgroundImage: "none",
-        height: 40,
-        width: Titanium.UI.FILL,
-        font: {
-            fontSize: 18,
-            fontWeight: "bold",
-            fontFamily: "Helvetica Neue"
-        },
-        index: "3",
-        title: "Log out",
-        id: "__alloyId14"
-    });
-    $.__views.menu.add($.__views.__alloyId14);
-    menuChild ? $.__views.__alloyId14.addEventListener("click", menuChild) : __defers["$.__views.__alloyId14!click!menuChild"] = !0;
     $.__views.cameraBtn = Ti.UI.createButton({
         backgroundImage: "photoBtn@2x.png",
         top: 5,
@@ -181,7 +140,7 @@ function Controller() {
         layout: "vertical"
     });
     $.__views.tooltipContainer.add($.__views.tooltip);
-    $.__views.__alloyId15 = Ti.UI.createLabel({
+    $.__views.__alloyId14 = Ti.UI.createLabel({
         font: {
             fontSize: 18,
             fontWeight: "bold",
@@ -191,10 +150,10 @@ function Controller() {
         textAlign: Titanium.UI.TEXT_ALIGNMENT_CENTER,
         top: 15,
         text: "Let's go !",
-        id: "__alloyId15"
+        id: "__alloyId14"
     });
-    $.__views.tooltip.add($.__views.__alloyId15);
-    $.__views.__alloyId16 = Ti.UI.createLabel({
+    $.__views.tooltip.add($.__views.__alloyId14);
+    $.__views.__alloyId15 = Ti.UI.createLabel({
         font: {
             fontSize: 16,
             fontFamily: "Helvetica Neue"
@@ -204,9 +163,9 @@ function Controller() {
         right: 30,
         left: 30,
         text: "You want to capture in which events ?",
-        id: "__alloyId16"
+        id: "__alloyId15"
     });
-    $.__views.tooltip.add($.__views.__alloyId16);
+    $.__views.tooltip.add($.__views.__alloyId15);
     $.__views.tableOpen = Ti.UI.createScrollView({
         height: 80,
         width: "100%",
@@ -215,7 +174,7 @@ function Controller() {
         layout: "vertical"
     });
     $.__views.tooltip.add($.__views.tableOpen);
-    $.__views.__alloyId17 = Ti.UI.createLabel({
+    $.__views.__alloyId16 = Ti.UI.createLabel({
         font: {
             fontSize: 16,
             fontFamily: "Helvetica Neue"
@@ -225,10 +184,10 @@ function Controller() {
         right: 30,
         left: 30,
         text: "or",
-        id: "__alloyId17"
+        id: "__alloyId16"
     });
-    $.__views.tooltip.add($.__views.__alloyId17);
-    $.__views.__alloyId18 = Ti.UI.createButton({
+    $.__views.tooltip.add($.__views.__alloyId16);
+    $.__views.__alloyId17 = Ti.UI.createButton({
         backgroundImage: "none",
         font: {
             fontSize: 18,
@@ -249,16 +208,17 @@ function Controller() {
             y: 1
         },
         title: "Create Event",
-        id: "__alloyId18"
+        id: "__alloyId17"
     });
-    $.__views.tooltip.add($.__views.__alloyId18);
-    createEvent ? $.__views.__alloyId18.addEventListener("click", createEvent) : __defers["$.__views.__alloyId18!click!createEvent"] = !0;
+    $.__views.tooltip.add($.__views.__alloyId17);
+    openEventForm ? $.__views.__alloyId17.addEventListener("click", openEventForm) : __defers["$.__views.__alloyId17!click!openEventForm"] = !0;
     exports.destroy = function() {};
     _.extend($, $.__views);
     Ti.include("config.js");
     Ti.include("tiajax.js");
-    var data = [], current_row, url = REST_PATH + "/events/views/my_events.json?display_id=services_1", pulling = !1, reloading = !1, ajax = Titanium.Network.ajax, xhr2 = Ti.Network.createHTTPClient({
+    var data = [], url = REST_PATH + "/events/my_events.json", ajax = Titanium.Network.ajax, xhr = Ti.Network.createHTTPClient({
         onload: function(e) {
+            removeAllChildren($.tableOpen);
             json = JSON.parse(this.responseText);
             json.forEach(function(event) {
                 if (event.closed === "1") return;
@@ -310,22 +270,16 @@ function Controller() {
         },
         timeout: 5000
     });
-    xhr2.open("GET", url);
-    xhr2.send();
-    Titanium.API.addEventListener("refreshEvent", function(data) {
-        xhr2.open("GET", url);
-        xhr2.send();
-    });
     $.tooltipContainer.addEventListener("click", function(e) {
         $.tooltipContainer.hide();
     });
     __defers["$.__views.menuBtn!click!openMenu"] && $.__views.menuBtn.addEventListener("click", openMenu);
+    __defers["$.__views.__alloyId10!click!menuChild"] && $.__views.__alloyId10.addEventListener("click", menuChild);
     __defers["$.__views.__alloyId11!click!menuChild"] && $.__views.__alloyId11.addEventListener("click", menuChild);
     __defers["$.__views.__alloyId12!click!menuChild"] && $.__views.__alloyId12.addEventListener("click", menuChild);
     __defers["$.__views.__alloyId13!click!menuChild"] && $.__views.__alloyId13.addEventListener("click", menuChild);
-    __defers["$.__views.__alloyId14!click!menuChild"] && $.__views.__alloyId14.addEventListener("click", menuChild);
     __defers["$.__views.cameraBtn!click!openTooltip"] && $.__views.cameraBtn.addEventListener("click", openTooltip);
-    __defers["$.__views.__alloyId18!click!createEvent"] && $.__views.__alloyId18.addEventListener("click", createEvent);
+    __defers["$.__views.__alloyId17!click!openEventForm"] && $.__views.__alloyId17.addEventListener("click", openEventForm);
     _.extend($, exports);
 }
 

@@ -5,11 +5,7 @@ var args = arguments[0] || {};
 // Map field with correct values
 $.author.text = args.user_name; 
 $.author_image.image = args.avatar;
-
-// Function to close the window.s
-function close() {
-	$.eventPage.close();
-}
+$.videoPlayer.url = args.video;
 
 // Get the data of the selected event.
 var xhr = Titanium.Network.createHTTPClient();
@@ -27,7 +23,7 @@ xhr.onload = function() {
 		var node = JSON.parse(nodeResponse);
 		
 		// Map fiel with the correct value.
-		$.f_date.text = moment.unix(node.created).fromNow();;
+		$.f_date.text = moment.unix(node.created).fromNow();
 		$.f_title.text = node.title;
 
 	}
