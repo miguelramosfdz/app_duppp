@@ -3,11 +3,11 @@ Ti.include('config.js');
 var args = arguments[0] || {};
 
 // Map fields with correct values.
-$.f_title.text = args.node_title;
-$.f_date.text = moment.unix(args.node_created).fromNow();
-$.author_image.image = (args.avatar.length == 0) ? '' : args.avatar;
-$.author.text = args.user_name
-$.f_image.image = (args.video_thumbnail.length == 0) ? '' : args.video_thumbnail;
+$.f_title.text = args.title;
+$.f_date.text = args.created;
+$.author_image.image = (args.field_avatar.length == 0) ? '' : args.field_avatar;
+$.author.text = args.name;
+$.thumbnail.image = (args.video_thumbnail.length == 0) ? '' : args.video_thumbnail;
 
 // Open profile page when you click on the avatar image.
 $.author_image.addEventListener('touchend', function(e){
@@ -20,14 +20,16 @@ $.author_image.addEventListener('touchend', function(e){
 });
 
 // Open event page when you click on thumbnail.
-$.f_image.addEventListener('touchend', function(e){
+$.thumbnail.addEventListener('touchend', function(e){
   var node = {
     nid: args.nid,
-    user_name: args.user_name,
-    avatar: (args.avatar.length == 0) ? '' : args.avatar,
-    video: (args.video.length == 0) ? '' : args.video
+    title: args.title,
+    created: args.created,
+    user_name: args.name,
+    avatar: (args.field_avatar.length == 0) ? '' : args.field_avatar,
+    video: (args.field_event_video_final.length == 0) ? '' : args.field_event_video_final
   }
-  
+
 	var win = Alloy.createController('eventPage', node).getView();
 	win.title = "Event";
 
@@ -46,7 +48,7 @@ $.caption.addEventListener('swipe', function(e) {
 			right: 0,
 			duration: 300
 		});
-	};
+	}
 
 	current_row = Ti.Platform.osname == 'android' ? this : e.row; // it looks like android does not have the e.row property for this event.
 

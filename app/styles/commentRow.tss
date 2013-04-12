@@ -1,0 +1,20 @@
+".caption": {
+  bottom: 10,
+  height: Titanium.UI.SIZE,
+  textAlign: Titanium.UI.TEXT_ALIGNMENT_LEFT,
+  left: 50,
+  width: Titanium.UI.FILL
+}
+".author": {
+  font: { fontSize: 14, font: "HelveticaNeue", fontWeight: "semibold" },
+  left: 0
+}
+".title": {
+  font: { fontSize: 12, font: "HelveticaNeue" },
+  left: 0,
+  width: 250,
+}
+".date": {
+  font: { fontSize: 11, font: "HelveticaNeue" },
+  right: 10
+}

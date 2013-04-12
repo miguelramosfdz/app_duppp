@@ -1,0 +1,6 @@
+<Alloy>
+  <TableViewRow id="row" class="row" >
+    <Label id="title" class="title" left="10"/>
+    <Button id="button" title="Publish" onClick="close" />
+  </TableViewRow>
+</Alloy>

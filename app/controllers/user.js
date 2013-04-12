@@ -30,7 +30,7 @@ function login(e){
 	
 	// Define the url which contains the full url
 	// in this case, we'll connecting to http://example.com/api/rest/user/login
-	var url = REST_PATH + '/user/user/login';
+	var url = REST_PATH + '/user/login';
 	
 	// Create a connection
 	var xhr = Titanium.Network.createHTTPClient();
@@ -66,7 +66,7 @@ function login(e){
 			// Create another connection to get the user
 			var xhr2 = Titanium.Network.createHTTPClient();
 
-			var getUser = REST_PATH + '/user/user/' + data.user.uid + '.json';
+			var getUser = REST_PATH + '/user/' + data.user.uid + '.json';
 
 			xhr2.open("GET", getUser);
 			xhr2.send();

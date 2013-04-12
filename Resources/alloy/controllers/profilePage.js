@@ -1,7 +1,4 @@
 function Controller() {
-    function close() {
-        $.profilePage.close();
-    }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     $model = arguments[0] ? arguments[0].$model : null;
     var $ = this, exports = {}, __defers = {};
@@ -12,30 +9,27 @@ function Controller() {
         id: "profilePage"
     });
     $.addTopLevelView($.__views.profilePage);
-    $.__views.printView = Ti.UI.createView({
-        backgroundColor: "#F3F3F3",
-        id: "printView",
-        layout: "horizontal"
+    $.__views.scrollView = Ti.UI.createScrollView({
+        id: "scrollView",
+        layout: "vertical"
     });
-    $.__views.profilePage.add($.__views.printView);
-    $.__views.author_image = Ti.UI.createImageView({
-        height: 106.6,
-        width: 106.6,
-        id: "author_image"
+    $.__views.profilePage.add($.__views.scrollView);
+    $.__views.authorImage = Ti.UI.createImageView({
+        id: "authorImage"
     });
-    $.__views.printView.add($.__views.author_image);
+    $.__views.scrollView.add($.__views.authorImage);
     $.__views.author = Ti.UI.createLabel({
         id: "author"
     });
-    $.__views.printView.add($.__views.author);
+    $.__views.scrollView.add($.__views.author);
     exports.destroy = function() {};
     _.extend($, $.__views);
     Ti.include("config.js");
-    var args = arguments[0] || {}, url = REST_PATH + "/user/user/" + args + ".json", xhr = Ti.Network.createHTTPClient({
-        onload: function(e) {
-            json = JSON.parse(this.responseText);
-            $.author_image.image = SITE_PATH + "/sites/default/files/styles/profil/public/pictures/" + user.avatar.filename;
-            $.author.text = "@" + user.name;
+    var args = arguments[0] || {}, url = REST_PATH + "/user/" + args + ".json", xhr = Ti.Network.createHTTPClient({
+        onload: function() {
+            var user = JSON.parse(this.responseText);
+            console.log(user);
+            $.author.text = user.name;
         },
         onerror: function(e) {
             Ti.API.debug(e.error);

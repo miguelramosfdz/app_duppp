@@ -1,7 +1,7 @@
 ".eventPage": {
-	barImage: "bgNavBar.png",
-	barColor: "#3B9DCB",
-	backgroundColor: "#F3F3F3"
+  barImage: "bgNavBar.png",
+  barColor: "#3B9DCB",
+  backgroundColor: "#F3F3F3"
 }
 
 ".caption": {
@@ -33,4 +33,47 @@
   top: 15,
   width: 60,
   height: 60
+}
+
+// Buttons actions.
+"#actionBtns": {
+  top: 10,
+  height: 30,
+}
+".btn": {
+  backgroundImage: "none",
+  borderRadius: 0,
+  color: "white",
+  font:{fontSize:14, fontFamily:'Helvetica Neue'},
+  height: 20,
+  left: 3,
+  right: 3,
+  width: 100,
+}
+".comments": {
+  backgroundColor: "#1193FC",
+}
+".like": {
+  backgroundColor: "#EF5351",
+}
+".extra": {
+  backgroundColor: "#7CCD2F",
+}
+
+"#likeCount": {
+  bottom: 10,
+  color: "#EF5250",
+  font: { fontSize: 15, font: "HelveticaNeue", fontWeight: "bold" },
+  left: 5,
+}
+
+// Comments views
+"#commentCount": {
+  bottom: 10,
+  color: "#0CA7FD",
+  font: { fontSize: 15, font: "HelveticaNeue", fontWeight: "bold" },
+  left: 5,
+}
+'#commentsList': {
+  height: Titanium.UI.SIZE
 }

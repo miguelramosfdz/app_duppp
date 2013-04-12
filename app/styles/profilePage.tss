@@ -1,8 +1,4 @@
-".container": {
-	backgroundColor: "#F3F3F3"
-}
-
-".profilePage": {
+"#profilePage": {
 	barImage: "bgNavBar.png",
 	barColor: "#3B9DCB",
 	backgroundColor: "#F3F3F3"

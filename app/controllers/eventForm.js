@@ -9,9 +9,16 @@ Ti.include("tiajax.js");
 
 var ajax = Titanium.Network.ajax;
 
+$.textArea.addEventListener('focus', function() {
+  $.textArea.value = '';
+});
+
 // Function to create an event
 // @TODO Create the form for event type.
 function createEvent() {
+
+  $.createBtn.enabled = false;
+
   if (Titanium.App.Properties.getInt("userUid")) {
     // Create a user variable to hold some information about the user
     var user = {
@@ -26,6 +33,7 @@ function createEvent() {
       node:{
         title: $.textArea.value,
         type:'event',
+        language: 'und',
         group_access: {
           und: "0"
         },
@@ -48,7 +56,7 @@ function createEvent() {
 
     // Define the url
     // in this case, we'll connecting to http://example.com/api/rest/node
-    var url = REST_PATH + '/events/node';
+    var url = REST_PATH + '/node';
 
     // Use $.ajax to create the node
     ajax({
@@ -59,8 +67,9 @@ function createEvent() {
       contentType: 'application/json',
       // On success do some processing like closing the window and show an alert
       success: function(data) {
-        Titanium.API.fireEvent('refreshEvent');
         $.eventFormWindow.close({animated:true});
+        $.createBtn.enabled = true;
+        Titanium.API.fireEvent('eventCreated');
       }
     });
   }

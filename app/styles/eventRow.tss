@@ -28,17 +28,10 @@
 	width: 60,
 	height: 60
 }
-".cropView": {
-	height: 195,
-	right: 0,
-	width: Titanium.UI.FILL,
-	left: 0
-}
 ".image": {
-	top: '-230',
+	height: 200,
 	width: Titanium.UI.FILL
 }
-
 ".actionBtn": {
 	top: 20,
 	right: 20

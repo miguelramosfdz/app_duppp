@@ -1,11 +1,27 @@
 <Alloy>
 	<Window id="eventFormWindow" title="New event" class="container" layout="vertical">
     <TextArea id="textArea"
-              borderWidth="2" borderColor="#bbb" borderRadius="5"
-              color="#888" textAlign="left" value="I am a textarea"
-              top="60" width="300" height="70" />
-
-    <Button id="button" onClick="createEvent" title="Create"
-            top="10" width="100" height="50" />
+              borderWidth="1" borderColor="#bbb" returnKeyType="Titanium.UI.RETURNKEY_NEXT"
+              color="#888" textAlign="left" value="You have to type the title"
+              top="0" width="Titanium.UI.FILL" height="150" />
+    <ScrollView id="scrollView" class="container" top="0" contentWidth="300" layout='horizontal'>
+      <View>
+        <ImageView class="image" image="http://stage.duppp.com/medias/eventmedia/1521/preview.jpg" />
+      </View>
+      <ImageView class="image" image="http://stage.duppp.com/medias/eventmedia/1523/preview.jpg" />
+      <ImageView class="image" image="http://stage.duppp.com/medias/eventmedia/1524/preview.jpg" />
+      <ImageView class="image" image="http://stage.duppp.com/medias/eventmedia/1525/preview.jpg" />
+      <ImageView class="image" image="http://stage.duppp.com/medias/eventmedia/1510/preview.jpg" />
+      <ImageView class="image" image="http://stage.duppp.com/medias/eventmedia/1511/preview.jpg" />
+      <ImageView class="image" image="http://stage.duppp.com/medias/eventmedia/1512/preview.jpg" />
+      <ImageView class="image" image="http://stage.duppp.com/medias/eventmedia/1513/preview.jpg" />
+      <ImageView class="image" image="http://stage.duppp.com/medias/eventmedia/1514/preview.jpg" />
+      <ImageView class="image" image="http://stage.duppp.com/medias/eventmedia/1515/preview.jpg" />
+      <ImageView class="image" image="http://stage.duppp.com/medias/eventmedia/1516/preview.jpg" />
+      <ImageView class="image" image="http://stage.duppp.com/medias/eventmedia/1517/preview.jpg" />
+    </ScrollView>
+    <RightNavButton>
+      <Button id="createBtn" title="OK" onClick="createEvent" />
+    </RightNavButton>
 	</Window>
 </Alloy>

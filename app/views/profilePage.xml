@@ -1,8 +1,8 @@
 <Alloy>
-  <Window id="profilePage" class="profilePage">
-    <View id="printView" class="container" layout='horizontal'>
-      <ImageView id="author_image" class="author_image" />
+  <Window id="profilePage">
+    <ScrollView id="scrollView" class="container" layout='vertical'>
+      <ImageView id="authorImage" class="authorImage" />
       <Label id="author" class="author" />
-    </View>
+    </ScrollView>
   </Window>
 </Alloy>

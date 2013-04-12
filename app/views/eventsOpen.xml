@@ -1,0 +1,16 @@
+<Alloy>
+	<View id="view" class="container" layout="vertical">
+    <View id="viewLabel" class="containerNumber">
+      <ActivityIndicator id="activityIndicator" message="Loading ..." style="Ti.UI.iPhone.ActivityIndicatorStyle.DARK" />
+      <Label id="labelOpen" class="label" text="events in progress" />
+    </View>
+    <View id="view2" class="container-large" layout="vertical">
+      <View id="provressView" visible="false">
+        <Label id="provressViewLabel" text="0" />
+        <ProgressBar id="pb" height="auto" min="0" max="100" value="0" color="#000" />
+      </View>
+      <Label id="desc" class="desc" text="You want to close and publish which event ?" />
+      <TableView id="table" allowsSelection="false"/>
+    </View>
+	</View>
+</Alloy>

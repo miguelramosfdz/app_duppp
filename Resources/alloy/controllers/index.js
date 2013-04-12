@@ -5,26 +5,32 @@ function Controller() {
     $.__views.indexView = Ti.UI.createTabGroup({
         id: "indexView"
     });
-    $.__views.__alloyId6 = Alloy.createController("activity", {
-        id: "__alloyId6"
+    $.__views.__alloyId22 = Alloy.createController("activity", {
+        id: "__alloyId22"
     });
-    $.__views.indexView.addTab($.__views.__alloyId6.getViewEx({
+    $.__views.indexView.addTab($.__views.__alloyId22.getViewEx({
         recurse: !0
     }));
-    $.__views.__alloyId7 = Alloy.createController("myEvents", {
-        id: "__alloyId7"
+    $.__views.__alloyId23 = Alloy.createController("myEvents", {
+        id: "__alloyId23"
     });
-    $.__views.indexView.addTab($.__views.__alloyId7.getViewEx({
+    $.__views.indexView.addTab($.__views.__alloyId23.getViewEx({
+        recurse: !0
+    }));
+    $.__views.__alloyId24 = Alloy.createController("explore", {
+        id: "__alloyId24"
+    });
+    $.__views.indexView.addTab($.__views.__alloyId24.getViewEx({
         recurse: !0
     }));
     $.addTopLevelView($.__views.indexView);
-    $.__views.__alloyId8 = Alloy.createController("user", {
-        id: "__alloyId8"
+    $.__views.__alloyId25 = Alloy.createController("user", {
+        id: "__alloyId25"
     });
-    $.addTopLevelView($.__views.__alloyId8);
+    $.addTopLevelView($.__views.__alloyId25);
     exports.destroy = function() {};
     _.extend($, $.__views);
-    var userLoginWin = Alloy.createController("user").getView();
+    var userLoginWin = Alloy.createController("user").getView(), eventsOpenWin = Alloy.createController("eventsOpen").getView();
     Titanium.App.Properties.getInt("userUid") ? $.indexView.open() : userLoginWin.open();
     userLoginWin.addEventListener("close", function() {
         $.indexView.open({
@@ -37,6 +43,7 @@ function Controller() {
     Titanium.API.addEventListener("openAsNavigation", function(data) {
         $.indexView.activeTab.open(data.window);
     });
+    $.indexView.add(eventsOpenWin);
     _.extend($, exports);
 }
 

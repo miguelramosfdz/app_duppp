@@ -8,6 +8,14 @@
 				<Label id="f_title" class="title" />
 				<Label id="f_date" class="date" />
 			</View>
+      <View id="actionBtns" layout='horizontal' >
+        <Button title="Comments" class="btn comments" />
+        <Button id="like" title="Like" onClick="like" class="btn like" />
+        <Button title="Extra" class="btn extra" />
+      </View>
+      <Label id="likeCount" />
+      <Label id="commentCount" />
+      <View id="commentsList" layout='vertical' />
 		</ScrollView>
 	</Window>
 </Alloy>

@@ -1,0 +1,7 @@
+<Alloy>
+  <View id="caption" class="caption" layout='vertical'>
+    <Label id="name" class="author" />
+    <Label id="commentBody" class="title" />
+    <Label id="created" class="date" />
+  </View>
+</Alloy>

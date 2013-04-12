@@ -6,5 +6,11 @@
 }
 
 "#textArea": {
-  clearOnEdit: true
+  font: { fontSize: 13, font: "HelveticaNeue" },
+  color: "#000000"
+}
+
+".image": {
+  height: 106.5,
+  width: 106.5
 }

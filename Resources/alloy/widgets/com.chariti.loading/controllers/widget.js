@@ -1,0 +1,65 @@
+function WPATH(s) {
+    var index = s.lastIndexOf("/"), path = index === -1 ? "com.chariti.loading/" + s : s.substring(0, index) + "/com.chariti.loading/" + s.substring(index + 1);
+    return path;
+}
+
+function Controller() {
+    require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
+    $model = arguments[0] ? arguments[0].$model : null;
+    var $ = this, exports = {}, __defers = {};
+    $.__views.Wrapper = Ti.UI.createView({
+        width: Ti.UI.FILL,
+        top: "46dp",
+        id: "Wrapper"
+    });
+    $.addTopLevelView($.__views.Wrapper);
+    $.__views.Background = Ti.UI.createView({
+        backgroundColor: "#000",
+        opacity: 0.3,
+        width: Ti.UI.FILL,
+        height: Ti.UI.FILL,
+        id: "Background"
+    });
+    $.__views.Wrapper.add($.__views.Background);
+    $.__views.Modal = Ti.UI.createView({
+        width: "92dp",
+        height: "92dp",
+        borderRadius: 10,
+        backgroundColor: "#000",
+        id: "Modal"
+    });
+    $.__views.Wrapper.add($.__views.Modal);
+    $.__views.Loading = Ti.UI.createImageView({
+        height: "33dp",
+        width: "33dp",
+        top: "17dp",
+        left: "29dp",
+        images: [ WPATH("images/00.png"), WPATH("images/01.png"), WPATH("images/02.png"), WPATH("images/03.png"), WPATH("images/04.png"), WPATH("images/05.png"), WPATH("images/06.png"), WPATH("images/07.png"), WPATH("images/08.png"), WPATH("images/09.png"), WPATH("images/10.png"), WPATH("images/11.png") ],
+        id: "Loading"
+    });
+    $.__views.Modal.add($.__views.Loading);
+    $.__views.Label = Ti.UI.createLabel({
+        top: "60dp",
+        left: "0dp",
+        width: "92dp",
+        height: "20dp",
+        color: "#FFF",
+        textAlign: "center",
+        font: {
+            fontSize: 13,
+            fontWeight: "bold"
+        },
+        id: "Label",
+        text: "Loading"
+    });
+    $.__views.Modal.add($.__views.Label);
+    exports.destroy = function() {};
+    _.extend($, $.__views);
+    Ti.Platform.osname === "mobileweb" && ($.Loading.duration = 100);
+    $.Loading.start();
+    _.extend($, exports);
+}
+
+var Alloy = require("alloy"), Backbone = Alloy.Backbone, _ = Alloy._, $model;
+
+module.exports = Controller;
