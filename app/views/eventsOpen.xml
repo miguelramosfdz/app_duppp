@@ -6,7 +6,7 @@
     </View>
     <View id="view2" class="container-large" layout="vertical">
       <View id="provressView" visible="false">
-        <Label id="provressViewLabel" text="0" />
+        <Label id="provressViewLabel" text="0 video" />
         <ProgressBar id="pb" height="auto" min="0" max="100" value="0" color="#000" />
       </View>
       <Label id="desc" class="desc" text="You want to close and publish which event ?" />

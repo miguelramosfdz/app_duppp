@@ -3,6 +3,7 @@
     <ScrollView id="scrollView" class="container" layout='vertical'>
       <ImageView id="authorImage" class="authorImage" />
       <Label id="author" class="author" />
+      <Button id="follow" title="Follow" onClick="follow" class="btn follow" />
     </ScrollView>
   </Window>
 </Alloy>

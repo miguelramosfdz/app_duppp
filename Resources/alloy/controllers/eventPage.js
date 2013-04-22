@@ -1,33 +1,45 @@
 function Controller() {
     function like() {
-        if ($.like.title === "Like") var data = {
-            action: "flag",
-            flag_name: "like"
-        }; else var data = {
-            action: "unflag",
-            flag_name: "like"
-        };
+        if ("Like" === $.like.title) {
+            $.like.title = "Unlike";
+            var data = {
+                action: "flag",
+                flag_name: "like"
+            };
+        } else {
+            $.like.title = "Like";
+            var data = {
+                action: "unflag",
+                flag_name: "like"
+            };
+        }
         ajax({
             type: "POST",
             url: urlLike,
             data: JSON.stringify(data),
             dataType: "json",
             contentType: "application/json",
-            success: function(data) {
-                $.like.title === "Like" ? $.like.title = "Unlike" : $.like.title = "Like";
-            }
+            success: function() {}
+        });
+    }
+    function comment() {
+        commentFormWin.open({
+            modal: true
         });
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
-    $model = arguments[0] ? arguments[0].$model : null;
-    var $ = this, exports = {}, __defers = {};
+    arguments[0] ? arguments[0]["__parentSymbol"] : null;
+    arguments[0] ? arguments[0]["$model"] : null;
+    var $ = this;
+    var exports = {};
+    var __defers = {};
     $.__views.eventPage = Ti.UI.createWindow({
         barImage: "bgNavBar.png",
         barColor: "#3B9DCB",
         backgroundColor: "#F3F3F3",
         id: "eventPage"
     });
-    $.addTopLevelView($.__views.eventPage);
+    $.__views.eventPage && $.addTopLevelView($.__views.eventPage);
     $.__views.scrollView = Ti.UI.createScrollView({
         id: "scrollView",
         layout: "vertical"
@@ -99,32 +111,33 @@ function Controller() {
         layout: "horizontal"
     });
     $.__views.scrollView.add($.__views.actionBtns);
-    $.__views.__alloyId15 = Ti.UI.createButton({
+    $.__views.__alloyId3 = Ti.UI.createButton({
         backgroundImage: "none",
         borderRadius: 0,
         color: "white",
         font: {
-            fontSize: 14,
+            fontSize: 15,
             fontFamily: "Helvetica Neue"
         },
-        height: 20,
+        height: 25,
         left: 3,
         right: 3,
         width: 100,
         backgroundColor: "#1193FC",
         title: "Comments",
-        id: "__alloyId15"
+        id: "__alloyId3"
     });
-    $.__views.actionBtns.add($.__views.__alloyId15);
+    $.__views.actionBtns.add($.__views.__alloyId3);
+    comment ? $.__views.__alloyId3.addEventListener("click", comment) : __defers["$.__views.__alloyId3!click!comment"] = true;
     $.__views.like = Ti.UI.createButton({
         backgroundImage: "none",
         borderRadius: 0,
         color: "white",
         font: {
-            fontSize: 14,
+            fontSize: 15,
             fontFamily: "Helvetica Neue"
         },
-        height: 20,
+        height: 25,
         left: 3,
         right: 3,
         width: 100,
@@ -133,24 +146,24 @@ function Controller() {
         title: "Like"
     });
     $.__views.actionBtns.add($.__views.like);
-    like ? $.__views.like.addEventListener("click", like) : __defers["$.__views.like!click!like"] = !0;
-    $.__views.__alloyId16 = Ti.UI.createButton({
+    like ? $.__views.like.addEventListener("click", like) : __defers["$.__views.like!click!like"] = true;
+    $.__views.__alloyId4 = Ti.UI.createButton({
         backgroundImage: "none",
         borderRadius: 0,
         color: "white",
         font: {
-            fontSize: 14,
+            fontSize: 15,
             fontFamily: "Helvetica Neue"
         },
-        height: 20,
+        height: 25,
         left: 3,
         right: 3,
         width: 100,
         backgroundColor: "#7CCD2F",
         title: "Extra",
-        id: "__alloyId16"
+        id: "__alloyId4"
     });
-    $.__views.actionBtns.add($.__views.__alloyId16);
+    $.__views.actionBtns.add($.__views.__alloyId4);
     $.__views.likeCount = Ti.UI.createLabel({
         bottom: 10,
         color: "#EF5250",
@@ -191,11 +204,12 @@ function Controller() {
     $.videoPlayer.url = args.video;
     $.f_title.text = args.title;
     $.f_date.text = args.created;
-    var data = [], url = REST_PATH + "/event/" + args.nid + ".json", urlLike = REST_PATH + "/event/" + args.nid + "/flag", ajax = Titanium.Network.ajax, xhr = Ti.Network.createHTTPClient({
-        onload: function(e) {
+    var url = REST_PATH + "/event/" + args.nid + ".json", urlLike = REST_PATH + "/event/" + args.nid + "/flag", ajax = Titanium.Network.ajax, commentFormWin = Alloy.createController("commentForm").getView();
+    var xhr = Ti.Network.createHTTPClient({
+        onload: function() {
             var json = JSON.parse(this.responseText);
-            json.is_flagged ? $.like.title = "Unlike" : $.like.title = "Like";
-            json.like_count.count ? $.likeCount.text = "Likes " + json.like_count.count : $.likeCount.text = "Likes 0";
+            $.like.title = json.is_flagged ? "Unlike" : "Like";
+            $.likeCount.text = json.like_count.count ? "Likes " + json.like_count.count : "Likes 0";
             $.commentCount.text = "Comments " + json.comment_count;
             for (var key in json.comments) {
                 var newsItem = Alloy.createController("commentRow", json.comments[key]).getView();
@@ -206,16 +220,17 @@ function Controller() {
             Ti.API.debug(e.error);
             alert("error");
         },
-        timeout: 5000
+        timeout: 5e3
     });
     $.eventPage.addEventListener("open", function() {
         xhr.open("GET", url);
         xhr.send();
     });
+    __defers["$.__views.__alloyId3!click!comment"] && $.__views.__alloyId3.addEventListener("click", comment);
     __defers["$.__views.like!click!like"] && $.__views.like.addEventListener("click", like);
     _.extend($, exports);
 }
 
-var Alloy = require("alloy"), Backbone = Alloy.Backbone, _ = Alloy._, $model;
+var Alloy = require("alloy"), Backbone = Alloy.Backbone, _ = Alloy._;
 
 module.exports = Controller;

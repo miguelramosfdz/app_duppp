@@ -1,0 +1,8 @@
+<Alloy>
+  <Window id="win" class="container">
+
+    <RightNavButton>
+      <Button class="close" onClick="close" title="Close" />
+    </RightNavButton>
+  </Window>
+</Alloy>

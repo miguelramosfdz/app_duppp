@@ -1,14 +1,16 @@
 function Controller() {
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
-    $model = arguments[0] ? arguments[0].$model : null;
-    var $ = this, exports = {}, __defers = {};
+    arguments[0] ? arguments[0]["__parentSymbol"] : null;
+    arguments[0] ? arguments[0]["$model"] : null;
+    var $ = this;
+    var exports = {};
     $.__views.view = Ti.UI.createView({
         height: 200,
         bottom: -170,
         id: "view",
         layout: "vertical"
     });
-    $.addTopLevelView($.__views.view);
+    $.__views.view && $.addTopLevelView($.__views.view);
     $.__views.viewLabel = Ti.UI.createView({
         backgroundColor: "#D4D4D4",
         width: "50%",
@@ -48,7 +50,7 @@ function Controller() {
     });
     $.__views.view.add($.__views.view2);
     $.__views.provressView = Ti.UI.createView({
-        height: 20,
+        height: 0,
         id: "provressView",
         visible: "false"
     });
@@ -61,7 +63,7 @@ function Controller() {
             fontWeight: "bold"
         },
         id: "provressViewLabel",
-        text: "0"
+        text: "0 video"
     });
     $.__views.provressView.add($.__views.provressViewLabel);
     $.__views.pb = Ti.UI.createProgressBar({
@@ -99,45 +101,53 @@ function Controller() {
     $.__views.view2.add($.__views.table);
     exports.destroy = function() {};
     _.extend($, $.__views);
-    var url = REST_PATH + "/event.json?type=my_events", dupppUpload = require("duppp_upload"), data = [], xhr = Ti.Network.createHTTPClient({
-        onload: function(e) {
+    var eventsRaw, url = REST_PATH + "/event.json?type=my_events", dupppUpload = require("duppp_upload"), data = [];
+    var xhrMyEvents = Ti.Network.createHTTPClient({
+        onload: function() {
             data = [];
+            eventsRaw = [];
             json = JSON.parse(this.responseText);
             json.forEach(function(event) {
-                if (event.field_event_closed === "0") {
+                if ("0" === event.field_event_closed) {
                     var newsItem = Alloy.createController("eventOpenRow", event).getView();
                     data.push(newsItem);
+                    eventsRaw.push(event);
                 }
             });
-            $.labelOpen.text = data.length + " events in progress";
+            var events = {
+                data: eventsRaw
+            };
+            Titanium.API.fireEvent("myEvents:fetched", events);
             $.table.setData(data);
-            Titanium.UI.iPhone.setAppBadge(data.length);
+            $.labelOpen.text = data.length + " events in progress";
             $.activityIndicator.hide();
             $.labelOpen.show();
+            Titanium.UI.iPhone.setAppBadge(data.length);
         },
-        onerror: function(e) {
-            alert("error");
-        },
-        timeout: 5000
+        onerror: function() {},
+        timeout: 5e3
     });
     $.labelOpen.hide();
     $.activityIndicator.show();
-    xhr.open("GET", url);
-    xhr.send();
+    Titanium.API.addEventListener("index:open", function() {
+        xhrMyEvents.open("GET", url);
+        xhrMyEvents.send();
+    });
     Titanium.App.addEventListener("resume", function() {
         $.labelOpen.hide();
         $.activityIndicator.show();
         dupppUpload.processUpload();
-        xhr.open("GET", url);
-        xhr.send();
+        xhrMyEvents.open("GET", url);
+        xhrMyEvents.send();
     });
-    Titanium.API.addEventListener("eventCreated", function(data) {
+    Titanium.API.addEventListener("eventCreated", function() {
         $.labelOpen.hide();
         $.activityIndicator.show();
-        xhr.open("GET", url);
-        xhr.send();
+        xhrMyEvents.open("GET", url);
+        xhrMyEvents.send();
     });
-    Titanium.API.addEventListener("startUpload", function(data) {
+    Titanium.API.addEventListener("startUpload", function() {
+        $.provressView.height = 20;
         $.view.animate({
             bottom: -150,
             duration: 200
@@ -146,19 +156,20 @@ function Controller() {
         $.pb.show();
     });
     Titanium.API.addEventListener("uploadInProgress", function(data) {
-        $.provressViewLabel.text = dupppUpload.mediaQueue.length + 1 + " video";
-        $.pb.setValue(data.progressValue * 100);
+        $.provressViewLabel.text = dupppUpload.mediaQueue.length + " video";
+        $.pb.setValue(100 * data.progressValue);
     });
-    Titanium.API.addEventListener("uploadFinish", function(data) {
+    Titanium.API.addEventListener("uploadFinish", function() {
         $.view.animate({
             bottom: -170,
             duration: 200
         });
         $.provressView.hide();
         $.pb.hide();
+        $.provressView.height = 0;
         $.pb.setValue(0);
     });
-    $.viewLabel.addEventListener("singletap", function(e) {
+    $.viewLabel.addEventListener("singletap", function() {
         $.view.animate({
             bottom: 0,
             duration: 500
@@ -173,6 +184,6 @@ function Controller() {
     _.extend($, exports);
 }
 
-var Alloy = require("alloy"), Backbone = Alloy.Backbone, _ = Alloy._, $model;
+var Alloy = require("alloy"), Backbone = Alloy.Backbone, _ = Alloy._;
 
 module.exports = Controller;

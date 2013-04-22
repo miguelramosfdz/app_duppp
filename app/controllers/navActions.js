@@ -10,53 +10,6 @@ var data = [],
   ajax = Titanium.Network.ajax,
   dupppUpload = require('duppp_upload');
 
-// Get all open events and put in the menu at top.
-var xhr = Ti.Network.createHTTPClient({
-  onload: function(e) {
-    // Add events to views
-
-    removeAllChildren($.tableOpen);
-
-    json = JSON.parse(this.responseText);
-    json.forEach(function(event){
-      if (event.field_event_closed === "1") {
-        return;
-      }
-      var openItem = Titanium.UI.createButton({
-        title: event.title,
-        backgroundImage: "none",
-        backgroundGradient: {
-        type: 'linear',
-          startPoint: { x: '50%', y: '0%' },
-          endPoint: { x: '50%', y: '100%' },
-          colors: [ { color: '#0C99FC', offset: 0.0}, { color: '#0E76FC', offset: 1.0 } ]
-        },
-        width: Titanium.UI.FILL,
-        font:{fontSize:18, fontWeight:"bold", fontFamily:'Helvetica Neue'},
-        right: 10,
-        top: 10,
-        bottom: 5,
-        height: 40,
-        borderRadius: 5,
-        left: 10,
-        shadowColor:"#999",
-        shadowOffset:{x:0,y:1},
-        nid: event.nid
-      });
-      openItem.addEventListener("click", function(e) {
-        openCamera(e.source.nid);
-      });
-      $.tableOpen.add(openItem)
-
-    });
-  },
-  onerror: function(e) {
-    Ti.API.debug(e.error);
-    alert('error');
-  },
-  timeout: 5000
-});
-
 /*
  * Utility functions.
  */
@@ -73,10 +26,17 @@ function removeAllChildren(viewObject){
 // When you click on tooltip, close the tooltip.
 // @TODO apply this behavior only on the background of the tooltip.
 $.tooltipContainer.addEventListener("click", function(e) {
-  $.tooltipContainer.hide();
+
+  if (e.source.id === 'tooltipContainer') {
+    $.tooltipContainer.hide();
+  }
+
 });
 
 function openEventForm() {
+
+  $.tooltipContainer.hide();
+
   var eventForm = Alloy.createController('eventForm').getView();
 
   Titanium.API.fireEvent('openAsNavigation', {
@@ -85,6 +45,8 @@ function openEventForm() {
 }
 
 function openCamera(nid) {
+
+  $.tooltipContainer.hide();
 
   var user = {
     uid: Titanium.App.Properties.getInt("userUid"),
@@ -100,10 +62,7 @@ function openCamera(nid) {
       dupppUpload.addFile(event.media, nid, new Date().getTime(), user.uid);
 
     },
-    cancel:function() {
-
-    },
-    error:function(error) {
+    error: function(error) {
       // create alert
       var a = Titanium.UI.createAlertDialog({title:'Video'});
 
@@ -130,19 +89,32 @@ function menuChild (e) {
   });
 };
 
-var xhr2 = Ti.Network.createHTTPClient({
-  onload: function(e) {
-    // Add events to views
+// Function to display the tooltip.
+function openTooltip (){
+  $.tooltipContainer.show();
+}
 
-    removeAllChildren($.closeEvents);
+// Function to display the menu.
+function openMenu (){
+  $.menu.show();
+}
 
-    json = JSON.parse(this.responseText);
-    json.forEach(function(event){
-      if (event.closed === "1") {
-        return;
-      }
+Titanium.API.addEventListener('myEvents:fetched', function (data) {
+
+  // Remove previous buttons.
+  removeAllChildren($.tableOpen);
+
+  $.tableOpen.height = 0;
+  $.tableOpen.hide();
+  $.tableOpenLabel.hide();
+
+  if (data.data.length > 0) {
+
+    data.data.forEach(function(event){
+
+      // Create button for each event.
       var openItem = Titanium.UI.createButton({
-        title: event.node_title,
+        title: event.title,
         backgroundImage: "none",
         backgroundGradient: {
           type: 'linear',
@@ -162,34 +134,20 @@ var xhr2 = Ti.Network.createHTTPClient({
         shadowOffset:{x:0,y:1},
         nid: event.nid
       });
+
+      // Add event to open camera on each button.
       openItem.addEventListener("click", function(e) {
-        closeEvent(e.source.nid);
-        $.closeEventsWrapper.hide();
+        openCamera(e.source.nid);
       });
-      $.closeEvents.add(openItem)
+
+      // Add to the view.
+      $.tableOpen.add(openItem);
+      $.tableOpen.height = 100;
+      $.tableOpen.show();
+      $.tableOpenLabel.show();
+
     });
-  },
-  onerror: function(e) {
-    Ti.API.debug(e.error);
-    alert('error');
-  },
-  timeout: 5000
+
+  }
+
 });
-
-// Function to display the tooltip.
-function openTooltip (){
-  xhr.open("GET", url);
-  xhr.send();
-  $.tooltipContainer.show();
-}
-
-function openClose() {
-  xhr2.open("GET", url);
-  xhr2.send();
-  $.closeEventsWrapper.show();
-}
-
-// Function to display the menu.
-function openMenu (){
-  $.menu.show();
-}

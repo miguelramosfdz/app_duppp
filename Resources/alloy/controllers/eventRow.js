@@ -1,11 +1,13 @@
 function Controller() {
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
-    $model = arguments[0] ? arguments[0].$model : null;
-    var $ = this, exports = {}, __defers = {};
+    arguments[0] ? arguments[0]["__parentSymbol"] : null;
+    arguments[0] ? arguments[0]["$model"] : null;
+    var $ = this;
+    var exports = {};
     $.__views.row = Ti.UI.createTableViewRow({
         id: "row"
     });
-    $.addTopLevelView($.__views.row);
+    $.__views.row && $.addTopLevelView($.__views.row);
     $.__views.thumbnail = Ti.UI.createImageView({
         height: 200,
         width: Titanium.UI.FILL,
@@ -21,38 +23,38 @@ function Controller() {
         layout: "horizontal"
     });
     $.__views.row.add($.__views.actions);
-    $.__views.__alloyId17 = Ti.UI.createImageView({
+    $.__views.__alloyId5 = Ti.UI.createImageView({
         top: 20,
         right: 20,
         height: 30,
         image: "love.png",
-        id: "__alloyId17"
+        id: "__alloyId5"
     });
-    $.__views.actions.add($.__views.__alloyId17);
-    $.__views.__alloyId18 = Ti.UI.createImageView({
+    $.__views.actions.add($.__views.__alloyId5);
+    $.__views.__alloyId6 = Ti.UI.createImageView({
         top: 20,
         right: 20,
         width: 32.5,
         image: "comment.png",
-        id: "__alloyId18"
+        id: "__alloyId6"
     });
-    $.__views.actions.add($.__views.__alloyId18);
-    $.__views.__alloyId19 = Ti.UI.createImageView({
+    $.__views.actions.add($.__views.__alloyId6);
+    $.__views.__alloyId7 = Ti.UI.createImageView({
         top: 20,
         right: 20,
         height: 30,
         image: "share.png",
-        id: "__alloyId19"
+        id: "__alloyId7"
     });
-    $.__views.actions.add($.__views.__alloyId19);
-    $.__views.__alloyId20 = Ti.UI.createImageView({
+    $.__views.actions.add($.__views.__alloyId7);
+    $.__views.__alloyId8 = Ti.UI.createImageView({
         top: 30,
         right: 20,
         width: 36,
         image: "extra.png",
-        id: "__alloyId20"
+        id: "__alloyId8"
     });
-    $.__views.actions.add($.__views.__alloyId20);
+    $.__views.actions.add($.__views.__alloyId8);
     $.__views.caption = Ti.UI.createView({
         backgroundImage: "infoBg.png",
         width: "100%",
@@ -108,25 +110,26 @@ function Controller() {
     var args = arguments[0] || {};
     $.f_title.text = args.title;
     $.f_date.text = args.created;
-    $.author_image.image = args.field_avatar.length == 0 ? "" : args.field_avatar;
+    $.author_image.image = 0 == args.field_avatar.length ? "" : args.field_avatar;
     $.author.text = args.name;
-    $.thumbnail.image = args.video_thumbnail.length == 0 ? "" : args.video_thumbnail;
-    $.author_image.addEventListener("touchend", function(e) {
+    $.thumbnail.image = 0 == args.video_thumbnail.length ? "" : args.video_thumbnail;
+    $.author_image.addEventListener("touchend", function() {
         var win = Alloy.createController("profilePage", args.uid).getView();
         win.title = $.author.text;
         Titanium.API.fireEvent("openAsNavigation", {
             window: win
         });
     });
-    $.thumbnail.addEventListener("touchend", function(e) {
+    $.thumbnail.addEventListener("touchend", function() {
         var node = {
             nid: args.nid,
             title: args.title,
             created: args.created,
             user_name: args.name,
-            avatar: args.field_avatar.length == 0 ? "" : args.field_avatar,
-            video: args.field_event_video_final.length == 0 ? "" : args.field_event_video_final
-        }, win = Alloy.createController("eventPage", node).getView();
+            avatar: 0 == args.field_avatar.length ? "" : args.field_avatar,
+            video: 0 == args.field_event_video_final.length ? "" : args.field_event_video_final
+        };
+        var win = Alloy.createController("eventPage", node).getView();
         win.title = "Event";
         Titanium.API.fireEvent("openAsNavigation", {
             window: win
@@ -138,7 +141,7 @@ function Controller() {
             right: 0,
             duration: 300
         });
-        current_row = Ti.Platform.osname == "android" ? this : e.row;
+        current_row = "android" == Ti.Platform.osname ? this : e.row;
         $.caption.animate({
             right: -340,
             duration: 300
@@ -147,6 +150,6 @@ function Controller() {
     _.extend($, exports);
 }
 
-var Alloy = require("alloy"), Backbone = Alloy.Backbone, _ = Alloy._, $model;
+var Alloy = require("alloy"), Backbone = Alloy.Backbone, _ = Alloy._;
 
 module.exports = Controller;

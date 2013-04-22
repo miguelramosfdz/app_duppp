@@ -1,44 +1,70 @@
-var url = REST_PATH + "/event.json?type=my_events";
+var url = REST_PATH + "/event.json?type=my_events",
+    dupppUpload = require('duppp_upload'),
+    data = [],
+    eventsRaw;
 
-var dupppUpload = require('duppp_upload');
-
-var data = [];
-
-var xhr = Ti.Network.createHTTPClient({
+var xhrMyEvents = Ti.Network.createHTTPClient({
+  // Success callback.
   onload: function(e) {
 
     data = [];
+    eventsRaw = [];
 
-    // Add events to views
+    // Add events to views.
     json = JSON.parse(this.responseText);
     json.forEach(function(event){
+
+      // Keep only events open.
       if (event.field_event_closed === "0") {
         var newsItem = Alloy.createController('eventOpenRow', event).getView();
         data.push(newsItem);
+        eventsRaw.push(event);
       }
     });
+
+    var events = {
+      data: eventsRaw
+    };
+
+    Titanium.API.fireEvent('myEvents:fetched', events);
+
+    // Update View.
+    $.table.setData(data);
     $.labelOpen.text = data.length + " events in progress";
 
-    $.table.setData(data);
-
-    Titanium.UI.iPhone.setAppBadge(data.length);
-
+    // Display the label with correct value.
     $.activityIndicator.hide();
-
     $.labelOpen.show();
 
+    // Set a badge on application to see how many events still open.
+    Titanium.UI.iPhone.setAppBadge(data.length);
   },
+
+  // Error callback
   onerror: function(e) {
-    alert('error');
+    // Do ...
   },
+
   timeout: 5000
 });
+
+/*
+ * When the view is instantiate.
+ */
 
 $.labelOpen.hide();
 $.activityIndicator.show();
 
-xhr.open("GET", url);
-xhr.send();
+// Call the xhr.
+Titanium.API.addEventListener('index:open', function(data) {
+  xhrMyEvents.open("GET", url);
+  xhrMyEvents.send();
+});
+
+
+/*
+ * Event callback.
+ */
 
 Titanium.App.addEventListener('resume', function () {
 
@@ -47,8 +73,8 @@ Titanium.App.addEventListener('resume', function () {
 
   dupppUpload.processUpload();
 
-  xhr.open("GET", url);
-  xhr.send();
+  xhrMyEvents.open("GET", url);
+  xhrMyEvents.send();
 });
 
 Titanium.API.addEventListener('eventCreated', function (data) {
@@ -56,12 +82,14 @@ Titanium.API.addEventListener('eventCreated', function (data) {
   $.labelOpen.hide();
   $.activityIndicator.show();
 
-  xhr.open("GET", url);
-  xhr.send();
+  xhrMyEvents.open("GET", url);
+  xhrMyEvents.send();
 });
 
 
 Titanium.API.addEventListener('startUpload', function (data) {
+
+  $.provressView.height = 20;
 
   $.view.animate({
     bottom: -150,
@@ -75,7 +103,7 @@ Titanium.API.addEventListener('startUpload', function (data) {
 
 Titanium.API.addEventListener('uploadInProgress', function (data) {
 
-  $.provressViewLabel.text = (dupppUpload.mediaQueue.length + 1) + ' video';
+  $.provressViewLabel.text = dupppUpload.mediaQueue.length + ' video';
   $.pb.setValue(data.progressValue * 100);
 
 });
@@ -89,6 +117,7 @@ Titanium.API.addEventListener('uploadFinish', function (data) {
 
   $.provressView.hide();
   $.pb.hide();
+  $.provressView.height = 0;
   $.pb.setValue(0);
 
 });

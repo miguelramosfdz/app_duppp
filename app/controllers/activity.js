@@ -74,7 +74,9 @@ function myLoaderCallback(widgetCallback) {
       widgetCallback(true);
     },
     onerror: function(e) {
-      Ti.API.debug(e.error);
+
+      widgetCallback(true);
+
       alert('error');
     },
     timeout: 5000

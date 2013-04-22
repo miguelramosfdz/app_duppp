@@ -1,7 +1,7 @@
 eclipse.preferences.version=1
-provisioning_profiles/adhoc/7B02F8E6-9590-40A4-AE69-7F7FC4D121E2/appid=com.duppp.duppp-v1
-provisioning_profiles/adhoc/7B02F8E6-9590-40A4-AE69-7F7FC4D121E2/name=duppp_v1_appStore
-provisioning_profiles/adhoc/7B02F8E6-9590-40A4-AE69-7F7FC4D121E2/uuid=7B02F8E6-9590-40A4-AE69-7F7FC4D121E2
+provisioning_profiles/adhoc/E90395BC-1F87-4453-B359-83AF37B1C04D/appid=*
+provisioning_profiles/adhoc/E90395BC-1F87-4453-B359-83AF37B1C04D/name=Duppp
+provisioning_profiles/adhoc/E90395BC-1F87-4453-B359-83AF37B1C04D/uuid=E90395BC-1F87-4453-B359-83AF37B1C04D
 provisioning_profiles/development/95B7636E-CEF0-4D11-9EC0-E6811FE73D37/appid=*
 provisioning_profiles/development/95B7636E-CEF0-4D11-9EC0-E6811FE73D37/name=DupppV2
 provisioning_profiles/development/95B7636E-CEF0-4D11-9EC0-E6811FE73D37/uuid=95B7636E-CEF0-4D11-9EC0-E6811FE73D37

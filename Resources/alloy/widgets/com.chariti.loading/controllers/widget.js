@@ -1,21 +1,25 @@
 function WPATH(s) {
-    var index = s.lastIndexOf("/"), path = index === -1 ? "com.chariti.loading/" + s : s.substring(0, index) + "/com.chariti.loading/" + s.substring(index + 1);
+    var index = s.lastIndexOf("/");
+    var path = -1 === index ? "com.chariti.loading/" + s : s.substring(0, index) + "/com.chariti.loading/" + s.substring(index + 1);
     return path;
 }
 
 function Controller() {
+    new (require("alloy/widget"))("com.chariti.loading");
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
-    $model = arguments[0] ? arguments[0].$model : null;
-    var $ = this, exports = {}, __defers = {};
+    arguments[0] ? arguments[0]["__parentSymbol"] : null;
+    arguments[0] ? arguments[0]["$model"] : null;
+    var $ = this;
+    var exports = {};
     $.__views.Wrapper = Ti.UI.createView({
         width: Ti.UI.FILL,
         top: "46dp",
         id: "Wrapper"
     });
-    $.addTopLevelView($.__views.Wrapper);
+    $.__views.Wrapper && $.addTopLevelView($.__views.Wrapper);
     $.__views.Background = Ti.UI.createView({
         backgroundColor: "#000",
-        opacity: 0.3,
+        opacity: .3,
         width: Ti.UI.FILL,
         height: Ti.UI.FILL,
         id: "Background"
@@ -55,11 +59,11 @@ function Controller() {
     $.__views.Modal.add($.__views.Label);
     exports.destroy = function() {};
     _.extend($, $.__views);
-    Ti.Platform.osname === "mobileweb" && ($.Loading.duration = 100);
+    "mobileweb" === Ti.Platform.osname && ($.Loading.duration = 100);
     $.Loading.start();
     _.extend($, exports);
 }
 
-var Alloy = require("alloy"), Backbone = Alloy.Backbone, _ = Alloy._, $model;
+var Alloy = require("alloy"), Backbone = Alloy.Backbone, _ = Alloy._;
 
 module.exports = Controller;

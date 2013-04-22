@@ -1,10 +1,10 @@
 ".container": {
-	backgroundImage: "bg.png",
-	contentWidth: 'auto', 
-    contentHeight: 'auto', 
-    top: 0, 
-    showVerticalScrollIndicator: true, 
-    showHorizontalScrollIndicator: true 
+  backgroundColor: "#fff",
+  contentWidth: 'auto',
+  contentHeight: 'auto',
+  top: 0,
+  showVerticalScrollIndicator: true,
+  showHorizontalScrollIndicator: true
 }
 
 ".content": {
@@ -34,27 +34,35 @@
 
 ".submit": {
 	top: 10,
-	backgroundGradient: {
-        type: 'linear',
-        startPoint: { x: '50%', y: '0%' },
-        endPoint: { x: '50%', y: '100%' },
-        colors: [ { color: '#6a7179', offset: 0.0}, { color: '#2d3032', offset: 1.0 } ],
-   },
-	backgroundImage: "none",
-	backgroundFocusedColor: "#2d3032",
-	font: {fontSize: 20, fontWeight: "bold"},
+	font: {fontSize: 18},
 	color: "white",
 	height: 40,
 	width: 300,
 	borderRadius: 5
 }
-".switchBtn": {
-	bottom: 10,
-	width: 140,
-	height: 25,
-	font: {fontSize: 13},
-	color: "white",
-	backgroundImage: "none",
-	backgroundColor: "#b7544b",
-	borderRadius: 13
+
+".loginDuppp": {
+  backgroundImage: "dBg.png",
+  height: 46,
+  width: 278,
+  top: 10
+}
+
+".facebook": {
+  backgroundImage: "fbBg.png",
+  height: 46,
+  width: 278,
+  top: 10
+}
+
+'.windowStyle': {
+  barImage: "bgNavBar.png",
+  barColor: "#3B9DCB",
+  backgroundColor: "#F3F3F3",
+  borderWidth:8,
+  borderColor:'#888',
+  height:400,
+  width:300,
+  borderRadius:10,
+  opacity:0.9
 }

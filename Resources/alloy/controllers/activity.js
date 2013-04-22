@@ -1,36 +1,38 @@
 function Controller() {
     function myLoaderCallback(widgetCallback) {
         var xhr2 = Ti.Network.createHTTPClient({
-            onload: function(e) {
+            onload: function() {
                 data = [];
                 json = JSON.parse(this.responseText);
                 json.forEach(function(event) {
-                    if (event.field_event_closed === "1") {
+                    if ("1" === event.field_event_closed) {
                         var newsItem = Alloy.createController("eventRow", event).getView();
                         data.push(newsItem);
                     }
                 });
                 Titanium.API.fireEvent("refreshEvents");
                 $.table.setData(data);
-                widgetCallback(!0);
+                widgetCallback(true);
             },
-            onerror: function(e) {
-                Ti.API.debug(e.error);
+            onerror: function() {
+                widgetCallback(true);
                 alert("error");
             },
-            timeout: 5000
+            timeout: 5e3
         });
         xhr2.open("GET", url);
         xhr2.send();
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
-    $model = arguments[0] ? arguments[0].$model : null;
-    var $ = this, exports = {}, __defers = {};
+    arguments[0] ? arguments[0]["__parentSymbol"] : null;
+    arguments[0] ? arguments[0]["$model"] : null;
+    var $ = this;
+    var exports = {};
     $.__views.child_window = Ti.UI.createWindow({
         barImage: "bgNavBar.png",
         barColor: "#3B9DCB",
         backgroundColor: "#F3F3F3",
-        tabBarHidden: !0,
+        tabBarHidden: true,
         id: "child_window",
         title: "Activity"
     });
@@ -45,7 +47,7 @@ function Controller() {
         title: "Tab 1",
         icon: "KS_nav_views.png"
     });
-    $.addTopLevelView($.__views.tab1);
+    $.__views.tab1 && $.addTopLevelView($.__views.tab1);
     exports.destroy = function() {};
     _.extend($, $.__views);
     Ti.include("config.js");
@@ -55,10 +57,10 @@ function Controller() {
     $.child_window.add(nav.getView("tooltipContainer"));
     $.child_window.add(nav.getView("menu"));
     var xhr = Ti.Network.createHTTPClient({
-        onload: function(e) {
+        onload: function() {
             json = JSON.parse(this.responseText);
             json.forEach(function(event) {
-                if (event.field_event_closed === "1") {
+                if ("1" === event.field_event_closed) {
                     var newsItem = Alloy.createController("eventRow", event).getView();
                     data.push(newsItem);
                 }
@@ -66,24 +68,24 @@ function Controller() {
             $.table.setData(data);
             indicator.closeIndicator();
         },
-        onerror: function(e) {
+        onerror: function() {
             alert("The server cannot be reached");
             indicator.closeIndicator();
         },
-        timeout: 5000
+        timeout: 5e3
     });
     $.child_window.addEventListener("open", function() {
         indicator.openIndicator();
         xhr.open("GET", url);
         xhr.send();
     });
-    var ptrCtrl = Alloy.createWidget("nl.fokkezb.pullToRefresh", null, {
+    Alloy.createWidget("nl.fokkezb.pullToRefresh", null, {
         table: $.table,
         loader: myLoaderCallback
     });
     _.extend($, exports);
 }
 
-var Alloy = require("alloy"), Backbone = Alloy.Backbone, _ = Alloy._, $model;
+var Alloy = require("alloy"), Backbone = Alloy.Backbone, _ = Alloy._;
 
 module.exports = Controller;

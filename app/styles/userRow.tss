@@ -1,0 +1,18 @@
+".row": {
+  textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT
+}
+
+".title": {
+  color: "#353535",
+  font:{fontSize:18, fontWeight:"bold", fontFamily:'Helvetica Neue'}
+}
+
+".image": {
+  left: 5,
+  right: 10,
+  width: 45,
+  top: 3,
+  bottom: 3,
+  height: 45,
+  borderRadius: 2
+}

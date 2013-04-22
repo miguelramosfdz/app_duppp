@@ -1,5 +1,3 @@
-
-
 Ti.include('config.js');
 Ti.include("tiajax.js");
 
@@ -7,15 +5,87 @@ Ti.include("tiajax.js");
  *  Initialize variables
  */
 
-var ajax = Titanium.Network.ajax;
+var ajax = Titanium.Network.ajax,
+  data = [],
+  uie = require('UiElements'),
+  indicator = uie.createIndicatorWindow();
 
 $.textArea.addEventListener('focus', function() {
   $.textArea.value = '';
 });
 
+var xhrUsers = Ti.Network.createHTTPClient({
+  // Success callback.
+  onload: function(e) {
+
+    data = [];
+
+    // Add events to views.
+    json = JSON.parse(this.responseText);
+    json.forEach(function(user){
+      if (parseInt(user.uid) !== Titanium.App.Properties.getInt("userUid")) {
+        // Keep only user different from current user.
+        var newsItem = Alloy.createController('userRow', user).getView();
+        data.push(newsItem);
+      }
+    });
+
+    // Update View.
+    $.table.setData(data);
+
+    indicator.closeIndicator();
+
+  },
+
+  // Error callback
+  onerror: function(e) {
+    // Do ...
+  },
+
+  timeout: 5000
+});
+
+/*
+ * When the view is instantiate.
+ */
+
+var last_search = null;
+
+$.search.addEventListener('return', function (e) {
+  if (e.value !=  last_search) {
+    last_search = e.value;
+    indicator.openIndicator();
+
+    var urlUsers = REST_PATH + '/duppp_user.json?username=' + e.value;
+    xhrUsers.open("GET", urlUsers);
+    xhrUsers.send();
+
+    $.search.blur();
+  }
+});
+
+$.table.addEventListener('click',function(e){
+  if (e.rowData.selected) {
+    e.row.hasCheck = false;
+  } else {
+    e.row.hasCheck = true;
+  }
+  e.rowData.selected = !e.rowData.selected;
+});
+
+
 // Function to create an event
-// @TODO Create the form for event type.
 function createEvent() {
+
+  var clickedRows = [];
+
+  if ($.table.data.length > 0) {
+    for(var i=0; i < $.table.data[0].rows.length ; i++) {
+      if ($.table.data[0].rows[i].hasCheck == true) {
+        clickedRows.push($.table.data[0].rows[i].uid)
+      }
+    }
+  }
 
   $.createBtn.enabled = false;
 
@@ -70,6 +140,23 @@ function createEvent() {
         $.eventFormWindow.close({animated:true});
         $.createBtn.enabled = true;
         Titanium.API.fireEvent('eventCreated');
+
+        var join = {
+          uid: clickedRows
+        }
+
+        ajax({
+          type: "POST",
+          url: REST_PATH + '/event/' + data.nid + '/join',
+          data: JSON.stringify(join), // Stringify the node
+          dataType: 'json',
+          contentType: 'application/json',
+          // On success do some processing like closing the window and show an alert
+          success: function(data) {
+
+          }
+        });
+
       }
     });
   }

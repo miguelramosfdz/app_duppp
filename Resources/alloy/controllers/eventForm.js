@@ -1,12 +1,16 @@
 function Controller() {
     function createEvent() {
+        var clickedRows = [];
+        if ($.table.data.length > 0) for (var i = 0; $.table.data[0].rows.length > i; i++) true == $.table.data[0].rows[i].hasCheck && clickedRows.push($.table.data[0].rows[i].uid);
+        $.createBtn.enabled = false;
         if (Titanium.App.Properties.getInt("userUid")) {
             var user = {
                 uid: Titanium.App.Properties.getInt("userUid"),
                 sessid: Titanium.App.Properties.getString("userSessionId"),
                 session_name: Titanium.App.Properties.getString("userSessionName"),
                 name: Titanium.App.Properties.getString("userName")
-            }, node = {
+            };
+            var node = {
                 node: {
                     title: $.textArea.value,
                     type: "event",
@@ -29,7 +33,8 @@ function Controller() {
                     uid: user.uid,
                     status: 1
                 }
-            }, url = REST_PATH + "/node";
+            };
+            var url = REST_PATH + "/node";
             ajax({
                 type: "POST",
                 url: url,
@@ -38,26 +43,41 @@ function Controller() {
                 contentType: "application/json",
                 success: function(data) {
                     $.eventFormWindow.close({
-                        animated: !0
+                        animated: true
                     });
+                    $.createBtn.enabled = true;
                     Titanium.API.fireEvent("eventCreated");
+                    var join = {
+                        uid: clickedRows
+                    };
+                    ajax({
+                        type: "POST",
+                        url: REST_PATH + "/event/" + data.nid + "/join",
+                        data: JSON.stringify(join),
+                        dataType: "json",
+                        contentType: "application/json",
+                        success: function() {}
+                    });
                 }
             });
         } else alert("You need to login first");
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
-    $model = arguments[0] ? arguments[0].$model : null;
-    var $ = this, exports = {}, __defers = {};
+    arguments[0] ? arguments[0]["__parentSymbol"] : null;
+    arguments[0] ? arguments[0]["$model"] : null;
+    var $ = this;
+    var exports = {};
+    var __defers = {};
     $.__views.eventFormWindow = Ti.UI.createWindow({
         barImage: "bgNavBar.png",
         barColor: "#3B9DCB",
         backgroundColor: "#F3F3F3",
-        tabBarHidden: !0,
+        tabBarHidden: true,
         id: "eventFormWindow",
         title: "New event",
         layout: "vertical"
     });
-    $.addTopLevelView($.__views.eventFormWindow);
+    $.__views.eventFormWindow && $.addTopLevelView($.__views.eventFormWindow);
     $.__views.textArea = Ti.UI.createTextArea({
         font: {
             fontSize: 13,
@@ -75,123 +95,69 @@ function Controller() {
         height: "150"
     });
     $.__views.eventFormWindow.add($.__views.textArea);
-    $.__views.scrollView = Ti.UI.createScrollView({
+    $.__views.search = Ti.UI.createSearchBar({
+        id: "search",
+        hintText: "Search a user"
+    });
+    $.__views.eventFormWindow.add($.__views.search);
+    $.__views.table = Ti.UI.createTableView({
         barImage: "bgNavBar.png",
         barColor: "#3B9DCB",
         backgroundColor: "#F3F3F3",
-        tabBarHidden: !0,
-        id: "scrollView",
-        top: "0",
-        contentWidth: "300",
-        layout: "horizontal"
+        tabBarHidden: true,
+        id: "table",
+        allowsSelectionDuringEditing: "true"
     });
-    $.__views.eventFormWindow.add($.__views.scrollView);
-    $.__views.__alloyId0 = Ti.UI.createView({
-        id: "__alloyId0"
+    $.__views.eventFormWindow.add($.__views.table);
+    $.__views.createBtn = Ti.UI.createButton({
+        id: "createBtn",
+        title: "OK"
     });
-    $.__views.scrollView.add($.__views.__alloyId0);
-    $.__views.__alloyId1 = Ti.UI.createImageView({
-        height: 106.5,
-        width: 106.5,
-        image: "http://stage.duppp.com/medias/eventmedia/1521/preview.jpg",
-        id: "__alloyId1"
-    });
-    $.__views.__alloyId0.add($.__views.__alloyId1);
-    $.__views.__alloyId2 = Ti.UI.createImageView({
-        height: 106.5,
-        width: 106.5,
-        image: "http://stage.duppp.com/medias/eventmedia/1523/preview.jpg",
-        id: "__alloyId2"
-    });
-    $.__views.scrollView.add($.__views.__alloyId2);
-    $.__views.__alloyId3 = Ti.UI.createImageView({
-        height: 106.5,
-        width: 106.5,
-        image: "http://stage.duppp.com/medias/eventmedia/1524/preview.jpg",
-        id: "__alloyId3"
-    });
-    $.__views.scrollView.add($.__views.__alloyId3);
-    $.__views.__alloyId4 = Ti.UI.createImageView({
-        height: 106.5,
-        width: 106.5,
-        image: "http://stage.duppp.com/medias/eventmedia/1525/preview.jpg",
-        id: "__alloyId4"
-    });
-    $.__views.scrollView.add($.__views.__alloyId4);
-    $.__views.__alloyId5 = Ti.UI.createImageView({
-        height: 106.5,
-        width: 106.5,
-        image: "http://stage.duppp.com/medias/eventmedia/1510/preview.jpg",
-        id: "__alloyId5"
-    });
-    $.__views.scrollView.add($.__views.__alloyId5);
-    $.__views.__alloyId6 = Ti.UI.createImageView({
-        height: 106.5,
-        width: 106.5,
-        image: "http://stage.duppp.com/medias/eventmedia/1511/preview.jpg",
-        id: "__alloyId6"
-    });
-    $.__views.scrollView.add($.__views.__alloyId6);
-    $.__views.__alloyId7 = Ti.UI.createImageView({
-        height: 106.5,
-        width: 106.5,
-        image: "http://stage.duppp.com/medias/eventmedia/1512/preview.jpg",
-        id: "__alloyId7"
-    });
-    $.__views.scrollView.add($.__views.__alloyId7);
-    $.__views.__alloyId8 = Ti.UI.createImageView({
-        height: 106.5,
-        width: 106.5,
-        image: "http://stage.duppp.com/medias/eventmedia/1513/preview.jpg",
-        id: "__alloyId8"
-    });
-    $.__views.scrollView.add($.__views.__alloyId8);
-    $.__views.__alloyId9 = Ti.UI.createImageView({
-        height: 106.5,
-        width: 106.5,
-        image: "http://stage.duppp.com/medias/eventmedia/1514/preview.jpg",
-        id: "__alloyId9"
-    });
-    $.__views.scrollView.add($.__views.__alloyId9);
-    $.__views.__alloyId10 = Ti.UI.createImageView({
-        height: 106.5,
-        width: 106.5,
-        image: "http://stage.duppp.com/medias/eventmedia/1515/preview.jpg",
-        id: "__alloyId10"
-    });
-    $.__views.scrollView.add($.__views.__alloyId10);
-    $.__views.__alloyId11 = Ti.UI.createImageView({
-        height: 106.5,
-        width: 106.5,
-        image: "http://stage.duppp.com/medias/eventmedia/1516/preview.jpg",
-        id: "__alloyId11"
-    });
-    $.__views.scrollView.add($.__views.__alloyId11);
-    $.__views.__alloyId12 = Ti.UI.createImageView({
-        height: 106.5,
-        width: 106.5,
-        image: "http://stage.duppp.com/medias/eventmedia/1517/preview.jpg",
-        id: "__alloyId12"
-    });
-    $.__views.scrollView.add($.__views.__alloyId12);
-    $.__views.__alloyId14 = Ti.UI.createButton({
-        title: "OK",
-        id: "__alloyId14"
-    });
-    createEvent ? $.__views.__alloyId14.addEventListener("click", createEvent) : __defers["$.__views.__alloyId14!click!createEvent"] = !0;
-    $.__views.eventFormWindow.rightNavButton = $.__views.__alloyId14;
+    createEvent ? $.__views.createBtn.addEventListener("click", createEvent) : __defers["$.__views.createBtn!click!createEvent"] = true;
+    $.__views.eventFormWindow.rightNavButton = $.__views.createBtn;
     exports.destroy = function() {};
     _.extend($, $.__views);
     Ti.include("config.js");
     Ti.include("tiajax.js");
-    var ajax = Titanium.Network.ajax;
+    var ajax = Titanium.Network.ajax, data = [], uie = require("UiElements"), indicator = uie.createIndicatorWindow();
     $.textArea.addEventListener("focus", function() {
         $.textArea.value = "";
     });
-    __defers["$.__views.__alloyId14!click!createEvent"] && $.__views.__alloyId14.addEventListener("click", createEvent);
+    var xhrUsers = Ti.Network.createHTTPClient({
+        onload: function() {
+            data = [];
+            json = JSON.parse(this.responseText);
+            json.forEach(function(user) {
+                if (parseInt(user.uid) !== Titanium.App.Properties.getInt("userUid")) {
+                    var newsItem = Alloy.createController("userRow", user).getView();
+                    data.push(newsItem);
+                }
+            });
+            $.table.setData(data);
+            indicator.closeIndicator();
+        },
+        onerror: function() {},
+        timeout: 5e3
+    });
+    var last_search = null;
+    $.search.addEventListener("return", function(e) {
+        if (e.value != last_search) {
+            last_search = e.value;
+            indicator.openIndicator();
+            var urlUsers = REST_PATH + "/duppp_user.json?username=" + e.value;
+            xhrUsers.open("GET", urlUsers);
+            xhrUsers.send();
+            $.search.blur();
+        }
+    });
+    $.table.addEventListener("click", function(e) {
+        e.row.hasCheck = e.rowData.selected ? false : true;
+        e.rowData.selected = !e.rowData.selected;
+    });
+    __defers["$.__views.createBtn!click!createEvent"] && $.__views.createBtn.addEventListener("click", createEvent);
     _.extend($, exports);
 }
 
-var Alloy = require("alloy"), Backbone = Alloy.Backbone, _ = Alloy._, $model;
+var Alloy = require("alloy"), Backbone = Alloy.Backbone, _ = Alloy._;
 
 module.exports = Controller;

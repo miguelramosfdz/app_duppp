@@ -15,7 +15,8 @@ $.f_date.text = args.created;
 var data = [],
   url = REST_PATH + '/event/' + args.nid + '.json',
   urlLike = REST_PATH + '/event/' + args.nid + '/flag',
-  ajax = Titanium.Network.ajax;
+  ajax = Titanium.Network.ajax,
+  commentFormWin = Alloy.createController('commentForm').getView();
 
 var xhr = Ti.Network.createHTTPClient({
   onload: function(e) {
@@ -58,11 +59,13 @@ $.eventPage.addEventListener('open', function () {
 function like () {
 
   if ($.like.title === 'Like') {
+    $.like.title = 'Unlike';
     var data = {
       "action": "flag",
       "flag_name": "like"
     };
   } else {
+    $.like.title = 'Like';
     var data = {
       "action": "unflag",
       "flag_name": "like"
@@ -76,11 +79,13 @@ function like () {
     dataType: 'json',
     contentType: 'application/json',
     success: function(data) {
-      if ($.like.title === 'Like') {
-        $.like.title = 'Unlike';
-      } else {
-        $.like.title = 'Like';
-      }
     }
+  });
+
+}
+
+function comment() {
+  commentFormWin.open({
+    modal: true
   });
 }

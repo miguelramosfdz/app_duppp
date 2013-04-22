@@ -7,15 +7,20 @@ function createIndicatorWindow(args) {
         activityIndicator.hide();
         win.close();
     }
-    var width = 110, height = 110, args = args || {}, top = args.top || "35%", text = args.text || "Loading", win = Titanium.UI.createWindow({
+    var width = 110, height = 110;
+    var args = args || {};
+    var top = args.top || "35%";
+    var text = args.text || "Loading";
+    var win = Titanium.UI.createWindow({
         height: height,
         width: width,
         top: top,
         borderRadius: 10,
-        touchEnabled: !1,
+        touchEnabled: false,
         backgroundColor: "#000",
-        opacity: 0.8
-    }), view = Ti.UI.createView({
+        opacity: .8
+    });
+    var view = Ti.UI.createView({
         width: Ti.UI.SIZE,
         height: Ti.UI.FILL,
         center: {
@@ -23,11 +28,13 @@ function createIndicatorWindow(args) {
             y: height / 2
         },
         layout: "vertical"
-    }), activityIndicator = Ti.UI.createActivityIndicator({
+    });
+    var activityIndicator = Ti.UI.createActivityIndicator({
         top: 20,
         style: Ti.UI.iPhone.ActivityIndicatorStyle.BIG,
         width: 30
-    }), label = Titanium.UI.createLabel({
+    });
+    var label = Titanium.UI.createLabel({
         text: text,
         color: "#fff",
         font: {

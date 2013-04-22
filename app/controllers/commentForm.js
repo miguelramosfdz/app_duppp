@@ -1,0 +1,3 @@
+function close() {
+  $.win.close();
+}

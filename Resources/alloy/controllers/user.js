@@ -1,75 +1,188 @@
 function Controller() {
-    function login(e) {
+    function login() {
         var user = {
             username: $.loginUsr.value,
             password: $.loginPwd.value
-        }, url = REST_PATH + "/user/login", xhr = Titanium.Network.createHTTPClient();
+        };
+        var url = REST_PATH + "/user/login";
+        var xhr = Titanium.Network.createHTTPClient();
         xhr.setRequestHeader("Content-Type", "application/json; charset=utf-8");
         xhr.open("POST", url);
         xhr.send(user);
         xhr.onload = function() {
             var statusCode = xhr.status;
-            if (statusCode == 200) {
-                var response = xhr.responseText, data = JSON.parse(response);
+            if (200 == statusCode) {
+                var response = xhr.responseText;
+                var data = JSON.parse(response);
                 Titanium.App.Properties.setInt("userUid", data.user.uid);
                 Titanium.App.Properties.setInt("userSessionId", data.sessid);
                 Titanium.App.Properties.setInt("userSessionName", data.sesion_name);
-                var xhr2 = Titanium.Network.createHTTPClient(), getUser = REST_PATH + "/user/" + data.user.uid + ".json";
-                xhr2.open("GET", getUser);
-                xhr2.send();
-                xhr2.onload = function() {
-                    var userStatusCode = xhr2.status;
-                    if (userStatusCode == 200) {
-                        var userResponse = xhr2.responseText, user = JSON.parse(userResponse);
-                        Titanium.App.Properties.setString("userName", user.name);
-                        $.userLogin.close();
-                    }
-                };
+                $.userLoginDuppp.close();
+                Titanium.API.fireEvent("user:login");
             } else alert("There was an error");
         };
-    }
-    function switchViews() {
-        if ($.switchBtn.title === "Login") {
-            $.registerView.hide();
-            $.loginView.show();
-            $.switchBtn.title = "Get Duppp account";
-        } else {
-            $.loginView.hide();
-            $.registerView.show();
-            $.switchBtn.title = "Login";
-        }
     }
     function register() {
         console.log("fock");
     }
-    function close() {
-        $.userLogin.close();
+    function openLoginFacebook() {
+        Ti.Facebook.authorize();
+    }
+    function openLoginDuppp() {
+        var t = Titanium.UI.create2DMatrix();
+        t = t.scale(0);
+        $.userLoginDuppp.transform = t;
+        var t1 = Titanium.UI.create2DMatrix();
+        t1 = t1.scale(1.1);
+        var a = Titanium.UI.createAnimation();
+        a.transform = t1;
+        a.duration = 200;
+        a.addEventListener("complete", function() {
+            var t2 = Titanium.UI.create2DMatrix();
+            t2 = t2.scale(1);
+            $.userLoginDuppp.animate({
+                transform: t2,
+                duration: 200
+            });
+        });
+        $.userLoginDuppp.open(a);
+    }
+    function openRegisterDuppp() {}
+    function facebook(e) {
+        if (e.success) {
+            var fbuid = Ti.Facebook.getUid();
+            var fbAccessToken = Ti.Facebook.getAccessToken();
+            var user = {
+                service: "facebook",
+                id: fbuid,
+                accesstoken: fbAccessToken
+            };
+            var xhr3 = Titanium.Network.createHTTPClient();
+            xhr3.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+            xhr3.open("POST", urlFB);
+            xhr3.send(user);
+            xhr3.onload = function() {
+                var statusCode = xhr3.status;
+                if (200 == statusCode) {
+                    var response = xhr3.responseText;
+                    var data = JSON.parse(response);
+                    Titanium.App.Properties.setInt("userUid", data.user.uid);
+                    Titanium.App.Properties.setInt("userSessionId", data.sessid);
+                    Titanium.App.Properties.setInt("userSessionName", data.sesion_name);
+                    $.userLogin.close();
+                } else alert("There was an error");
+            };
+        } else e.error && alert(e.error);
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
-    $model = arguments[0] ? arguments[0].$model : null;
-    var $ = this, exports = {}, __defers = {};
+    arguments[0] ? arguments[0]["__parentSymbol"] : null;
+    arguments[0] ? arguments[0]["$model"] : null;
+    var $ = this;
+    var exports = {};
+    var __defers = {};
     $.__views.userLogin = Ti.UI.createWindow({
-        id: "userLogin"
-    });
-    $.addTopLevelView($.__views.userLogin);
-    $.__views.loginView = Ti.UI.createScrollView({
-        backgroundImage: "bg.png",
+        backgroundColor: "#fff",
         contentWidth: "auto",
         contentHeight: "auto",
         top: 0,
-        showVerticalScrollIndicator: !0,
-        showHorizontalScrollIndicator: !0,
+        showVerticalScrollIndicator: true,
+        showHorizontalScrollIndicator: true,
+        id: "userLogin",
+        layout: "vertical"
+    });
+    $.__views.userLogin && $.addTopLevelView($.__views.userLogin);
+    var __alloyId21 = [];
+    $.__views.view1 = Ti.UI.createView({
+        id: "view1",
+        backgroundColor: "#123"
+    });
+    __alloyId21.push($.__views.view1);
+    $.__views.view2 = Ti.UI.createView({
+        id: "view2",
+        backgroundColor: "#246"
+    });
+    __alloyId21.push($.__views.view2);
+    $.__views.view3 = Ti.UI.createView({
+        id: "view3",
+        backgroundColor: "#48b"
+    });
+    __alloyId21.push($.__views.view3);
+    $.__views.scrollableView = Ti.UI.createScrollableView({
+        views: __alloyId21,
+        id: "scrollableView",
+        height: "60%"
+    });
+    $.__views.userLogin.add($.__views.scrollableView);
+    $.__views.__alloyId22 = Ti.UI.createView({
+        layout: "vertical",
+        id: "__alloyId22"
+    });
+    $.__views.userLogin.add($.__views.__alloyId22);
+    $.__views.__alloyId23 = Ti.UI.createButton({
+        backgroundImage: "fbBg.png",
+        height: 46,
+        width: 278,
+        top: 10,
+        title: "Login with Facebook",
+        id: "__alloyId23"
+    });
+    $.__views.__alloyId22.add($.__views.__alloyId23);
+    openLoginFacebook ? $.__views.__alloyId23.addEventListener("click", openLoginFacebook) : __defers["$.__views.__alloyId23!click!openLoginFacebook"] = true;
+    $.__views.__alloyId24 = Ti.UI.createButton({
+        backgroundImage: "dBg.png",
+        height: 46,
+        width: 278,
+        top: 10,
+        title: "Login with Duppp",
+        id: "__alloyId24"
+    });
+    $.__views.__alloyId22.add($.__views.__alloyId24);
+    openLoginDuppp ? $.__views.__alloyId24.addEventListener("click", openLoginDuppp) : __defers["$.__views.__alloyId24!click!openLoginDuppp"] = true;
+    $.__views.__alloyId25 = Ti.UI.createButton({
+        top: 10,
+        font: {
+            fontSize: 18
+        },
+        color: "white",
+        height: 40,
+        width: 300,
+        borderRadius: 5,
+        title: "Register with Duppp",
+        id: "__alloyId25"
+    });
+    $.__views.__alloyId22.add($.__views.__alloyId25);
+    openRegisterDuppp ? $.__views.__alloyId25.addEventListener("click", openRegisterDuppp) : __defers["$.__views.__alloyId25!click!openRegisterDuppp"] = true;
+    $.__views.userLoginDuppp = Ti.UI.createWindow({
+        barImage: "bgNavBar.png",
+        barColor: "#3B9DCB",
+        backgroundColor: "#F3F3F3",
+        borderWidth: 8,
+        borderColor: "#888",
+        height: 400,
+        width: 300,
+        borderRadius: 10,
+        opacity: .9,
+        id: "userLoginDuppp"
+    });
+    $.__views.userLoginDuppp && $.addTopLevelView($.__views.userLoginDuppp);
+    $.__views.loginView = Ti.UI.createScrollView({
+        backgroundColor: "#fff",
+        contentWidth: "auto",
+        contentHeight: "auto",
+        top: 0,
+        showVerticalScrollIndicator: true,
+        showHorizontalScrollIndicator: true,
         id: "loginView"
     });
-    $.__views.userLogin.add($.__views.loginView);
-    $.__views.__alloyId35 = Ti.UI.createView({
+    $.__views.userLoginDuppp.add($.__views.loginView);
+    $.__views.__alloyId26 = Ti.UI.createView({
         top: 180,
         layout: "vertical",
-        id: "__alloyId35"
+        id: "__alloyId26"
     });
-    $.__views.loginView.add($.__views.__alloyId35);
+    $.__views.loginView.add($.__views.__alloyId26);
     $.__views.loginUsr = Ti.UI.createTextField({
-        clearOnEdit: !0,
+        clearOnEdit: true,
         height: 40,
         backgroundColor: "#fff",
         top: 10,
@@ -86,9 +199,9 @@ function Controller() {
         value: "Username",
         autocapitalization: Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE
     });
-    $.__views.__alloyId35.add($.__views.loginUsr);
+    $.__views.__alloyId26.add($.__views.loginUsr);
     $.__views.loginPwd = Ti.UI.createTextField({
-        clearOnEdit: !0,
+        clearOnEdit: true,
         height: 40,
         backgroundColor: "#fff",
         top: 10,
@@ -106,32 +219,11 @@ function Controller() {
         value: "Password",
         autocapitalization: Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE
     });
-    $.__views.__alloyId35.add($.__views.loginPwd);
+    $.__views.__alloyId26.add($.__views.loginPwd);
     $.__views.loginBtn = Ti.UI.createButton({
         top: 10,
-        backgroundGradient: {
-            type: "linear",
-            startPoint: {
-                x: "50%",
-                y: "0%"
-            },
-            endPoint: {
-                x: "50%",
-                y: "100%"
-            },
-            colors: [ {
-                color: "#6a7179",
-                offset: 0
-            }, {
-                color: "#2d3032",
-                offset: 1
-            } ]
-        },
-        backgroundImage: "none",
-        backgroundFocusedColor: "#2d3032",
         font: {
-            fontSize: 20,
-            fontWeight: "bold"
+            fontSize: 18
         },
         color: "white",
         height: 40,
@@ -140,27 +232,40 @@ function Controller() {
         id: "loginBtn",
         title: "Login"
     });
-    $.__views.__alloyId35.add($.__views.loginBtn);
-    login ? $.__views.loginBtn.addEventListener("click", login) : __defers["$.__views.loginBtn!click!login"] = !0;
+    $.__views.__alloyId26.add($.__views.loginBtn);
+    login ? $.__views.loginBtn.addEventListener("click", login) : __defers["$.__views.loginBtn!click!login"] = true;
+    $.__views.userRegisterDuppp = Ti.UI.createWindow({
+        barImage: "bgNavBar.png",
+        barColor: "#3B9DCB",
+        backgroundColor: "#F3F3F3",
+        borderWidth: 8,
+        borderColor: "#888",
+        height: 400,
+        width: 300,
+        borderRadius: 10,
+        opacity: .9,
+        id: "userRegisterDuppp"
+    });
+    $.__views.userRegisterDuppp && $.addTopLevelView($.__views.userRegisterDuppp);
     $.__views.registerView = Ti.UI.createScrollView({
-        backgroundImage: "bg.png",
+        backgroundColor: "#fff",
         contentWidth: "auto",
         contentHeight: "auto",
         top: 0,
-        showVerticalScrollIndicator: !0,
-        showHorizontalScrollIndicator: !0,
+        showVerticalScrollIndicator: true,
+        showHorizontalScrollIndicator: true,
         id: "registerView",
         visible: "false"
     });
-    $.__views.userLogin.add($.__views.registerView);
-    $.__views.__alloyId36 = Ti.UI.createView({
+    $.__views.userRegisterDuppp.add($.__views.registerView);
+    $.__views.__alloyId27 = Ti.UI.createView({
         top: 180,
         layout: "vertical",
-        id: "__alloyId36"
+        id: "__alloyId27"
     });
-    $.__views.registerView.add($.__views.__alloyId36);
+    $.__views.registerView.add($.__views.__alloyId27);
     $.__views.usernameField = Ti.UI.createTextField({
-        clearOnEdit: !0,
+        clearOnEdit: true,
         height: 40,
         backgroundColor: "#fff",
         top: 10,
@@ -177,9 +282,9 @@ function Controller() {
         value: "Username",
         autocapitalization: Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE
     });
-    $.__views.__alloyId36.add($.__views.usernameField);
+    $.__views.__alloyId27.add($.__views.usernameField);
     $.__views.emailField = Ti.UI.createTextField({
-        clearOnEdit: !0,
+        clearOnEdit: true,
         height: 40,
         backgroundColor: "#fff",
         top: 10,
@@ -197,9 +302,9 @@ function Controller() {
         keyboardType: Titanium.UI.KEYBOARD_EMAIL,
         autocapitalization: Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE
     });
-    $.__views.__alloyId36.add($.__views.emailField);
+    $.__views.__alloyId27.add($.__views.emailField);
     $.__views.passwordRegisterField = Ti.UI.createTextField({
-        clearOnEdit: !0,
+        clearOnEdit: true,
         height: 40,
         backgroundColor: "#fff",
         top: 10,
@@ -217,32 +322,11 @@ function Controller() {
         value: "Password",
         autocapitalization: Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE
     });
-    $.__views.__alloyId36.add($.__views.passwordRegisterField);
+    $.__views.__alloyId27.add($.__views.passwordRegisterField);
     $.__views.registerBtn = Ti.UI.createButton({
         top: 10,
-        backgroundGradient: {
-            type: "linear",
-            startPoint: {
-                x: "50%",
-                y: "0%"
-            },
-            endPoint: {
-                x: "50%",
-                y: "100%"
-            },
-            colors: [ {
-                color: "#6a7179",
-                offset: 0
-            }, {
-                color: "#2d3032",
-                offset: 1
-            } ]
-        },
-        backgroundImage: "none",
-        backgroundFocusedColor: "#2d3032",
         font: {
-            fontSize: 20,
-            fontWeight: "bold"
+            fontSize: 18
         },
         color: "white",
         height: 40,
@@ -251,73 +335,25 @@ function Controller() {
         id: "registerBtn",
         title: "Register"
     });
-    $.__views.__alloyId36.add($.__views.registerBtn);
-    register ? $.__views.registerBtn.addEventListener("click", register) : __defers["$.__views.registerBtn!click!register"] = !0;
-    $.__views.switchBtn = Ti.UI.createButton({
-        bottom: 10,
-        width: 140,
-        height: 25,
-        font: {
-            fontSize: 13
-        },
-        color: "white",
-        backgroundImage: "none",
-        backgroundColor: "#b7544b",
-        borderRadius: 13,
-        id: "switchBtn",
-        title: "Get Duppp Account"
-    });
-    $.__views.userLogin.add($.__views.switchBtn);
-    switchViews ? $.__views.switchBtn.addEventListener("click", switchViews) : __defers["$.__views.switchBtn!click!switchViews"] = !0;
+    $.__views.__alloyId27.add($.__views.registerBtn);
+    register ? $.__views.registerBtn.addEventListener("click", register) : __defers["$.__views.registerBtn!click!register"] = true;
     exports.destroy = function() {};
     _.extend($, $.__views);
     Ti.include("config.js");
-    $.loginBtn.addEventListener("touchstart", function() {
-        $.loginBtn.backgroundGradient = {
-            type: "linear",
-            startPoint: {
-                x: "50%",
-                y: "0%"
-            },
-            endPoint: {
-                x: "50%",
-                y: "100%"
-            },
-            colors: [ {
-                color: "#2d3032",
-                offset: 0
-            }, {
-                color: "#2d3032",
-                offset: 1
-            } ]
-        };
-    });
-    $.loginBtn.addEventListener("touchend", function() {
-        $.loginBtn.backgroundGradient = {
-            type: "linear",
-            startPoint: {
-                x: "50%",
-                y: "0%"
-            },
-            endPoint: {
-                x: "50%",
-                y: "100%"
-            },
-            colors: [ {
-                color: "#6a7179",
-                offset: 0
-            }, {
-                color: "#2d3032",
-                offset: 1
-            } ]
-        };
-    });
+    Ti.include("tiajax.js");
+    Titanium.Network.ajax;
+    var urlFB = REST_PATH + "/facebook_connect/connect";
+    Ti.Facebook.appid = "457579484312297";
+    Ti.Facebook.permissions = [ "publish_stream", "email" ];
+    Ti.Facebook.addEventListener("login", facebook);
+    __defers["$.__views.__alloyId23!click!openLoginFacebook"] && $.__views.__alloyId23.addEventListener("click", openLoginFacebook);
+    __defers["$.__views.__alloyId24!click!openLoginDuppp"] && $.__views.__alloyId24.addEventListener("click", openLoginDuppp);
+    __defers["$.__views.__alloyId25!click!openRegisterDuppp"] && $.__views.__alloyId25.addEventListener("click", openRegisterDuppp);
     __defers["$.__views.loginBtn!click!login"] && $.__views.loginBtn.addEventListener("click", login);
     __defers["$.__views.registerBtn!click!register"] && $.__views.registerBtn.addEventListener("click", register);
-    __defers["$.__views.switchBtn!click!switchViews"] && $.__views.switchBtn.addEventListener("click", switchViews);
     _.extend($, exports);
 }
 
-var Alloy = require("alloy"), Backbone = Alloy.Backbone, _ = Alloy._, $model;
+var Alloy = require("alloy"), Backbone = Alloy.Backbone, _ = Alloy._;
 
 module.exports = Controller;

@@ -2,7 +2,7 @@ function saveFile(_args) {
     if (Ti.Filesystem.isExternalStoragePresent()) var file = Ti.Filesystem.getFile(Ti.Filesystem.externalStorageDirectory, _args.filename); else var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, _args.filename);
     file.write(_args.file);
     file.exists ? Ti.API.info("[saveFile] Saved: YES! (" + file.nativePath + ")") : Ti.API.info("[saveFile] Saved: NO!");
-    if (ios && Ti.version <= "1.8.2") {
+    if (ios && "1.8.2" >= Ti.version) {
         var iosPath = Ti.Filesystem.applicationDataDirectory + _args.filename;
         iosPath = iosPath.replace("file://", "app://");
         return iosPath;
@@ -14,9 +14,13 @@ Ti.include("config.js");
 
 Ti.include("tiajax.js");
 
-var mediaQueue = [], ajax = Titanium.Network.ajax, nodeUrl = REST_PATH + "/node", processed = !1, uploadFile = function(media, contribution) {
+var mediaQueue = [], ajax = Titanium.Network.ajax, nodeUrl = REST_PATH + "/node", processed = false;
+
+if ("iPhone" === Ti.Platform.osname || "iPad" === Ti.Platform.osname) var ios = true;
+
+var uploadFile = function(media, contribution) {
     if (Titanium.Network.online && !processed) {
-        processed = !0;
+        processed = true;
         ajax({
             type: "POST",
             url: nodeUrl,
@@ -27,27 +31,40 @@ var mediaQueue = [], ajax = Titanium.Network.ajax, nodeUrl = REST_PATH + "/node"
                 Titanium.API.fireEvent("startUpload");
                 var xhr_video = Titanium.Network.createHTTPClient();
                 xhr_video.onsendstream = function(e) {
+                    "";
                     var data = {
                         progressValue: e.progress
                     };
                     Titanium.API.fireEvent("uploadInProgress", data);
                 };
-                xhr_video.onload = function(e) {
+                xhr_video.onerror = function() {
+                    processed = false;
+                    processUpload();
+                };
+                xhr_video.onload = function() {
                     mediaQueue.shift();
-                    processed = !1;
+                    processed = false;
                     processUpload();
                     Titanium.API.fireEvent("uploadFinish");
                 };
+                xhr_video.setRequestHeader("ContentType", "multipart/form-data");
                 xhr_video.open("POST", REST_PATH + "/node/" + data.nid + "/attach_file");
                 xhr_video.send({
                     "files[video]": media,
                     field_name: "field_contribution_video"
                 });
+            },
+            error: function() {
+                processed = false;
+                processUpload();
             }
         });
     }
-}, addFile = function(media, gid, date, uid) {
-    var file, contribution = {
+};
+
+var addFile = function(media, gid, date, uid) {
+    var file;
+    var contribution = {
         node: {
             title: date,
             type: "contribution",
@@ -61,23 +78,23 @@ var mediaQueue = [], ajax = Titanium.Network.ajax, nodeUrl = REST_PATH + "/node"
             status: 1
         }
     };
-    if (Titanium.Network.online) uploadFile(media, contribution); else {
-        file = saveFile({
-            file: media,
-            filename: date + "_" + gid + ".MOV"
-        });
-        contribution.mediaElement = file;
-        mediaQueue.push(contribution);
-    }
-}, processUpload = function() {
+    file = saveFile({
+        file: media,
+        filename: date + "_" + gid + ".MOV"
+    });
+    contribution.mediaElement = file;
+    mediaQueue.push(contribution);
+    processUpload();
+};
+
+var processUpload = function() {
+    console.log(mediaQueue);
     if (Titanium.Network.online) {
-        if (mediaQueue.length === 0) return alert("No video need to be upload");
+        if (0 === mediaQueue.length) return Ti.API.info("No video need to be upload");
         var contribution = mediaQueue[0], file = Ti.Filesystem.getFile(contribution.mediaElement);
         contribution && uploadFile(file.read(), contribution.node);
     }
 };
-
-if (Ti.Platform.osname === "iPhone" || Ti.Platform.osname === "iPad") var ios = !0;
 
 exports.mediaQueue = mediaQueue;
 

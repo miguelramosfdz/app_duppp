@@ -10,6 +10,11 @@ var mediaQueue = [],
     nodeUrl = REST_PATH + '/node',
     processed = false;
 
+// OS
+if(Ti.Platform.osname === 'iPhone' || Ti.Platform.osname === 'iPad') {
+  var ios = true;
+}
+
 /*
  *  Add upload to list of upload files.
  *
@@ -19,51 +24,74 @@ var mediaQueue = [],
  */
 var uploadFile = function (media, contribution) {
 
+  // Need to be online.
   if (Titanium.Network.online && !processed) {
 
+    // Pass to true to avoid parallel upload.
     processed = true;
 
-    // Use $.ajax to create the node
+    // Create the contribution node to attach file.
     ajax({
       type: "POST",
       url: nodeUrl,
       data: JSON.stringify(contribution), // Stringify the node
       dataType: 'json',
       contentType: 'application/json',
-      // On success do some processing like closing the window and show an alert
       success: function (data) {
 
+        // Add callback events when the contribution is created.
         Titanium.API.fireEvent('startUpload');
 
-        /* success callback fired after media retrieved from gallery */
+        // Attach file to past contribution node.
         var xhr_video = Titanium.Network.createHTTPClient();
         xhr_video.onsendstream = function(e){
-
+""
           var data = {
             progressValue: e.progress
           };
 
+          // Add callback to add a progress bar.
           Titanium.API.fireEvent('uploadInProgress', data);
+
         };
         xhr_video.onerror = function (e) {
-          processUpload();
-        };
-        xhr_video.onload = function (e) {
-
-          mediaQueue.shift();
 
           processed = false;
 
+          // If the attach file get an error, try again.
           processUpload();
 
+        };
+        xhr_video.onload = function (e) {
+
+          // Delete current row, if the video is uploaded.
+          mediaQueue.shift();
+          processed = false;
+
+          // try to upload the next row.
+          processUpload();
+
+          // Add callback for upload finish.
           Titanium.API.fireEvent('uploadFinish');
 
         };
+
+        xhr_video.setRequestHeader("ContentType", "multipart/form-data");
+
+        // Send the xhr for upload the video.
         xhr_video.open('POST', REST_PATH + '/node/' + data.nid + '/attach_file');
         xhr_video.send({
-          "files[video]": media, /* event.media holds blob from gallery */
-          "field_name": "field_contribution_video"
+          "files[video]": media, // Blob file
+          "field_name": "field_contribution_video" // Field name in API
         });
+      },
+      error: function (data) {
+
+        processed = false;
+
+        // try again.
+        processUpload();
+
       }
     });
   }
@@ -83,7 +111,7 @@ var addFile = function (media, gid, date, uid) {
 
   var file;
 
-  // Create a new node object
+  // Create structure of node object.
   var contribution = {
     node: {
       title: date,
@@ -102,22 +130,19 @@ var addFile = function (media, gid, date, uid) {
   };
 
   // Put the row in a table if the user are not online.
-  if (Titanium.Network.online) {
+  // Save file in persistant way.
+  file = saveFile({
+    file: media,
+    filename: date + '_' + gid + '.MOV'
+  });
 
-    uploadFile(media, contribution)
+  contribution.mediaElement = file;
 
-  } else {
+  // Add to the mediaQueue.
+  mediaQueue.push(contribution);
 
-    file = saveFile({
-      file: media,
-      filename: date + '_' + gid + '.MOV'
-    });
-
-    contribution.mediaElement = file;
-
-    mediaQueue.push(contribution)
-
-  }
+  // Process the upload.
+  processUpload();
 
 };
 
@@ -126,14 +151,17 @@ var addFile = function (media, gid, date, uid) {
  */
 var processUpload = function () {
 
+  console.log(mediaQueue);
+
   if (Titanium.Network.online) {
     // Check if array still have file to upload.
     if (mediaQueue.length === 0) {
 
-      return alert("No video need to be upload");
+      return Ti.API.info("No video need to be upload");
 
     } else {
 
+      // Get the row and upload her.
       var contribution = mediaQueue[0],
         file = Ti.Filesystem.getFile(contribution.mediaElement);
 
@@ -146,11 +174,6 @@ var processUpload = function () {
 
 
 };
-
-// OS
-if(Ti.Platform.osname === 'iPhone' || Ti.Platform.osname === 'iPad') {
-  var ios = true;
-}
 
 /**
  * Save file function

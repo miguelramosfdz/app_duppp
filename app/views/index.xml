@@ -4,5 +4,4 @@
     <Require src="myEvents" />
     <Require src="explore" />
   </TabGroup>
-  <Require src="user" />
 </Alloy>

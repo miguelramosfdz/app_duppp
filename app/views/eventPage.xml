@@ -9,7 +9,7 @@
 				<Label id="f_date" class="date" />
 			</View>
       <View id="actionBtns" layout='horizontal' >
-        <Button title="Comments" class="btn comments" />
+        <Button title="Comments" onClick="comment" class="btn comments" />
         <Button id="like" title="Like" onClick="like" class="btn like" />
         <Button title="Extra" class="btn extra" />
       </View>

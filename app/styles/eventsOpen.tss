@@ -4,7 +4,7 @@
 }
 
 "#provressView": {
-  height: 20
+  height: 0
 }
 
 "#pb": {

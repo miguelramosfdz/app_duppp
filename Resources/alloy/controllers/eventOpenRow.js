@@ -1,29 +1,34 @@
 function Controller() {
     function close() {
-        indicator.openIndicator();
-        ajax({
-            type: "POST",
-            url: url,
-            dataType: "json",
-            contentType: "application/json",
-            success: function(data) {
-                indicator.closeIndicator();
-                Titanium.API.fireEvent("eventCreated");
-            },
-            error: function(data) {
-                indicator.closeIndicator();
-                alert("Sorry, your event cannot be closed.");
-            }
-        });
+        if (0 === dupppUpload.mediaQueue.length) {
+            indicator.openIndicator();
+            ajax({
+                type: "POST",
+                url: url,
+                dataType: "json",
+                contentType: "application/json",
+                success: function() {
+                    indicator.closeIndicator();
+                    Titanium.API.fireEvent("eventCreated");
+                },
+                error: function() {
+                    indicator.closeIndicator();
+                    alert("Sorry, your event cannot be closed.");
+                }
+            });
+        } else alert("Sorry, your cannot close your event, because some videos need to be uploaded.");
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
-    $model = arguments[0] ? arguments[0].$model : null;
-    var $ = this, exports = {}, __defers = {};
+    arguments[0] ? arguments[0]["__parentSymbol"] : null;
+    arguments[0] ? arguments[0]["$model"] : null;
+    var $ = this;
+    var exports = {};
+    var __defers = {};
     $.__views.row = Ti.UI.createTableViewRow({
         textAlign: Ti.UI.TEXT_ALIGNMENT_LEFT,
         id: "row"
     });
-    $.addTopLevelView($.__views.row);
+    $.__views.row && $.addTopLevelView($.__views.row);
     $.__views.title = Ti.UI.createLabel({
         color: "#353535",
         font: {
@@ -74,17 +79,19 @@ function Controller() {
         title: "Publish"
     });
     $.__views.row.add($.__views.button);
-    close ? $.__views.button.addEventListener("click", close) : __defers["$.__views.button!click!close"] = !0;
+    close ? $.__views.button.addEventListener("click", close) : __defers["$.__views.button!click!close"] = true;
     exports.destroy = function() {};
     _.extend($, $.__views);
     Ti.include("config.js");
     Ti.include("tiajax.js");
-    var data = [], ajax = Titanium.Network.ajax, args = arguments[0] || {}, url = REST_PATH + "/event/" + args.nid + "/close", uie = require("UiElements"), indicator = uie.createIndicatorWindow();
+    var ajax = Titanium.Network.ajax, args = arguments[0] || {}, url = REST_PATH + "/event/" + args.nid + "/close", dupppUpload = require("duppp_upload");
+    var uie = require("UiElements");
+    var indicator = uie.createIndicatorWindow();
     $.title.text = args.title;
     __defers["$.__views.button!click!close"] && $.__views.button.addEventListener("click", close);
     _.extend($, exports);
 }
 
-var Alloy = require("alloy"), Backbone = Alloy.Backbone, _ = Alloy._, $model;
+var Alloy = require("alloy"), Backbone = Alloy.Backbone, _ = Alloy._;
 
 module.exports = Controller;

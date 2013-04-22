@@ -1,1 +1,3 @@
-var REST_PATH = "http://develop.duppp.com/api/1.0", SITE_PATH = "http://duppp.local";
+var REST_PATH = "http://duppp.local/api/1.0";
+
+var SITE_PATH = "http://duppp.local";

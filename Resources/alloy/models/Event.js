@@ -12,9 +12,9 @@ exports.definition = {
             },
             parse: function(record) {
                 Ti.API.debug("In models/agents#extendModel.parse. Parameter received " + record);
-                if (typeof record == "string") {
+                if ("string" == typeof record) {
                     record = JSON.parse(record);
-                    record.status === "success" && record.data.result_list;
+                    "success" === record.status && record.data.result_list;
                     record = record.data.result_list[0];
                 }
                 return record;
@@ -30,12 +30,12 @@ exports.definition = {
             parse: function(response) {
                 Ti.API.debug("In models/agents#extendCollection.parse. Parameter received " + response);
                 response = JSON.parse(response);
-                Ti.API.debug(response.status === "success");
+                Ti.API.debug("success" === response.status);
                 Ti.API.debug(response.data.result_list);
-                return response.status === "success" ? response.data.result_list : "";
+                return "success" === response.status ? response.data.result_list : "";
             },
             search: function(options) {
-                options == null && (options = {});
+                null == options && (options = {});
                 Ti.API.debug(options);
                 Ti.API.debug("In models/agents#extendCollection.search. Parameters received " + options);
                 return this.fetch(options);
