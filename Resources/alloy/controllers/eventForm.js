@@ -10,10 +10,10 @@ function Controller() {
                 session_name: Titanium.App.Properties.getString("userSessionName"),
                 name: Titanium.App.Properties.getString("userName")
             };
-            var node = {
+            drupalServices.createNode({
                 node: {
-                    title: $.textArea.value,
                     type: "event",
+                    title: $.textArea.value,
                     language: "und",
                     group_access: {
                         und: "0"
@@ -32,32 +32,16 @@ function Controller() {
                     },
                     uid: user.uid,
                     status: 1
-                }
-            };
-            var url = REST_PATH + "/node";
-            ajax({
-                type: "POST",
-                url: url,
-                data: JSON.stringify(node),
-                dataType: "json",
-                contentType: "application/json",
-                success: function(data) {
+                },
+                success: function() {
                     $.eventFormWindow.close({
                         animated: true
                     });
                     $.createBtn.enabled = true;
                     Titanium.API.fireEvent("eventCreated");
-                    var join = {
-                        uid: clickedRows
-                    };
-                    ajax({
-                        type: "POST",
-                        url: REST_PATH + "/event/" + data.nid + "/join",
-                        data: JSON.stringify(join),
-                        dataType: "json",
-                        contentType: "application/json",
-                        success: function() {}
-                    });
+                },
+                error: function() {
+                    alert("There was an error, try again.");
                 }
             });
         } else alert("You need to login first");
@@ -118,8 +102,7 @@ function Controller() {
     exports.destroy = function() {};
     _.extend($, $.__views);
     Ti.include("config.js");
-    Ti.include("tiajax.js");
-    var ajax = Titanium.Network.ajax, data = [], uie = require("UiElements"), indicator = uie.createIndicatorWindow();
+    var data = [], uie = require("UiElements"), indicator = uie.createIndicatorWindow(), drupalServices = require("drupalServices");
     $.textArea.addEventListener("focus", function() {
         $.textArea.value = "";
     });

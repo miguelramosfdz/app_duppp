@@ -1,25 +1,22 @@
 function Controller() {
     function like() {
+        var data;
         if ("Like" === $.like.title) {
             $.like.title = "Unlike";
-            var data = {
+            data = {
                 action: "flag",
                 flag_name: "like"
             };
         } else {
             $.like.title = "Like";
-            var data = {
+            data = {
                 action: "unflag",
                 flag_name: "like"
             };
         }
-        ajax({
-            type: "POST",
-            url: urlLike,
-            data: JSON.stringify(data),
-            dataType: "json",
-            contentType: "application/json",
-            success: function() {}
+        drupalServices.likeNode({
+            node: data,
+            nid: args.nid
         });
     }
     function comment() {
@@ -197,34 +194,25 @@ function Controller() {
     exports.destroy = function() {};
     _.extend($, $.__views);
     Ti.include("config.js");
-    Ti.include("tiajax.js");
-    var args = arguments[0] || {};
+    var commentFormWin = Alloy.createController("commentForm").getView(), args = arguments[0] || {}, drupalServices = require("drupalServices");
     $.author.text = args.user_name;
     $.author_image.image = args.avatar;
     $.videoPlayer.url = args.video;
     $.f_title.text = args.title;
     $.f_date.text = args.created;
-    var url = REST_PATH + "/event/" + args.nid + ".json", urlLike = REST_PATH + "/event/" + args.nid + "/flag", ajax = Titanium.Network.ajax, commentFormWin = Alloy.createController("commentForm").getView();
-    var xhr = Ti.Network.createHTTPClient({
-        onload: function() {
-            var json = JSON.parse(this.responseText);
-            $.like.title = json.is_flagged ? "Unlike" : "Like";
-            $.likeCount.text = json.like_count.count ? "Likes " + json.like_count.count : "Likes 0";
-            $.commentCount.text = "Comments " + json.comment_count;
-            for (var key in json.comments) {
-                var newsItem = Alloy.createController("commentRow", json.comments[key]).getView();
-                $.commentsList.add(newsItem);
-            }
-        },
-        onerror: function(e) {
-            Ti.API.debug(e.error);
-            alert("error");
-        },
-        timeout: 5e3
-    });
     $.eventPage.addEventListener("open", function() {
-        xhr.open("GET", url);
-        xhr.send();
+        drupalServices.nodeRetrieve({
+            nid: args.nid,
+            success: function(json) {
+                $.like.title = json.is_flagged ? "Unlike" : "Like";
+                $.likeCount.text = json.like_count.count ? "Likes " + json.like_count.count : "Likes 0";
+                $.commentCount.text = "Comments " + json.comment_count;
+                for (var key in json.comments) {
+                    var newsItem = Alloy.createController("commentRow", json.comments[key]).getView();
+                    $.commentsList.add(newsItem);
+                }
+            }
+        });
     });
     __defers["$.__views.__alloyId3!click!comment"] && $.__views.__alloyId3.addEventListener("click", comment);
     __defers["$.__views.like!click!like"] && $.__views.like.addEventListener("click", like);

@@ -44,7 +44,13 @@ function Controller() {
         $.tooltipContainer.show();
     }
     function openMenu() {
-        $.menu.show();
+        if (menuOpen) {
+            menuOpen = false;
+            $.menu.hide();
+        } else {
+            menuOpen = true;
+            $.menu.show();
+        }
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     arguments[0] ? arguments[0]["__parentSymbol"] : null;
@@ -243,11 +249,11 @@ function Controller() {
     exports.destroy = function() {};
     _.extend($, $.__views);
     Ti.include("config.js");
-    Ti.include("tiajax.js");
-    var dupppUpload = (Titanium.Network.ajax, require("duppp_upload"));
+    var dupppUpload = require("dupppUpload");
     $.tooltipContainer.addEventListener("click", function(e) {
         "tooltipContainer" === e.source.id && $.tooltipContainer.hide();
     });
+    var menuOpen = false;
     Titanium.API.addEventListener("myEvents:fetched", function(data) {
         removeAllChildren($.tableOpen);
         $.tableOpen.height = 0;

@@ -1,15 +1,11 @@
-Ti.include('config.js');
-Ti.include("tiajax.js");
-
 /*
  *  Initialize variables
  */
 
 var data = [],
-  ajax = Titanium.Network.ajax,
   args = arguments[0] || {},
-  url = REST_PATH + "/event/" + args.nid + "/close",
-  dupppUpload = require('duppp_upload');
+  dupppUpload = require('dupppUpload'),
+  drupalServices = require('drupalServices');
 
 var uie = require('UiElements');
 var indicator = uie.createIndicatorWindow();
@@ -25,11 +21,8 @@ function close() {
 
     indicator.openIndicator();
 
-    ajax({
-      type: "POST",
-      url: url,
-      dataType: 'json',
-      contentType: 'application/json',
+    drupalServices.closeNode({
+      nid: args.nid,
       success: function(data) {
         indicator.closeIndicator();
         Titanium.API.fireEvent('eventCreated');

@@ -1,52 +1,50 @@
-var url = REST_PATH + "/event.json?type=my_events",
-    dupppUpload = require('duppp_upload'),
+var dupppUpload = require('dupppUpload'),
+    drupalServices = require('drupalServices'),
     data = [],
     eventsRaw;
 
-var xhrMyEvents = Ti.Network.createHTTPClient({
-  // Success callback.
-  onload: function(e) {
 
-    data = [];
-    eventsRaw = [];
+function fetchEvents() {
+  drupalServices.nodeList({
+    type: 'my_events',
+    success: function(json) {
+      data = [];
+      eventsRaw = [];
 
-    // Add events to views.
-    json = JSON.parse(this.responseText);
-    json.forEach(function(event){
+      // Add events to views.
+      json.forEach(function(event){
 
-      // Keep only events open.
-      if (event.field_event_closed === "0") {
-        var newsItem = Alloy.createController('eventOpenRow', event).getView();
-        data.push(newsItem);
-        eventsRaw.push(event);
-      }
-    });
+        // Keep only events open.
+        if (event.field_event_closed === "0") {
+          var newsItem = Alloy.createController('eventOpenRow', event).getView();
+          data.push(newsItem);
+          eventsRaw.push(event);
+        }
+      });
 
-    var events = {
-      data: eventsRaw
-    };
+      var events = {
+        data: eventsRaw
+      };
 
-    Titanium.API.fireEvent('myEvents:fetched', events);
+      Titanium.API.fireEvent('myEvents:fetched', events);
 
-    // Update View.
-    $.table.setData(data);
-    $.labelOpen.text = data.length + " events in progress";
+      // Update View.
+      $.table.setData(data);
+      $.labelOpen.text = data.length + " events in progress";
 
-    // Display the label with correct value.
-    $.activityIndicator.hide();
-    $.labelOpen.show();
+      // Display the label with correct value.
+      $.activityIndicator.hide();
+      $.labelOpen.show();
 
-    // Set a badge on application to see how many events still open.
-    Titanium.UI.iPhone.setAppBadge(data.length);
-  },
+      // Set a badge on application to see how many events still open.
+      Titanium.UI.iPhone.setAppBadge(data.length);
+    },
+    error: function(data) {
+      alert('error');
+    }
+  });
+}
 
-  // Error callback
-  onerror: function(e) {
-    // Do ...
-  },
-
-  timeout: 5000
-});
 
 /*
  * When the view is instantiate.
@@ -57,8 +55,7 @@ $.activityIndicator.show();
 
 // Call the xhr.
 Titanium.API.addEventListener('index:open', function(data) {
-  xhrMyEvents.open("GET", url);
-  xhrMyEvents.send();
+  fetchEvents();
 });
 
 
@@ -72,18 +69,14 @@ Titanium.App.addEventListener('resume', function () {
   $.activityIndicator.show();
 
   dupppUpload.processUpload();
-
-  xhrMyEvents.open("GET", url);
-  xhrMyEvents.send();
+  fetchEvents();
 });
 
 Titanium.API.addEventListener('eventCreated', function (data) {
 
   $.labelOpen.hide();
   $.activityIndicator.show();
-
-  xhrMyEvents.open("GET", url);
-  xhrMyEvents.send();
+  fetchEvents();
 });
 
 

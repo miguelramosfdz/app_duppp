@@ -2,11 +2,8 @@ function Controller() {
     function close() {
         if (0 === dupppUpload.mediaQueue.length) {
             indicator.openIndicator();
-            ajax({
-                type: "POST",
-                url: url,
-                dataType: "json",
-                contentType: "application/json",
+            drupalServices.closeNode({
+                nid: args.nid,
                 success: function() {
                     indicator.closeIndicator();
                     Titanium.API.fireEvent("eventCreated");
@@ -82,9 +79,7 @@ function Controller() {
     close ? $.__views.button.addEventListener("click", close) : __defers["$.__views.button!click!close"] = true;
     exports.destroy = function() {};
     _.extend($, $.__views);
-    Ti.include("config.js");
-    Ti.include("tiajax.js");
-    var ajax = Titanium.Network.ajax, args = arguments[0] || {}, url = REST_PATH + "/event/" + args.nid + "/close", dupppUpload = require("duppp_upload");
+    var args = arguments[0] || {}, dupppUpload = require("dupppUpload"), drupalServices = require("drupalServices");
     var uie = require("UiElements");
     var indicator = uie.createIndicatorWindow();
     $.title.text = args.title;

@@ -1,4 +1,32 @@
 function Controller() {
+    function fetchEvents() {
+        drupalServices.nodeList({
+            type: "my_events",
+            success: function(json) {
+                data = [];
+                eventsRaw = [];
+                json.forEach(function(event) {
+                    if ("0" === event.field_event_closed) {
+                        var newsItem = Alloy.createController("eventOpenRow", event).getView();
+                        data.push(newsItem);
+                        eventsRaw.push(event);
+                    }
+                });
+                var events = {
+                    data: eventsRaw
+                };
+                Titanium.API.fireEvent("myEvents:fetched", events);
+                $.table.setData(data);
+                $.labelOpen.text = data.length + " events in progress";
+                $.activityIndicator.hide();
+                $.labelOpen.show();
+                Titanium.UI.iPhone.setAppBadge(data.length);
+            },
+            error: function() {
+                alert("error");
+            }
+        });
+    }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     arguments[0] ? arguments[0]["__parentSymbol"] : null;
     arguments[0] ? arguments[0]["$model"] : null;
@@ -101,50 +129,22 @@ function Controller() {
     $.__views.view2.add($.__views.table);
     exports.destroy = function() {};
     _.extend($, $.__views);
-    var eventsRaw, url = REST_PATH + "/event.json?type=my_events", dupppUpload = require("duppp_upload"), data = [];
-    var xhrMyEvents = Ti.Network.createHTTPClient({
-        onload: function() {
-            data = [];
-            eventsRaw = [];
-            json = JSON.parse(this.responseText);
-            json.forEach(function(event) {
-                if ("0" === event.field_event_closed) {
-                    var newsItem = Alloy.createController("eventOpenRow", event).getView();
-                    data.push(newsItem);
-                    eventsRaw.push(event);
-                }
-            });
-            var events = {
-                data: eventsRaw
-            };
-            Titanium.API.fireEvent("myEvents:fetched", events);
-            $.table.setData(data);
-            $.labelOpen.text = data.length + " events in progress";
-            $.activityIndicator.hide();
-            $.labelOpen.show();
-            Titanium.UI.iPhone.setAppBadge(data.length);
-        },
-        onerror: function() {},
-        timeout: 5e3
-    });
+    var eventsRaw, dupppUpload = require("dupppUpload"), drupalServices = require("drupalServices"), data = [];
     $.labelOpen.hide();
     $.activityIndicator.show();
     Titanium.API.addEventListener("index:open", function() {
-        xhrMyEvents.open("GET", url);
-        xhrMyEvents.send();
+        fetchEvents();
     });
     Titanium.App.addEventListener("resume", function() {
         $.labelOpen.hide();
         $.activityIndicator.show();
         dupppUpload.processUpload();
-        xhrMyEvents.open("GET", url);
-        xhrMyEvents.send();
+        fetchEvents();
     });
     Titanium.API.addEventListener("eventCreated", function() {
         $.labelOpen.hide();
         $.activityIndicator.show();
-        xhrMyEvents.open("GET", url);
-        xhrMyEvents.send();
+        fetchEvents();
     });
     Titanium.API.addEventListener("startUpload", function() {
         $.provressView.height = 20;

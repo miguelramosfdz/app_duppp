@@ -3,58 +3,53 @@ Ti.include('config.js');
 var args = arguments[0] || {};
 
 // Create another connection to get the user
-var url = REST_PATH + '/duppp_user/' + args + '.json',
-  urlFollow = REST_PATH + '/duppp_user/' + args + '/flag',
-  ajax = Titanium.Network.ajax;
-
-var xhr = Ti.Network.createHTTPClient({
-  onload: function() {
-    var user = JSON.parse(this.responseText);
-
-    if (user.is_flagged) {
-      $.follow.title = 'Unfollow';
-    } else {
-      $.follow.title = 'Follow';
-    }
-
-      // map fields with correct values.
-    $.author.text = user.name;
-  },
-  onerror: function(e) {
-      Ti.API.debug(e.error);
-      alert('error');
-  },
-  timeout: 5000
-});
+var drupalServices = require('drupalServices');
 
 $.profilePage.addEventListener('open', function() {
-  xhr.open("GET", url);
-  xhr.send();
+  drupalServices.userRetrieve({
+    uid: args,
+    success: function(user) {
+      // Check if user si flagged by the current user.
+      if (user.is_flagged) {
+        $.follow.title = 'Unfollow';
+      } else {
+        $.follow.title = 'Follow';
+      }
+      // map fields with correct values.
+      $.author.text = user.name;
+    },
+    error: function(data) {
+      alert('error');
+    }
+  });
 });
 
 function follow () {
+
+  var data;
+
   if ($.follow.title === 'Follow') {
-    var data = {
+    data = {
       "action": "flag"
     };
   } else {
-    var data = {
+    data = {
       "action": "unflag"
     };
   }
 
-  ajax({
-    type: "POST",
-    url: urlFollow,
-    data: JSON.stringify(data), // Stringify the node
-    dataType: 'json',
-    contentType: 'application/json',
-    success: function(data) {
+  drupalServices.followUser({
+    node: data,
+    uid: args,
+    success: function(user) {
       if ($.follow.title === 'Follow') {
         $.follow.title = 'Unfollow';
       } else {
         $.follow.title = 'Follow';
       }
+    },
+    error: function(data) {
+      alert('error');
     }
   });
 }

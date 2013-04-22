@@ -1,5 +1,3 @@
-Ti.include('config.js');
-
 var args = arguments[0] || {};
 
 // Map fields with correct values.

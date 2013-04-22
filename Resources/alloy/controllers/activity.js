@@ -1,27 +1,26 @@
 function Controller() {
+    function prepareData(data) {
+        dataEvents = [];
+        data.forEach(function(event) {
+            if ("1" === event.field_event_closed) {
+                var newsItem = Alloy.createController("eventRow", event).getView();
+                dataEvents.push(newsItem);
+            }
+        });
+        $.table.setData(dataEvents);
+    }
     function myLoaderCallback(widgetCallback) {
-        var xhr2 = Ti.Network.createHTTPClient({
-            onload: function() {
-                data = [];
-                json = JSON.parse(this.responseText);
-                json.forEach(function(event) {
-                    if ("1" === event.field_event_closed) {
-                        var newsItem = Alloy.createController("eventRow", event).getView();
-                        data.push(newsItem);
-                    }
-                });
-                Titanium.API.fireEvent("refreshEvents");
-                $.table.setData(data);
+        drupalServices.nodeList({
+            type: "activity",
+            success: function(data) {
+                prepareData(data);
                 widgetCallback(true);
             },
-            onerror: function() {
+            error: function() {
                 widgetCallback(true);
                 alert("error");
-            },
-            timeout: 5e3
+            }
         });
-        xhr2.open("GET", url);
-        xhr2.send();
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     arguments[0] ? arguments[0]["__parentSymbol"] : null;
@@ -51,33 +50,24 @@ function Controller() {
     exports.destroy = function() {};
     _.extend($, $.__views);
     Ti.include("config.js");
-    var data = [], url = REST_PATH + "/event.json?type=activity", nav = Alloy.createController("navActions"), uie = require("UiElements"), indicator = uie.createIndicatorWindow();
+    var dataEvents = [], nav = Alloy.createController("navActions"), uie = require("UiElements"), drupalServices = require("drupalServices"), indicator = uie.createIndicatorWindow();
     $.child_window.setLeftNavButton(nav.getView("menuBtn"));
     $.child_window.setRightNavButton(nav.getView("cameraBtn"));
     $.child_window.add(nav.getView("tooltipContainer"));
     $.child_window.add(nav.getView("menu"));
-    var xhr = Ti.Network.createHTTPClient({
-        onload: function() {
-            json = JSON.parse(this.responseText);
-            json.forEach(function(event) {
-                if ("1" === event.field_event_closed) {
-                    var newsItem = Alloy.createController("eventRow", event).getView();
-                    data.push(newsItem);
-                }
-            });
-            $.table.setData(data);
-            indicator.closeIndicator();
-        },
-        onerror: function() {
-            alert("The server cannot be reached");
-            indicator.closeIndicator();
-        },
-        timeout: 5e3
-    });
     $.child_window.addEventListener("open", function() {
         indicator.openIndicator();
-        xhr.open("GET", url);
-        xhr.send();
+        drupalServices.nodeList({
+            type: "activity",
+            success: function(data) {
+                prepareData(data);
+                indicator.closeIndicator();
+            },
+            error: function() {
+                indicator.closeIndicator();
+                alert("error");
+            }
+        });
     });
     Alloy.createWidget("nl.fokkezb.pullToRefresh", null, {
         table: $.table,

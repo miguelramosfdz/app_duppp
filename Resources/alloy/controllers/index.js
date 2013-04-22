@@ -1,20 +1,20 @@
 function Controller() {
     function checkConnection() {
-        ajax({
-            type: "POST",
-            url: urlInfo,
-            dataType: "json",
-            contentType: "application/json",
-            success: function(data) {
+        var xhr3 = Titanium.Network.createHTTPClient();
+        xhr3.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+        xhr3.open("POST", urlInfo);
+        xhr3.send();
+        xhr3.onload = function() {
+            var statusCode = xhr3.status;
+            if (200 == statusCode) {
+                var response = xhr3.responseText;
+                var data = JSON.parse(response);
                 if (0 !== data.user.uid) $.indexView.open(); else {
                     userLoginWin.open();
                     Ti.Facebook.logout();
                 }
-            },
-            error: function(data) {
-                console.log(data);
-            }
-        });
+            } else alert("There was an error");
+        };
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     arguments[0] ? arguments[0]["__parentSymbol"] : null;
@@ -46,8 +46,7 @@ function Controller() {
     exports.destroy = function() {};
     _.extend($, $.__views);
     Ti.include("config.js");
-    Ti.include("tiajax.js");
-    var userLoginWin = Alloy.createController("user").getView("userLogin"), eventsOpenWin = Alloy.createController("eventsOpen").getView(), ajax = Titanium.Network.ajax, urlInfo = REST_PATH + "/system/connect";
+    var userLoginWin = Alloy.createController("user").getView("userLogin"), eventsOpenWin = Alloy.createController("eventsOpen").getView(), urlInfo = REST_PATH + "/system/connect";
     checkConnection();
     Titanium.App.addEventListener("resume", function() {
         checkConnection();
@@ -56,6 +55,7 @@ function Controller() {
         $.indexView.open({
             transition: Titanium.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT
         });
+        Titanium.API.fireEvent("index:open");
     });
     Titanium.API.addEventListener("clickMenuChild", function(data) {
         $.indexView.tabs[data.tab_id].active = true;

@@ -1,19 +1,11 @@
-Ti.include('config.js');
-Ti.include("tiajax.js");
-
 /*
  *	Initialize variables
  */
 
-var data = [],
-    dataOpen = [],
-    current_row,
-    url = REST_PATH + "/event.json?type=my_events",
-    pulling = false,
-    reloading = false,
-    ajax = Titanium.Network.ajax,
+var dataEvents = [],
     nav = Alloy.createController('navActions'),
     uie = require('UiElements'),
+    drupalServices = require('drupalServices'),
     indicator = uie.createIndicatorWindow();
 
 // Map fields with correct values.
@@ -25,38 +17,37 @@ $.child_window.add(nav.getView("menu"));
 /*
  * Get all of my events.
  */
-var xhr = Ti.Network.createHTTPClient({
-  onload: function(e) {
 
-    data = [];
+// Prepare data and push to the tableView
+function prepareData(data) {
+  dataEvents = [];
 
-    json = JSON.parse(this.responseText);
-    json.forEach(function(event){
+  data.forEach(function(event){
+    // Add to the main view, only closed events
+    if (event.field_event_closed === "1") {
+      var newsItem = Alloy.createController('eventRow', event).getView();
+      dataEvents.push(newsItem);
+    }
+  });
 
-      // Add to the main view, only closed events
-      if (event.field_event_closed === "1") {
-        var newsItem = Alloy.createController('eventRow', event).getView();
-        data.push(newsItem);
-      }
-    });
+  $.table.setData(dataEvents);
+}
 
-    indicator.closeIndicator();
-
-    $.table.setData(data);
-
-  },
-  onerror: function(e) {
-    Ti.API.debug(e.error);
-    indicator.closeIndicator();
-    alert('error');
-  },
-  timeout: 5000
-});
- 
+// Fetch events.
 $.child_window.addEventListener('open', function() {
   indicator.openIndicator();
-	xhr.open("GET", url);
-	xhr.send();
+
+  drupalServices.nodeList({
+    type: 'my_events',
+    success: function(data) {
+      prepareData(data);
+      indicator.closeIndicator();
+    },
+    error: function(data) {
+      indicator.closeIndicator();
+      alert('error');
+    }
+  });
 });
 
 var ptrCtrl = Alloy.createWidget('nl.fokkezb.pullToRefresh', null, {
@@ -65,38 +56,15 @@ var ptrCtrl = Alloy.createWidget('nl.fokkezb.pullToRefresh', null, {
 });
 
 function myLoaderCallback(widgetCallback) {
-  var xhr2 = Ti.Network.createHTTPClient({
-    onload: function(e) {
-
-      data = [];
-
-      json = JSON.parse(this.responseText);
-      json.forEach(function(event){
-
-        // Add to the main view, only closed events
-        if (event.field_event_closed === "1") {
-          var newsItem = Alloy.createController('eventRow', event).getView();
-          data.push(newsItem);
-        }
-      });
-
-      indicator.closeIndicator();
-
+  drupalServices.nodeList({
+    type: 'my_events',
+    success: function(data) {
+      prepareData(data);
       widgetCallback(true);
-
-      $.table.setData(data);
-
     },
-    onerror: function(e) {
-
+    error: function(data) {
       widgetCallback(true);
-
       alert('error');
-    },
-    timeout: 5000
+    }
   });
-
-
-  xhr2.open("GET", url);
-  xhr2.send();
 }

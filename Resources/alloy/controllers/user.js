@@ -26,7 +26,7 @@ function Controller() {
         console.log("fock");
     }
     function openLoginFacebook() {
-        Ti.Facebook.authorize();
+        fb.authorize();
     }
     function openLoginDuppp() {
         var t = Titanium.UI.create2DMatrix();
@@ -50,8 +50,8 @@ function Controller() {
     function openRegisterDuppp() {}
     function facebook(e) {
         if (e.success) {
-            var fbuid = Ti.Facebook.getUid();
-            var fbAccessToken = Ti.Facebook.getAccessToken();
+            var fbuid = fb.getUid();
+            var fbAccessToken = fb.getAccessToken();
             var user = {
                 service: "facebook",
                 id: fbuid,
@@ -69,7 +69,7 @@ function Controller() {
                     Titanium.App.Properties.setInt("userUid", data.user.uid);
                     Titanium.App.Properties.setInt("userSessionId", data.sessid);
                     Titanium.App.Properties.setInt("userSessionName", data.sesion_name);
-                    $.userLogin.close();
+                    Titanium.API.fireEvent("user:login");
                 } else alert("There was an error");
             };
         } else e.error && alert(e.error);
@@ -340,12 +340,12 @@ function Controller() {
     exports.destroy = function() {};
     _.extend($, $.__views);
     Ti.include("config.js");
-    Ti.include("tiajax.js");
-    Titanium.Network.ajax;
     var urlFB = REST_PATH + "/facebook_connect/connect";
-    Ti.Facebook.appid = "457579484312297";
-    Ti.Facebook.permissions = [ "publish_stream", "email" ];
-    Ti.Facebook.addEventListener("login", facebook);
+    var fb = require("facebook");
+    fb.permissions = [ "publish_stream", "email" ];
+    fb.appid = "457579484312297";
+    fb.forceDialogAuth = true;
+    fb.addEventListener("login", facebook);
     __defers["$.__views.__alloyId23!click!openLoginFacebook"] && $.__views.__alloyId23.addEventListener("click", openLoginFacebook);
     __defers["$.__views.__alloyId24!click!openLoginDuppp"] && $.__views.__alloyId24.addEventListener("click", openLoginDuppp);
     __defers["$.__views.__alloyId25!click!openRegisterDuppp"] && $.__views.__alloyId25.addEventListener("click", openRegisterDuppp);

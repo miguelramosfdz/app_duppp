@@ -1,14 +1,12 @@
 Ti.include('config.js');
-Ti.include("tiajax.js");
 
 /*
  *  Initialize variables
  */
-
-var ajax = Titanium.Network.ajax,
-  data = [],
+var data = [],
   uie = require('UiElements'),
-  indicator = uie.createIndicatorWindow();
+  indicator = uie.createIndicatorWindow(),
+  drupalServices = require('drupalServices');
 
 $.textArea.addEventListener('focus', function() {
   $.textArea.value = '';
@@ -98,45 +96,30 @@ function createEvent() {
       name: Titanium.App.Properties.getString("userName")
     }
 
-    // Create a new node object
-    var node = {
-      node:{
-        title: $.textArea.value,
-        type:'event',
-        language: 'und',
-        group_access: {
-          und: "0"
+    drupalServices.createNode({
+      node: {
+        "type": "event",
+        "title": $.textArea.value,
+        "language": "und",
+        "group_access": {
+          "und": "0"
         },
-        field_event_date: {
-          und:[{
-            show_todate: "0",
-            value: {
-              month: "2",
-              day: "14",
-              year: "2013",
-              hour: "20",
-              minute: "15"
+        "field_event_date": {
+          "und":[{
+            "show_todate": "0",
+            "value": {
+              "month": "2",
+              "day": "14",
+              "year": "2013",
+              "hour": "20",
+              "minute": "15"
             }
           }]
         },
-        uid: user.uid,
-        status: 1
-      }
-    };
-
-    // Define the url
-    // in this case, we'll connecting to http://example.com/api/rest/node
-    var url = REST_PATH + '/node';
-
-    // Use $.ajax to create the node
-    ajax({
-      type: "POST",
-      url: url,
-      data: JSON.stringify(node), // Stringify the node
-      dataType: 'json',
-      contentType: 'application/json',
-      // On success do some processing like closing the window and show an alert
-      success: function(data) {
+        "uid": user.uid,
+        "status": 1
+      },
+      success: function (data) {
         $.eventFormWindow.close({animated:true});
         $.createBtn.enabled = true;
         Titanium.API.fireEvent('eventCreated');
@@ -144,21 +127,15 @@ function createEvent() {
         var join = {
           uid: clickedRows
         }
-
-        ajax({
-          type: "POST",
-          url: REST_PATH + '/event/' + data.nid + '/join',
-          data: JSON.stringify(join), // Stringify the node
-          dataType: 'json',
-          contentType: 'application/json',
-          // On success do some processing like closing the window and show an alert
-          success: function(data) {
-
-          }
-        });
-
+      },
+      error: function(data) {
+        alert("There was an error, try again.");
       }
     });
+
+    // Open the connection using POST
+    //xhr4.open("POST", REST_PATH + '/event/' + data.nid + '/join');
+    //xhr4.send(JSON.stringify(join));
   }
   else {
     alert("You need to login first");

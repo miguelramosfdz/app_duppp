@@ -1,14 +1,11 @@
 Ti.include('config.js');
-Ti.include("tiajax.js");
 
 /*
  *  Initialize variables
  */
 
 var data = [],
-  url = REST_PATH + "/event.json?type=my_events",
-  ajax = Titanium.Network.ajax,
-  dupppUpload = require('duppp_upload');
+  dupppUpload = require('dupppUpload');
 
 /*
  * Utility functions.
@@ -24,7 +21,6 @@ function removeAllChildren(viewObject){
 }
 
 // When you click on tooltip, close the tooltip.
-// @TODO apply this behavior only on the background of the tooltip.
 $.tooltipContainer.addEventListener("click", function(e) {
 
   if (e.source.id === 'tooltipContainer') {
@@ -94,9 +90,16 @@ function openTooltip (){
   $.tooltipContainer.show();
 }
 
+var menuOpen = false;
 // Function to display the menu.
-function openMenu (){
-  $.menu.show();
+function openMenu() {
+  if (!menuOpen) {
+    menuOpen = true;
+    $.menu.show();
+  } else {
+    menuOpen = false;
+    $.menu.hide();
+  }
 }
 
 Titanium.API.addEventListener('myEvents:fetched', function (data) {

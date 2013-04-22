@@ -106,7 +106,6 @@ function Controller() {
     $.__views.caption.add($.__views.f_date);
     exports.destroy = function() {};
     _.extend($, $.__views);
-    Ti.include("config.js");
     var args = arguments[0] || {};
     $.f_title.text = args.title;
     $.f_date.text = args.created;

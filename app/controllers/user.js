@@ -1,11 +1,14 @@
 Ti.include('config.js');
-Ti.include("tiajax.js");
-
 /*
  *  Initialize variables
  */
 
-var ajax = Titanium.Network.ajax;
+// Facebook Button
+var urlFB = REST_PATH + '/facebook_connect/connect';
+var fb = require('facebook');
+fb.permissions = ['publish_stream', 'email']; // Permissions your app needs, sync with the permissions you set in fboauth
+fb.appid = '457579484312297'; // Permissions your app needs, sync with the permissions you set in fboauth
+fb.forceDialogAuth = true;
 
 function login(e){
   // Create an object to hold the data entered in the form
@@ -66,7 +69,7 @@ function register() {
 }
 
 function openLoginFacebook() {
-  Ti.Facebook.authorize();
+  fb.authorize();
 }
 
 function openLoginDuppp() {
@@ -97,20 +100,12 @@ function openRegisterDuppp() {
 
 }
 
-
-
-// Facebook Button
-var urlFB = REST_PATH + '/facebook_connect/connect';
-Ti.Facebook.appid = "457579484312297";
-Ti.Facebook.permissions = ['publish_stream','email']; // Permissions your app needs, sync with the permissions you set in fboauth
-
-
-Ti.Facebook.addEventListener("login", facebook);
+fb.addEventListener("login", facebook);
 
 function facebook (e) {
   if (e.success) {
-    var fbuid = Ti.Facebook.getUid();
-    var fbAccessToken = Ti.Facebook.getAccessToken();
+    var fbuid = fb.getUid();
+    var fbAccessToken = fb.getAccessToken();
 
     var user = {
       service: "facebook",
@@ -149,7 +144,7 @@ function facebook (e) {
         Titanium.App.Properties.setInt("userSessionId", data.sessid);
         Titanium.App.Properties.setInt("userSessionName", data.sesion_name);
 
-        $.userLogin.close();
+        Titanium.API.fireEvent('user:login');
       }
       else {
         alert("There was an error");

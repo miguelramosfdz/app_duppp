@@ -1,18 +1,19 @@
 function Controller() {
     function follow() {
-        if ("Follow" === $.follow.title) var data = {
+        var data;
+        data = "Follow" === $.follow.title ? {
             action: "flag"
-        }; else var data = {
+        } : {
             action: "unflag"
         };
-        ajax({
-            type: "POST",
-            url: urlFollow,
-            data: JSON.stringify(data),
-            dataType: "json",
-            contentType: "application/json",
+        drupalServices.followUser({
+            node: data,
+            uid: args,
             success: function() {
                 $.follow.title = "Follow" === $.follow.title ? "Unfollow" : "Follow";
+            },
+            error: function() {
+                alert("error");
             }
         });
     }
@@ -52,22 +53,18 @@ function Controller() {
     _.extend($, $.__views);
     Ti.include("config.js");
     var args = arguments[0] || {};
-    var url = REST_PATH + "/duppp_user/" + args + ".json", urlFollow = REST_PATH + "/duppp_user/" + args + "/flag", ajax = Titanium.Network.ajax;
-    var xhr = Ti.Network.createHTTPClient({
-        onload: function() {
-            var user = JSON.parse(this.responseText);
-            $.follow.title = user.is_flagged ? "Unfollow" : "Follow";
-            $.author.text = user.name;
-        },
-        onerror: function(e) {
-            Ti.API.debug(e.error);
-            alert("error");
-        },
-        timeout: 5e3
-    });
+    var drupalServices = require("drupalServices");
     $.profilePage.addEventListener("open", function() {
-        xhr.open("GET", url);
-        xhr.send();
+        drupalServices.userRetrieve({
+            uid: args,
+            success: function(user) {
+                $.follow.title = user.is_flagged ? "Unfollow" : "Follow";
+                $.author.text = user.name;
+            },
+            error: function() {
+                alert("error");
+            }
+        });
     });
     __defers["$.__views.follow!click!follow"] && $.__views.follow.addEventListener("click", follow);
     _.extend($, exports);
