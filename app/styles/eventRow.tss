@@ -16,6 +16,9 @@
 	width: 250,
 	left: 70
 }
+".labelTitle": {
+  font: { fontSize: 12, font: "HelveticaNeue" }
+}
 ".date": {
 	font: { fontSize: 11, font: "HelveticaNeue" },
 	bottom: 12,

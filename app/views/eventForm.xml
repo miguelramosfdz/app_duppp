@@ -4,6 +4,7 @@
               borderWidth="1" borderColor="#bbb" returnKeyType="Titanium.UI.RETURNKEY_NEXT"
               color="#888" textAlign="left" value="You have to type the title"
               top="0" width="Titanium.UI.FILL" height="150" />
+    <Switch id="switchPrivate" title="Private" value="0"/>
     <SearchBar id="search" hintText="Search a user" />
     <TableView id="table" class="container" allowsSelectionDuringEditing="true" />
     <RightNavButton>

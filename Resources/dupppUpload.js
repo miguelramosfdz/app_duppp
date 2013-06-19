@@ -10,9 +10,7 @@ function saveFile(_args) {
     return file.nativePath;
 }
 
-Ti.include("config.js");
-
-var mediaQueue = [], drupalServices = require("drupalServices"), nodeUrl = REST_PATH + "/node", processed = false;
+var mediaQueue = [], REST_PATH = Alloy.CFG.rest, drupalServices = require("drupalServices"), processed = false;
 
 if ("iPhone" === Ti.Platform.osname || "iPad" === Ti.Platform.osname) var ios = true;
 
@@ -23,28 +21,26 @@ var uploadFile = function(media, contribution) {
             node: contribution,
             success: function(data) {
                 Titanium.API.fireEvent("startUpload");
-                var xhr_video = Titanium.Network.createHTTPClient();
-                xhr_video.onsendstream = function(e) {
-                    var data = {
-                        progressValue: e.progress
-                    };
-                    Titanium.API.fireEvent("uploadInProgress", data);
-                };
-                xhr_video.onerror = function() {
-                    processed = false;
-                    processUpload();
-                };
-                xhr_video.onload = function() {
-                    mediaQueue.shift();
-                    processed = false;
-                    processUpload();
-                    Titanium.API.fireEvent("uploadFinish");
-                };
-                xhr_video.setRequestHeader("ContentType", "multipart/form-data");
-                xhr_video.open("POST", REST_PATH + "/node/" + data.nid + "/attach_file");
-                xhr_video.send({
+                var node = {
                     "files[video]": media,
                     field_name: "field_contribution_video"
+                };
+                drupalServices.attachFile({
+                    node: node,
+                    nid: data.nid,
+                    sending: function(json) {
+                        Titanium.API.fireEvent("uploadInProgress", json);
+                    },
+                    success: function() {
+                        mediaQueue.shift();
+                        processed = false;
+                        processUpload();
+                        Titanium.API.fireEvent("uploadFinish");
+                    },
+                    error: function() {
+                        processed = false;
+                        processUpload();
+                    }
                 });
             },
             error: function() {

@@ -1,13 +1,11 @@
-Ti.include('config.js');
-
 /*
  *  Initialize variables
  */
 
 var mediaQueue = [],
-    drupalServices = require('drupalServices'),
-    nodeUrl = REST_PATH + '/node',
-    processed = false;
+  REST_PATH = Alloy.CFG.rest,
+  drupalServices = require('drupalServices'),
+  processed = false;
 
 // OS
 if(Ti.Platform.osname === 'iPhone' || Ti.Platform.osname === 'iPad') {
@@ -35,47 +33,36 @@ var uploadFile = function (media, contribution) {
         // Add callback events when the contribution is created.
         Titanium.API.fireEvent('startUpload');
 
-        // Attach file to past contribution node.
-        var xhr_video = Titanium.Network.createHTTPClient();
-        xhr_video.onsendstream = function(e){
-          var data = {
-            progressValue: e.progress
-          };
-
-          // Add callback to add a progress bar.
-          Titanium.API.fireEvent('uploadInProgress', data);
-
-        };
-        xhr_video.onerror = function (e) {
-
-          processed = false;
-
-          // If the attach file get an error, try again.
-          processUpload();
-
-        };
-        xhr_video.onload = function (e) {
-
-          // Delete current row, if the video is uploaded.
-          mediaQueue.shift();
-          processed = false;
-
-          // try to upload the next row.
-          processUpload();
-
-          // Add callback for upload finish.
-          Titanium.API.fireEvent('uploadFinish');
-
-        };
-
-        xhr_video.setRequestHeader("ContentType", "multipart/form-data");
-
-        // Send the xhr for upload the video.
-        xhr_video.open('POST', REST_PATH + '/node/' + data.nid + '/attach_file');
-        xhr_video.send({
+        var node = {
           "files[video]": media, // Blob file
           "field_name": "field_contribution_video" // Field name in API
+        };
+
+        drupalServices.attachFile({
+          node: node,
+          nid: data.nid,
+          sending: function(json) {
+            Titanium.API.fireEvent('uploadInProgress', json);
+          },
+          success: function() {
+            // Delete current row, if the video is uploaded.
+            mediaQueue.shift();
+            processed = false;
+
+            // try to upload the next row.
+            processUpload();
+
+            // Add callback for upload finish.
+            Titanium.API.fireEvent('uploadFinish');
+          },
+          error: function() {
+            processed = false;
+
+            // If the attach file get an error, try again.
+            processUpload();
+          }
         });
+
       },
       error: function(data) {
         alert("There was an error, try again.");

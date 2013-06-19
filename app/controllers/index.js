@@ -3,47 +3,42 @@
  *  Init variables.
  */
 
-// Include config file for make http request.
-Ti.include('config.js');
 
 // Load child views, and initiate some vars.
-var userLoginWin = Alloy.createController('user').getView('userLogin'),
+var drupalServices = require('drupalServices'),
+  userLoginWin = Alloy.createController('user').getView('userLogin'),
   eventsOpenWin = Alloy.createController('eventsOpen').getView(),
-  urlInfo = REST_PATH + '/system/connect';
+  fb = require('facebook');
 
 /*
- *  Function declarations.
+ *  Event declarations.
  */
 
-// Check if the user have an sessionID with correct uid.
-function checkConnection() {
+drupalServices.systemInfo({
+  success: function(data) {
+    if (data.user.uid !== 0) {
 
-  // Create a connection
-  var xhr3 = Titanium.Network.createHTTPClient();
+      // Open default view.
+      $.indexView.open();
 
-  xhr3.setRequestHeader('Content-Type','application/json; charset=utf-8');
+    } else {
 
-  // Open the connection using POST
-  xhr3.open("POST", urlInfo);
+      // Logout if you are connected to facebook.
+      //fb.logout();
 
-  // Send the connection and the user object as argument
-  xhr3.send();
+      // Open User form.
+      userLoginWin.open();
 
-  // When the connection loads we do:
-  xhr3.onload = function() {
-    // Save the status of the connection in a variable
-    // this will be used to see if we have a connection (200) or not
-    var statusCode = xhr3.status;
+    }
+  },
+  error: function(data) {
+    alert('Error, contact the admin');
+  }
+});
 
-    // Check if we have a valid status
-    if (statusCode == 200) {
-
-      // Create a variable response to hold the response
-      var response = xhr3.responseText;
-
-      // Parse (build data structure) the JSON response into an object (data)
-      var data = JSON.parse(response);
-
+Titanium.App.addEventListener('resume', function () {
+  drupalServices.systemInfo({
+    success: function(data) {
       if (data.user.uid !== 0) {
 
         // Open default view.
@@ -55,24 +50,13 @@ function checkConnection() {
         userLoginWin.open();
 
         // Logout if you are connected to facebook.
-        Ti.Facebook.logout();
-
+        //fb.logout();
       }
+    },
+    error: function(data) {
+      alert('Error, contact the admin');
     }
-    else {
-      alert("There was an error");
-    }
-  };
-}
-
-/*
- *  Event declarations.
- */
-
-checkConnection();
-
-Titanium.App.addEventListener('resume', function () {
-  checkConnection();
+  });
 });
 
 Titanium.API.addEventListener('user:login', function () {

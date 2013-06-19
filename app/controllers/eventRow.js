@@ -9,7 +9,7 @@ $.thumbnail.image = (args.video_thumbnail.length == 0) ? '' : args.video_thumbna
 
 // Open profile page when you click on the avatar image.
 $.author_image.addEventListener('touchend', function(e){
-	var win = Alloy.createController('profilePage', args.uid).getView();
+	var win = Alloy.createController('profilePage', args).getView();
 	win.title = $.author.text;
 
   Titanium.API.fireEvent('openAsNavigation', {

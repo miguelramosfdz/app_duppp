@@ -1,10 +1,9 @@
-Ti.include('config.js');
-
 /*
  *  Initialize variables
  */
 
-var data = [],
+var REST_PATH = Alloy.CFG.rest,
+  data = [],
   dupppUpload = require('dupppUpload');
 
 /*

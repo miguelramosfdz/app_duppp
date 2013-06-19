@@ -42,13 +42,13 @@ function Controller() {
         id: "pullingContainer"
     });
     $.__views.child_window.add($.__views.pullingContainer);
-    $.__views.__alloyId13 = Ti.UI.createView({
+    $.__views.__alloyId14 = Ti.UI.createView({
         backgroundColor: "#576c89",
         height: 2,
         bottom: 0,
-        id: "__alloyId13"
+        id: "__alloyId14"
     });
-    $.__views.pullingContainer.add($.__views.__alloyId13);
+    $.__views.pullingContainer.add($.__views.__alloyId14);
     $.__views.arrow = Ti.UI.createView({
         backgroundImage: "whiteArrow.png",
         width: 23,

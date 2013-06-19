@@ -1,67 +1,44 @@
-Ti.include('config.js');
 /*
  *  Initialize variables
  */
 
 // Facebook Button
-var urlFB = REST_PATH + '/facebook_connect/connect';
-var fb = require('facebook');
-fb.permissions = ['publish_stream', 'email']; // Permissions your app needs, sync with the permissions you set in fboauth
+var REST_PATH = Alloy.CFG.rest,
+  urlFB = REST_PATH + '/facebook_connect/connect',
+  drupalServices = require('drupalServices'),
+  fb = require('facebook');
+
+fb.permissions = ['publish_stream', 'email', 'read_friendlists']; // Permissions your app needs, sync with the permissions you set in fboauth
 fb.appid = '457579484312297'; // Permissions your app needs, sync with the permissions you set in fboauth
 fb.forceDialogAuth = true;
 
 function login(e){
+
   // Create an object to hold the data entered in the form
-	var user = {
-		username: $.loginUsr.value,
-		password: $.loginPwd.value
-	};
+  drupalServices.userLogin({
+    node: {
+      username: $.loginUsr.value,
+      password: $.loginPwd.value
+    },
+    success: function(data) {
 
-	// Define the url which contains the full url
-	// in this case, we'll connecting to http://example.com/api/rest/user/login
-	var url = REST_PATH + '/user/login';
-
-	// Create a connection
-	var xhr = Titanium.Network.createHTTPClient();
-
-	xhr.setRequestHeader('Content-Type','application/json; charset=utf-8');
-
-	// Open the connection using POST
-	xhr.open("POST",url);
-
-	// Send the connection and the user object as argument
-	xhr.send(user);
-
-	// When the connection loads we do:
-	xhr.onload = function() {
-		// Save the status of the connection in a variable
-		// this will be used to see if we have a connection (200) or not
-		var statusCode = xhr.status;
-
-		// Check if we have a valid status
-		if (statusCode == 200) {
-
-			// Create a variable response to hold the response
-			var response = xhr.responseText;
-
-			// Parse (build data structure) the JSON response into an object (data)
-			var data = JSON.parse(response);
-
-			// Set a global variable
-			Titanium.App.Properties.setInt("userUid", data.user.uid);
-			Titanium.App.Properties.setInt("userSessionId", data.sessid);
-			Titanium.App.Properties.setInt("userSessionName", data.sesion_name);
+      // Set a global variable
+      Titanium.App.Properties.setInt("userUid", data.user.uid);
+      Titanium.App.Properties.setInt("userSessionId", data.sessid);
+      Titanium.App.Properties.setInt("userSessionName", data.sesion_name);
 
 
       // Close the window.
       $.userLoginDuppp.close();
 
+      // Fire event login
       Titanium.API.fireEvent('user:login');
-		}
-		else {
-			alert("There was an error");
-		}
-	}
+
+    },
+    error: function(data) {
+      alert('Error, contact the admin');
+    }
+  });
 }
 
 function register() {

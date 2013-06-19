@@ -83,7 +83,7 @@ function Controller() {
         id: "author"
     });
     $.__views.caption.add($.__views.author);
-    $.__views.f_title = Ti.UI.createLabel({
+    $.__views.__alloyId9 = Ti.UI.createView({
         width: 250,
         font: {
             fontSize: 12,
@@ -91,9 +91,18 @@ function Controller() {
         },
         top: 22,
         left: 70,
+        layout: "horizontal",
+        id: "__alloyId9"
+    });
+    $.__views.caption.add($.__views.__alloyId9);
+    $.__views.f_title = Ti.UI.createLabel({
+        font: {
+            fontSize: 12,
+            font: "HelveticaNeue"
+        },
         id: "f_title"
     });
-    $.__views.caption.add($.__views.f_title);
+    $.__views.__alloyId9.add($.__views.f_title);
     $.__views.f_date = Ti.UI.createLabel({
         font: {
             fontSize: 11,
@@ -113,7 +122,7 @@ function Controller() {
     $.author.text = args.name;
     $.thumbnail.image = 0 == args.video_thumbnail.length ? "" : args.video_thumbnail;
     $.author_image.addEventListener("touchend", function() {
-        var win = Alloy.createController("profilePage", args.uid).getView();
+        var win = Alloy.createController("profilePage", args).getView();
         win.title = $.author.text;
         Titanium.API.fireEvent("openAsNavigation", {
             window: win

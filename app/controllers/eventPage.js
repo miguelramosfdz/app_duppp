@@ -1,4 +1,4 @@
-Ti.include('config.js');
+var REST_PATH = Alloy.CFG.rest;
 
 var data = [],
   commentFormWin = Alloy.createController('commentForm').getView(),

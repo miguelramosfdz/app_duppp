@@ -1,4 +1,4 @@
-Ti.include('config.js');
+var REST_PATH = Alloy.CFG.rest;
 
 /*
  *  Initialize variables
@@ -59,12 +59,4 @@ $.search.addEventListener('return', function (e) {
 
     $.search.blur();
   }
-});
-
-$.table.addEventListener('click', function(e){
-  var win = Alloy.createController('profilePage', e.row.uid).getView();
-
-  Titanium.API.fireEvent('openAsNavigation', {
-    window: win
-  });
 });

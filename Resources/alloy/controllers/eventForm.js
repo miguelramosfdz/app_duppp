@@ -10,13 +10,15 @@ function Controller() {
                 session_name: Titanium.App.Properties.getString("userSessionName"),
                 name: Titanium.App.Properties.getString("userName")
             };
+            var switchPrivate;
+            switchPrivate = 1 == $.switchPrivate.value ? "1" : "0";
             drupalServices.createNode({
                 node: {
                     type: "event",
                     title: $.textArea.value,
                     language: "und",
                     group_access: {
-                        und: "0"
+                        und: switchPrivate
                     },
                     field_event_date: {
                         und: [ {
@@ -33,12 +35,19 @@ function Controller() {
                     uid: user.uid,
                     status: 1
                 },
-                success: function() {
+                success: function(data) {
                     $.eventFormWindow.close({
                         animated: true
                     });
                     $.createBtn.enabled = true;
                     Titanium.API.fireEvent("eventCreated");
+                    var join = {
+                        uid: clickedRows
+                    };
+                    drupalServices.joinNode({
+                        node: join,
+                        nid: data.nid
+                    });
                 },
                 error: function() {
                     alert("There was an error, try again.");
@@ -79,6 +88,12 @@ function Controller() {
         height: "150"
     });
     $.__views.eventFormWindow.add($.__views.textArea);
+    $.__views.switchPrivate = Ti.UI.createSwitch({
+        id: "switchPrivate",
+        title: "Private",
+        value: "0"
+    });
+    $.__views.eventFormWindow.add($.__views.switchPrivate);
     $.__views.search = Ti.UI.createSearchBar({
         id: "search",
         hintText: "Search a user"
@@ -101,7 +116,7 @@ function Controller() {
     $.__views.eventFormWindow.rightNavButton = $.__views.createBtn;
     exports.destroy = function() {};
     _.extend($, $.__views);
-    Ti.include("config.js");
+    var REST_PATH = Alloy.CFG.rest;
     var data = [], uie = require("UiElements"), indicator = uie.createIndicatorWindow(), drupalServices = require("drupalServices");
     $.textArea.addEventListener("focus", function() {
         $.textArea.value = "";

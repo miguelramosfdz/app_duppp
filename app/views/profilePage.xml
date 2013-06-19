@@ -1,8 +1,20 @@
 <Alloy>
   <Window id="profilePage">
     <ScrollView id="scrollView" class="container" layout='vertical'>
-      <ImageView id="authorImage" class="authorImage" />
-      <Label id="author" class="author" />
+      <View class="header" layout='horizontal'>
+        <ImageView id="authorImage" class="authorImage" />
+        <Label id="author" class="author" />
+      </View>
+      <View class="headerInfo" layout='horizontal'>
+        <View class="wFollower wrapper" layout='vertical'>
+          <Label id="followerCount" />
+          <Label class="wlabel" text="follower" />
+        </View>
+        <View class="wEvent wrapper" layout='vertical'>
+          <Label id="eventCount" />
+          <Label class="wlabel" text="events" />
+        </View>
+      </View>
       <Button id="follow" title="Follow" onClick="follow" class="btn follow" />
     </ScrollView>
   </Window>

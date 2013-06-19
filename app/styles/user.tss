@@ -42,17 +42,24 @@
 }
 
 ".loginDuppp": {
-  backgroundImage: "dBg.png",
-  height: 46,
-  width: 278,
-  top: 10
+  backgroundImage: "none",
+  backgroundColor: "#E74C3C",
+  height: 106,
+  width: "50%"
+}
+
+".registerDuppp": {
+  backgroundImage: "none",
+  backgroundColor: "#E74C3C",
+  height: 106,
+  width: "50%"
 }
 
 ".facebook": {
-  backgroundImage: "fbBg.png",
-  height: 46,
-  width: 278,
-  top: 10
+  backgroundImage: "none",
+  backgroundColor: "#3b5998",
+  height: 106,
+  width: "50%"
 }
 
 '.windowStyle': {

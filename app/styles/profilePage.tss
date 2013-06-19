@@ -4,7 +4,57 @@
 	backgroundColor: "#F3F3F3"
 }
 
-".author_image": {
-	height: 106.6,
-	width: 106.6
-} 
+".header": {
+  backgroundColor: "#0679FF",
+  height: 107
+}
+
+".authorImage": {
+  borderRadius: 43,
+  borderWidth: 4,
+  borderColor: "#3892E3",
+  top: 8,
+  right: 10,
+  left: 7,
+	height: 90,
+	width: 90
+}
+
+".author": {
+  color: "FFF",
+  font: {fontSize: 35, fontFamily: 'Helvetica Neue'},
+  shadowColor:"#444",
+  shadowOffset: {x: 1, y: 1},
+}
+
+".wrapper": {
+  height: 106,
+  width: "50%"
+}
+
+".headerInfo": {
+  height: 107
+}
+
+".wEvent": {
+  backgroundColor: "#E74C3C",
+}
+
+".wFollower": {
+  backgroundColor: "#F39C12",
+}
+
+"#followerCount": {
+  color: "#FFF",
+  font: {fontSize: 62, fontFamily: 'Helvetica Neue'}
+}
+
+"#eventCount": {
+  color: "#FFF",
+  font: {fontSize: 62, fontFamily: 'Helvetica Neue'}
+}
+
+".wlabel": {
+  color: "#FFF",
+  font: {fontSize: 15, fontFamily: 'Helvetica Neue'}
+}

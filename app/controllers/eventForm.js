@@ -1,4 +1,4 @@
-Ti.include('config.js');
+var REST_PATH = Alloy.CFG.rest;
 
 /*
  *  Initialize variables
@@ -94,6 +94,13 @@ function createEvent() {
       sessid: Titanium.App.Properties.getString("userSessionId"),
       session_name: Titanium.App.Properties.getString("userSessionName"),
       name: Titanium.App.Properties.getString("userName")
+    };
+    var switchPrivate;
+
+    if ($.switchPrivate.value == 1) {
+      switchPrivate = "1";
+    } else {
+      switchPrivate = "0";
     }
 
     drupalServices.createNode({
@@ -102,7 +109,7 @@ function createEvent() {
         "title": $.textArea.value,
         "language": "und",
         "group_access": {
-          "und": "0"
+          "und": switchPrivate
         },
         "field_event_date": {
           "und":[{
@@ -127,15 +134,18 @@ function createEvent() {
         var join = {
           uid: clickedRows
         }
+
+        drupalServices.joinNode({
+          node: join,
+          nid: data.nid
+        });
+
       },
       error: function(data) {
         alert("There was an error, try again.");
       }
     });
 
-    // Open the connection using POST
-    //xhr4.open("POST", REST_PATH + '/event/' + data.nid + '/join');
-    //xhr4.send(JSON.stringify(join));
   }
   else {
     alert("You need to login first");

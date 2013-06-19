@@ -1,22 +1,27 @@
-Ti.include('config.js');
 
-var args = arguments[0] || {};
 
 // Create another connection to get the user
-var drupalServices = require('drupalServices');
+var drupalServices = require('drupalServices'),
+  args = arguments[0] || {};
 
 $.profilePage.addEventListener('open', function() {
+
+  $.authorImage.image = args.field_avatar;
+  $.followerCount.text = args.follower_count;
+
   drupalServices.userRetrieve({
-    uid: args,
+    uid: args.uid,
     success: function(user) {
       // Check if user si flagged by the current user.
-      if (user.is_flagged) {
+      if (user[0].is_flagged) {
         $.follow.title = 'Unfollow';
       } else {
         $.follow.title = 'Follow';
       }
       // map fields with correct values.
-      $.author.text = user.name;
+      $.followerCount.text = user[0].follow_count;
+      $.eventCount.text = user[0].event_count;
+      $.author.text = user[0].name;
     },
     error: function(data) {
       alert('error');
@@ -40,7 +45,7 @@ function follow () {
 
   drupalServices.followUser({
     node: data,
-    uid: args,
+    uid: args.uid,
     success: function(user) {
       if ($.follow.title === 'Follow') {
         $.follow.title = 'Unfollow';

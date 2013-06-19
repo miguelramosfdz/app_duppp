@@ -12,20 +12,20 @@ function Controller() {
         id: "child_window",
         title: "Explore"
     });
-    $.__views.__alloyId9 = Ti.UI.createView({
+    $.__views.__alloyId10 = Ti.UI.createView({
         layout: "vertical",
-        id: "__alloyId9"
+        id: "__alloyId10"
     });
-    $.__views.child_window.add($.__views.__alloyId9);
+    $.__views.child_window.add($.__views.__alloyId10);
     $.__views.search = Ti.UI.createSearchBar({
         id: "search",
         hintText: "Search a user"
     });
-    $.__views.__alloyId9.add($.__views.search);
+    $.__views.__alloyId10.add($.__views.search);
     $.__views.table = Ti.UI.createTableView({
         id: "table"
     });
-    $.__views.__alloyId9.add($.__views.table);
+    $.__views.__alloyId10.add($.__views.table);
     $.__views.tab2 = Ti.UI.createTab({
         window: $.__views.child_window,
         id: "tab2",
@@ -35,7 +35,7 @@ function Controller() {
     $.__views.tab2 && $.addTopLevelView($.__views.tab2);
     exports.destroy = function() {};
     _.extend($, $.__views);
-    Ti.include("config.js");
+    var REST_PATH = Alloy.CFG.rest;
     var data = [], nav = Alloy.createController("navActions"), uie = require("UiElements"), indicator = uie.createIndicatorWindow();
     $.child_window.setLeftNavButton(nav.getView("menuBtn"));
     $.child_window.setRightNavButton(nav.getView("cameraBtn"));
@@ -67,12 +67,6 @@ function Controller() {
             xhrUsers.send();
             $.search.blur();
         }
-    });
-    $.table.addEventListener("click", function(e) {
-        var win = Alloy.createController("profilePage", e.row.uid).getView();
-        Titanium.API.fireEvent("openAsNavigation", {
-            window: win
-        });
     });
     _.extend($, exports);
 }

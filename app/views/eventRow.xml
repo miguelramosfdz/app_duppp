@@ -8,9 +8,11 @@
       <ImageView image="extra.png" class="actionBtn extra" />
     </View>
     <View id="caption" class="caption">
-    <ImageView id="author_image" class="author_image" />
+      <ImageView id="author_image" class="author_image" />
       <Label id="author" class="author" />
-      <Label id="f_title" class="title" />
+      <View class="title" layout="horizontal">
+        <Label id="f_title" class="labelTitle" />
+      </View>
       <Label id="f_date" class="date" />
     </View>
   </TableViewRow>

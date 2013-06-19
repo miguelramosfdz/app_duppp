@@ -9,6 +9,3 @@
 // object. For example:
 //
 // Alloy.Globals.someGlobalFunction = function(){};
-
-Ti.include('moment.min.js');
-//Titanium.UI.iPhone.StatusBar.OPAQUE_BLACK;

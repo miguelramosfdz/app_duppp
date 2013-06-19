@@ -49,8 +49,7 @@ function Controller() {
     $.__views.tab1 && $.addTopLevelView($.__views.tab1);
     exports.destroy = function() {};
     _.extend($, $.__views);
-    Ti.include("config.js");
-    var dataEvents = [], nav = Alloy.createController("navActions"), uie = require("UiElements"), drupalServices = require("drupalServices"), indicator = uie.createIndicatorWindow();
+    var dataEvents = (Alloy.CFG.rest, []), nav = Alloy.createController("navActions"), uie = require("UiElements"), drupalServices = require("drupalServices"), indicator = uie.createIndicatorWindow();
     $.child_window.setLeftNavButton(nav.getView("menuBtn"));
     $.child_window.setRightNavButton(nav.getView("cameraBtn"));
     $.child_window.add(nav.getView("tooltipContainer"));

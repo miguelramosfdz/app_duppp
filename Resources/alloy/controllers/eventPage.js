@@ -193,7 +193,7 @@ function Controller() {
     $.__views.scrollView.add($.__views.commentsList);
     exports.destroy = function() {};
     _.extend($, $.__views);
-    Ti.include("config.js");
+    Alloy.CFG.rest;
     var commentFormWin = Alloy.createController("commentForm").getView(), args = arguments[0] || {}, drupalServices = require("drupalServices");
     $.author.text = args.user_name;
     $.author_image.image = args.avatar;

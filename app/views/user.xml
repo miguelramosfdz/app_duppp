@@ -1,14 +1,11 @@
 <Alloy>
   <Window id="userLogin" class="container" layout="vertical">
-    <ScrollableView id="scrollableView" height="60%">
-      <View id="view1" backgroundColor="#123" />
-      <View id="view2" backgroundColor="#246" />
-      <View id="view3" backgroundColor="#48b" />
-    </ScrollableView>
-    <View layout="vertical">
+    <View layout='horizontal'>
+<!--
       <Button class="facebook" onClick="openLoginFacebook" title="Login with Facebook" />
+-->
       <Button class="loginDuppp" onClick="openLoginDuppp" title="Login with Duppp" />
-      <Button class="submit" onClick="openRegisterDuppp" title="Register with Duppp" />
+      <Button class="registerDuppp" onClick="openRegisterDuppp" title="Register with Duppp" />
     </View>
   </Window>
   <Window id="userLoginDuppp" class="windowStyle">
