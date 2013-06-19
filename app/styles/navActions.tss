@@ -5,35 +5,31 @@
   top: 0
 }
 
-".menuBtn": {
-  backgroundImage: "menuBtn@2x.png",
-  top: 5,
-  left: 5,
-  width: 43.5,
-  height: 32.5
-}
-
 ".menuItem": {
   backgroundImage: "none",
   height: 40,
   width: Titanium.UI.FILL,
-  font:{fontSize:18,fontWeight:"bold", fontFamily:'Helvetica Neue'}
+  font: {fontSize:18, fontFamily:'Lato-Regular'}
+}
+
+".menuBtn": {
+  backgroundImage: "menuBtn@2x.png",
+  width: 37,
+  height: 28
 }
 
 ".cameraBtn": {
   backgroundImage: "photoBtn@2x.png",
-  top: 5,
-  right: 5,
-  width: 43.5,
-  height: 32.5
+  width: 37,
+  height: 33
 }
 
 ".tooltip": {
-  backgroundColor: "#0C2754",
-  width: 265,
+  backgroundColor: "#34495e",
+  width: 300,
   height: Titanium.UI.SIZE,
-  opacity: 1,
-  zIndex: 6
+  zIndex: 6,
+  borderRadius: 5,
 }
 
 "#tableOpen": {
@@ -43,22 +39,20 @@
 }
 
 ".tooltipContainer": {
-  backgroundColor: "#000",
   width: Titanium.UI.FILL,
   height: Titanium.UI.FILL,
-  opacity: 0.8,
   zIndex: 5
 }
 
 ".modalTitle": {
-  font:{fontSize:18,fontWeight:"bold", fontFamily:'Helvetica Neue'},
+  font:{fontSize:18, fontFamily:'Lato-Regular'},
   color: "white",
   textAlign: Titanium.UI.TEXT_ALIGNMENT_CENTER,
   top: 15
 }
 
 ".modalDesc": {
-  font:{fontSize:16, fontFamily:'Helvetica Neue'},
+  font:{fontSize:16, fontFamily:'Lato-Light'},
   color: "white",
   textAlign: Titanium.UI.TEXT_ALIGNMENT_CENTER,
   right: 30,
@@ -67,8 +61,8 @@
 
 ".createEvent": {
   backgroundImage: "none",
-  font:{fontSize:18, fontWeight:"bold", fontFamily:'Helvetica Neue'},
-  backgroundColor: "#79CF19",
+  font:{fontSize:18, fontFamily:'Lato-Regular'},
+  backgroundColor: "#2ecc71",
   width: Titanium.UI.FILL,
   right: 10,
   bottom: 10,
@@ -76,7 +70,5 @@
   height: 40,
   borderRadius: 5,
   left: 10,
-  shadowColor:"#999",
-  shadowOffset:{x:0,y:1}
 }
 

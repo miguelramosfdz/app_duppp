@@ -3,25 +3,18 @@
 }
 
 ".title": {
-  color: "#353535",
-  font:{fontSize:18, fontWeight:"bold", fontFamily:'Helvetica Neue'}
+  color: "#2C3E50",
+  font:{fontSize:18, fontFamily:'Lato-Regular'}
 }
 
 "#button": {
   backgroundImage: "none",
-  backgroundGradient: {
-    type: 'linear',
-    startPoint: { x: '50%', y: '0%' },
-    endPoint: { x: '50%', y: '100%' },
-    colors: [ { color: '#0C99FC', offset: 0.0}, { color: '#0E76FC', offset: 1.0 } ]
-  },
-  font:{fontSize:16, fontFamily:'Helvetica Neue'},
+  backgroundColor: "#3498DB",
+  font:{fontSize:16, fontFamily:'Lato-Regular'},
   right: 10,
   width: 80,
   top: 10,
   bottom: 10,
   height: 30,
   borderRadius: 5,
-  shadowColor:"#999",
-  shadowOffset:{x:0,y:1},
 }

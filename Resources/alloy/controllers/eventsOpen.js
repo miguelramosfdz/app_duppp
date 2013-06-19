@@ -40,7 +40,7 @@ function Controller() {
     });
     $.__views.view && $.addTopLevelView($.__views.view);
     $.__views.viewLabel = Ti.UI.createView({
-        backgroundColor: "#D4D4D4",
+        backgroundColor: "#BDC3C7",
         width: "50%",
         height: 30,
         textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
@@ -49,10 +49,10 @@ function Controller() {
     });
     $.__views.view.add($.__views.viewLabel);
     $.__views.activityIndicator = Ti.UI.createActivityIndicator({
-        color: "#353535",
+        color: "#2C3E50",
         font: {
             fontSize: 14,
-            fontWeight: "bold"
+            fontFamily: "Lato-Regular"
         },
         id: "activityIndicator",
         message: "Loading ...",
@@ -60,17 +60,17 @@ function Controller() {
     });
     $.__views.viewLabel.add($.__views.activityIndicator);
     $.__views.labelOpen = Ti.UI.createLabel({
-        color: "#353535",
+        color: "#2C3E50",
         font: {
             fontSize: 14,
-            fontWeight: "bold"
+            fontFamily: "Lato-Regular"
         },
         id: "labelOpen",
         text: "events in progress"
     });
     $.__views.viewLabel.add($.__views.labelOpen);
     $.__views.view2 = Ti.UI.createView({
-        backgroundColor: "#D4D4D4",
+        backgroundColor: "#BDC3C7",
         borderRadius: 3,
         width: Titanium.UI.FILL,
         id: "view2",
@@ -88,14 +88,14 @@ function Controller() {
         top: 0,
         font: {
             fontSize: 14,
-            fontWeight: "bold"
+            fontFamily: "Lato-Regular"
         },
         id: "provressViewLabel",
         text: "0 video"
     });
     $.__views.provressView.add($.__views.provressViewLabel);
     $.__views.pb = Ti.UI.createProgressBar({
-        backgroundColor: "#D4D4D4",
+        backgroundColor: "#BDC3C7",
         style: Titanium.UI.iPhone.ProgressBarStyle.BAR,
         top: 3,
         left: 65,
@@ -109,9 +109,10 @@ function Controller() {
     });
     $.__views.provressView.add($.__views.pb);
     $.__views.desc = Ti.UI.createLabel({
-        color: "#353535",
+        color: "#2C3E50",
         font: {
-            fontSize: 14
+            fontSize: 14,
+            fontFamily: "Lato-Regular"
         },
         top: 10,
         id: "desc",
@@ -119,7 +120,7 @@ function Controller() {
     });
     $.__views.view2.add($.__views.desc);
     $.__views.table = Ti.UI.createTableView({
-        backgroundColor: "#D4D4D4",
+        backgroundColor: "#BDC3C7",
         height: 130,
         top: 10,
         width: "95%",

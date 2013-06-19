@@ -10,7 +10,7 @@ function Controller() {
     var __defers = {};
     $.__views.win = Ti.UI.createWindow({
         barImage: "bgNavBar.png",
-        barColor: "#3B9DCB",
+        barColor: "#000",
         backgroundColor: "#F3F3F3",
         id: "win"
     });

@@ -1,13 +1,6 @@
 <Alloy>
 	<Tab id="tab2" title="Tab 2">
-	    <Window id='child_window' title="My Events" class="container">
-	    	<View id="pullingContainer" class="pullingContainer">
-	    		<View class="border" />
-	    		<View id="arrow" class="arrow" />
-	    		<Label id="statusLabel" class="statusLabel" text="Pull to reload"/>
-	    		<Label id="lastUpdatedLabel" class="lastUpdatedLabel" text="Last update :"/>
-	    		<ActivityIndicator id="actInd" class="actInd" message="Loading..."/>
-	    	</View>
+	  <Window id='child_window' title="My Events" class="container">
 			<TableView id="table" allowsSelection="false"/>
 		</Window>
 	</Tab>

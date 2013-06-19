@@ -27,11 +27,10 @@ function Controller() {
     });
     $.__views.row && $.addTopLevelView($.__views.row);
     $.__views.title = Ti.UI.createLabel({
-        color: "#353535",
+        color: "#2C3E50",
         font: {
             fontSize: 18,
-            fontWeight: "bold",
-            fontFamily: "Helvetica Neue"
+            fontFamily: "Lato-Regular"
         },
         id: "title",
         left: "10"
@@ -39,27 +38,10 @@ function Controller() {
     $.__views.row.add($.__views.title);
     $.__views.button = Ti.UI.createButton({
         backgroundImage: "none",
-        backgroundGradient: {
-            type: "linear",
-            startPoint: {
-                x: "50%",
-                y: "0%"
-            },
-            endPoint: {
-                x: "50%",
-                y: "100%"
-            },
-            colors: [ {
-                color: "#0C99FC",
-                offset: 0
-            }, {
-                color: "#0E76FC",
-                offset: 1
-            } ]
-        },
+        backgroundColor: "#3498DB",
         font: {
             fontSize: 16,
-            fontFamily: "Helvetica Neue"
+            fontFamily: "Lato-Regular"
         },
         right: 10,
         width: 80,
@@ -67,11 +49,6 @@ function Controller() {
         bottom: 10,
         height: 30,
         borderRadius: 5,
-        shadowColor: "#999",
-        shadowOffset: {
-            x: 0,
-            y: 1
-        },
         id: "button",
         title: "Publish"
     });

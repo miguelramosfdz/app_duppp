@@ -12,6 +12,15 @@ $.textArea.addEventListener('focus', function() {
   $.textArea.value = '';
 });
 
+$.table.addEventListener('click',function(e){
+  if (e.rowData.selected) {
+    e.row.hasCheck = false;
+  } else {
+    e.row.hasCheck = true;
+  }
+  e.rowData.selected = !e.rowData.selected;
+});
+
 var xhrUsers = Ti.Network.createHTTPClient({
   // Success callback.
   onload: function(e) {
@@ -60,15 +69,6 @@ $.search.addEventListener('return', function (e) {
 
     $.search.blur();
   }
-});
-
-$.table.addEventListener('click',function(e){
-  if (e.rowData.selected) {
-    e.row.hasCheck = false;
-  } else {
-    e.row.hasCheck = true;
-  }
-  e.rowData.selected = !e.rowData.selected;
 });
 
 
@@ -139,7 +139,6 @@ function createEvent() {
           node: join,
           nid: data.nid
         });
-
       },
       error: function(data) {
         alert("There was an error, try again.");

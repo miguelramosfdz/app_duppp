@@ -6,7 +6,7 @@ function Controller() {
     var exports = {};
     $.__views.child_window = Ti.UI.createWindow({
         barImage: "bgNavBar.png",
-        barColor: "#3B9DCB",
+        barColor: "#000",
         backgroundColor: "#F3F3F3",
         tabBarHidden: true,
         id: "child_window",

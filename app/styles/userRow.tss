@@ -3,8 +3,8 @@
 }
 
 ".title": {
-  color: "#353535",
-  font:{fontSize:18, fontWeight:"bold", fontFamily:'Helvetica Neue'}
+  color: "#34495E",
+  font: { fontSize: 18, fontFamily: "Lato-Regular"}
 }
 
 ".image": {

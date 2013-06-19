@@ -63,7 +63,7 @@ function Controller() {
     var __defers = {};
     $.__views.eventFormWindow = Ti.UI.createWindow({
         barImage: "bgNavBar.png",
-        barColor: "#3B9DCB",
+        barColor: "#000",
         backgroundColor: "#F3F3F3",
         tabBarHidden: true,
         id: "eventFormWindow",
@@ -101,7 +101,7 @@ function Controller() {
     $.__views.eventFormWindow.add($.__views.search);
     $.__views.table = Ti.UI.createTableView({
         barImage: "bgNavBar.png",
-        barColor: "#3B9DCB",
+        barColor: "#000",
         backgroundColor: "#F3F3F3",
         tabBarHidden: true,
         id: "table",
@@ -120,6 +120,10 @@ function Controller() {
     var data = [], uie = require("UiElements"), indicator = uie.createIndicatorWindow(), drupalServices = require("drupalServices");
     $.textArea.addEventListener("focus", function() {
         $.textArea.value = "";
+    });
+    $.table.addEventListener("click", function(e) {
+        e.row.hasCheck = e.rowData.selected ? false : true;
+        e.rowData.selected = !e.rowData.selected;
     });
     var xhrUsers = Ti.Network.createHTTPClient({
         onload: function() {
@@ -147,10 +151,6 @@ function Controller() {
             xhrUsers.send();
             $.search.blur();
         }
-    });
-    $.table.addEventListener("click", function(e) {
-        e.row.hasCheck = e.rowData.selected ? false : true;
-        e.rowData.selected = !e.rowData.selected;
     });
     __defers["$.__views.createBtn!click!createEvent"] && $.__views.createBtn.addEventListener("click", createEvent);
     _.extend($, exports);

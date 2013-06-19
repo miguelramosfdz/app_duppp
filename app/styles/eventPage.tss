@@ -1,6 +1,6 @@
 ".eventPage": {
   barImage: "bgNavBar.png",
-  barColor: "#3B9DCB",
+  barColor: "#000",
   backgroundColor: "#F3F3F3"
 }
 

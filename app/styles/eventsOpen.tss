@@ -8,7 +8,7 @@
 }
 
 "#pb": {
-  backgroundColor: '#D4D4D4',
+  backgroundColor: '#BDC3C7',
   style: Titanium.UI.iPhone.ProgressBarStyle.BAR,
   top: 3,
   left: 65,
@@ -18,33 +18,33 @@
 "#provressViewLabel": {
   left: 10,
   top: 0,
-  font: { fontSize: 14, fontWeight: "bold"}
+  font: { fontSize: 14, fontFamily: "Lato-Regular"}
 }
 
 ".container-large": {
-  backgroundColor: '#D4D4D4',
+  backgroundColor: '#BDC3C7',
   borderRadius: 3,
   width: Titanium.UI.FILL
 }
 
 ".label": {
-  color: '#353535',
-  font: { fontSize: 14, fontWeight: "bold"}
+  color: '#2C3E50',
+  font: { fontSize: 14, fontFamily: "Lato-Regular"}
 }
 
 "#activityIndicator": {
-  color: '#353535',
-  font: { fontSize: 14, fontWeight: "bold"}
+  color: '#2C3E50',
+  font: { fontSize: 14, fontFamily: "Lato-Regular"}
 }
 
 ".desc": {
-  color: '#353535',
-  font: { fontSize: 14 },
+  color: '#2C3E50',
+  font: { fontSize: 14, fontFamily: "Lato-Regular"},
   top: 10
 }
 
 ".containerNumber": {
-  backgroundColor: '#D4D4D4',
+  backgroundColor: '#BDC3C7',
   width: '50%',
   height: 30,
   textAlign: Ti.UI.TEXT_ALIGNMENT_CENTER,
@@ -52,7 +52,7 @@
 }
 
 "#table": {
-  backgroundColor: '#D4D4D4',
+  backgroundColor: '#BDC3C7',
   height: 130,
   top: 10,
   width: "95%"

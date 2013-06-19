@@ -22,11 +22,10 @@ function Controller() {
     });
     $.__views.row.add($.__views.image);
     $.__views.name = Ti.UI.createLabel({
-        color: "#353535",
+        color: "#34495E",
         font: {
             fontSize: 18,
-            fontWeight: "bold",
-            fontFamily: "Helvetica Neue"
+            fontFamily: "Lato-Regular"
         },
         id: "name"
     });
