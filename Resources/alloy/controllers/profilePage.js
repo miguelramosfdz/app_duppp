@@ -140,13 +140,14 @@ function Controller() {
     $.profilePage.addEventListener("open", function() {
         $.authorImage.image = args.field_avatar;
         $.followerCount.text = args.follower_count;
+        $.profilePage.title = args.name;
         drupalServices.userRetrieve({
             uid: args.uid,
-            success: function(user) {
-                $.follow.title = user[0].is_flagged ? "Unfollow" : "Follow";
-                $.followerCount.text = user[0].follow_count;
-                $.eventCount.text = user[0].event_count;
-                $.author.text = user[0].name;
+            success: function(data) {
+                $.follow.title = data.user.is_flagged ? "Unfollow" : "Follow";
+                $.followerCount.text = data.user.follow_count;
+                $.eventCount.text = data.user.event_count;
+                $.author.text = data.user.name;
             },
             error: function() {
                 alert("error");

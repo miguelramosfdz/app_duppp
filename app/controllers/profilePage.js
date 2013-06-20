@@ -9,19 +9,22 @@ $.profilePage.addEventListener('open', function() {
   $.authorImage.image = args.field_avatar;
   $.followerCount.text = args.follower_count;
 
+  $.profilePage.title = args.name;
+
   drupalServices.userRetrieve({
     uid: args.uid,
-    success: function(user) {
+    success: function(data) {
+
       // Check if user si flagged by the current user.
-      if (user[0].is_flagged) {
+      if (data.user.is_flagged) {
         $.follow.title = 'Unfollow';
       } else {
         $.follow.title = 'Follow';
       }
       // map fields with correct values.
-      $.followerCount.text = user[0].follow_count;
-      $.eventCount.text = user[0].event_count;
-      $.author.text = user[0].name;
+      $.followerCount.text = data.user.follow_count;
+      $.eventCount.text = data.user.event_count;
+      $.author.text = data.user.name;
     },
     error: function(data) {
       alert('error');
