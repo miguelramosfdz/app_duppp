@@ -12,6 +12,14 @@ $.videoPlayer.url = args.video;
 $.f_title.text = args.title;
 $.f_date.text = args.created;
 
+$.videoPlayer.addEventListener('durationavailable', function() {
+
+  if (this.duration < 600000) {
+    $.videoPlayer.play();
+  }
+
+});
+
 $.eventPage.addEventListener('open', function () {
 
   drupalServices.nodeRetrieve({

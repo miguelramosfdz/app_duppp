@@ -30,25 +30,31 @@ function Controller() {
     _.extend($, $.__views);
     var drupalServices = require("drupalServices"), userLoginWin = Alloy.createController("user").getView("userLogin"), eventsOpenWin = Alloy.createController("eventsOpen").getView();
     require("facebook");
-    drupalServices.systemInfo({
-        success: function(data) {
-            0 !== data.user.uid ? $.indexView.open() : userLoginWin.open();
+    drupalServices.getToken({
+        success: function(token) {
+            Ti.App.Properties.setString("token", token);
+            drupalServices.systemInfo({
+                success: function(data) {
+                    0 !== data.user.uid ? $.indexView.open() : userLoginWin.open();
+                },
+                error: function() {
+                    alert("Error, contact the admin");
+                }
+            });
         },
         error: function() {
             alert("Error, contact the admin");
         }
     });
-    Titanium.App.addEventListener("resume", function() {
-        drupalServices.systemInfo({
-            success: function(data) {
-                0 !== data.user.uid ? $.indexView.open() : userLoginWin.open();
+    Titanium.API.addEventListener("user:login", function() {
+        drupalServices.getToken({
+            success: function(token) {
+                Ti.App.Properties.setString("token", token);
             },
             error: function() {
                 alert("Error, contact the admin");
             }
         });
-    });
-    Titanium.API.addEventListener("user:login", function() {
         $.indexView.open({
             transition: Titanium.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT
         });

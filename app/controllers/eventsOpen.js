@@ -67,7 +67,6 @@ Titanium.App.addEventListener('resume', function () {
 
   $.labelOpen.hide();
   $.activityIndicator.show();
-
   dupppUpload.processUpload();
   fetchEvents();
 });

@@ -49,7 +49,7 @@ function Controller() {
         height: "300",
         width: "320",
         backgroundColor: "black",
-        autoplay: "true"
+        autoplay: "false"
     });
     $.__views.scrollView.add($.__views.videoPlayer);
     $.__views.caption = Ti.UI.createView({
@@ -200,6 +200,9 @@ function Controller() {
     $.videoPlayer.url = args.video;
     $.f_title.text = args.title;
     $.f_date.text = args.created;
+    $.videoPlayer.addEventListener("durationavailable", function() {
+        6e5 > this.duration && $.videoPlayer.play();
+    });
     $.eventPage.addEventListener("open", function() {
         drupalServices.nodeRetrieve({
             nid: args.nid,

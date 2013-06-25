@@ -74,7 +74,27 @@ function openLoginDuppp() {
 }
 
 function openRegisterDuppp() {
+  var t = Titanium.UI.create2DMatrix();
+  t = t.scale(0);
 
+  $.userRegisterDuppp.transform = t;
+
+  // create first transform to go beyond normal size
+  var t1 = Titanium.UI.create2DMatrix();
+  t1 = t1.scale(1.1);
+  var a = Titanium.UI.createAnimation();
+  a.transform = t1;
+  a.duration = 200;
+
+  // when this animation completes, scale to normal size
+  a.addEventListener('complete', function() {
+    var t2 = Titanium.UI.create2DMatrix();
+    t2 = t2.scale(1.0);
+    $.userRegisterDuppp.animate({transform:t2, duration:200});
+
+  });
+
+  $.userRegisterDuppp.open(a);
 }
 
 fb.addEventListener("login", facebook);

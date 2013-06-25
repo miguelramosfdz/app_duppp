@@ -1,7 +1,7 @@
 <Alloy>
 	<Window id="eventPage" class="eventPage">
 		<ScrollView id="scrollView" class="container" layout='vertical'>
-			<VideoPlayer id="videoPlayer" ns="Ti.Media" top="0" height="300" width="320" backgroundColor="black" autoplay="true" />
+			<VideoPlayer id="videoPlayer" ns="Ti.Media" top="0" height="300" width="320" backgroundColor="black" autoplay="false" />
 			<View id="caption" class="caption">
 				<ImageView id="author_image" class="author_image" />
 				<Label id="author" class="author" />

@@ -62,3 +62,7 @@
 	borderRadius: 5,
   width:300
 }
+
+'#userRegisterDuppp': {
+  height: 260
+}

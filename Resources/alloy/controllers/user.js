@@ -39,7 +39,25 @@ function Controller() {
         });
         $.userLoginDuppp.open(a);
     }
-    function openRegisterDuppp() {}
+    function openRegisterDuppp() {
+        var t = Titanium.UI.create2DMatrix();
+        t = t.scale(0);
+        $.userRegisterDuppp.transform = t;
+        var t1 = Titanium.UI.create2DMatrix();
+        t1 = t1.scale(1.1);
+        var a = Titanium.UI.createAnimation();
+        a.transform = t1;
+        a.duration = 200;
+        a.addEventListener("complete", function() {
+            var t2 = Titanium.UI.create2DMatrix();
+            t2 = t2.scale(1);
+            $.userRegisterDuppp.animate({
+                transform: t2,
+                duration: 200
+            });
+        });
+        $.userRegisterDuppp.open(a);
+    }
     function facebook(e) {
         if (e.success) {
             var fbuid = fb.getUid();
@@ -88,6 +106,11 @@ function Controller() {
         id: "__alloyId27"
     });
     $.__views.userLogin.add($.__views.__alloyId27);
+    $.__views.headImage = Ti.UI.createImageView({
+        id: "headImage",
+        image: "bg.jpg"
+    });
+    $.__views.__alloyId27.add($.__views.headImage);
     $.__views.__alloyId28 = Ti.UI.createButton({
         backgroundImage: "none",
         backgroundColor: "#27ae60",
@@ -190,7 +213,7 @@ function Controller() {
     login ? $.__views.loginBtn.addEventListener("click", login) : __defers["$.__views.loginBtn!click!login"] = true;
     $.__views.userRegisterDuppp = Ti.UI.createWindow({
         backgroundColor: "#edeff1",
-        height: 200,
+        height: 260,
         borderRadius: 5,
         width: 300,
         id: "userRegisterDuppp"

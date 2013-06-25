@@ -1,6 +1,7 @@
 <Alloy>
   <Window id="userLogin" class="container" layout="vertical">
     <View layout='horizontal'>
+      <ImageView id="headImage" class="image" image="bg.jpg" />
 <!--
       <Button class="facebook" onClick="openLoginFacebook" title="Login with Facebook" />
 -->

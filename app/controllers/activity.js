@@ -10,7 +10,7 @@ var REST_PATH = Alloy.CFG.rest,
   drupalServices = require('drupalServices'),
   indicator = uie.createIndicatorWindow();
 
-// Add button and menu to current window.   
+// Add button and menu to current window.
 $.child_window.setLeftNavButton(nav.getView('menuBtn'));
 $.child_window.setRightNavButton(nav.getView('cameraBtn'));
 $.child_window.add(nav.getView("tooltipContainer"));

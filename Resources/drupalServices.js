@@ -1,4 +1,4 @@
-var REST_PATH = Alloy.CFG.rest;
+var REST_PATH = Alloy.CFG.rest, BASE_PATH = Alloy.CFG.base;
 
 var nodeRetrieve = function(opts) {
     var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/event/" + opts.nid;
@@ -35,10 +35,11 @@ var nodeList = function(opts) {
 };
 
 var createNode = function(opts) {
-    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/node";
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/node", token = Ti.App.Properties.getString("token");
     Ti.API.info("creating node, url: " + url);
     xhr.open("POST", url);
     xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("X-CSRF-Token", token);
     var obj = JSON.stringify(opts.node);
     Ti.API.info("node object: " + obj);
     xhr.send(obj);
@@ -57,11 +58,11 @@ var createNode = function(opts) {
 };
 
 var closeNode = function(opts) {
-    var xhr = Titanium.Network.createHTTPClient();
-    url = REST_PATH + "/event/" + opts.nid + "/close";
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/event/" + opts.nid + "/close", token = Ti.App.Properties.getString("token");
     Ti.API.info("closing node, url: " + url);
     xhr.open("POST", url);
     xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("X-CSRF-Token", token);
     xhr.send();
     xhr.onload = function() {
         var jsonObject = JSON.parse(this.responseText);
@@ -77,11 +78,11 @@ var closeNode = function(opts) {
 };
 
 var likeNode = function(opts) {
-    var xhr = Titanium.Network.createHTTPClient();
-    url = REST_PATH + "/event/" + opts.nid + "/flag";
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/event/" + opts.nid + "/flag", token = Ti.App.Properties.getString("token");
     Ti.API.info("liking node, url: " + url);
     xhr.open("POST", url);
     xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("X-CSRF-Token", token);
     var obj = JSON.stringify(opts.node);
     Ti.API.info("node object: " + obj);
     xhr.send(obj);
@@ -99,11 +100,11 @@ var likeNode = function(opts) {
 };
 
 var joinNode = function(opts) {
-    var xhr = Titanium.Network.createHTTPClient();
-    url = REST_PATH + "/event/" + opts.nid + "/join";
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/event/" + opts.nid + "/join", token = Ti.App.Properties.getString("token");
     Ti.API.info("joining node, url: " + url);
     xhr.open("POST", url);
     xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("X-CSRF-Token", token);
     var obj = JSON.stringify(opts.node);
     Ti.API.info("node object: " + obj);
     xhr.send(obj);
@@ -121,10 +122,11 @@ var joinNode = function(opts) {
 };
 
 var attachFile = function(opts) {
-    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/node/" + opts.nid + "/attach_file";
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/node/" + opts.nid + "/attach_file", token = Ti.App.Properties.getString("token");
     Ti.API.info("following user, url: " + url);
     xhr.open("POST", url);
     xhr.setRequestHeader("Content-Type", "multipart/form-data");
+    xhr.setRequestHeader("X-CSRF-Token", token);
     var obj = opts.node;
     Ti.API.info("node object: " + obj);
     xhr.send(obj);
@@ -165,10 +167,11 @@ var userRetrieve = function(opts) {
 };
 
 var followUser = function(opts) {
-    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/duppp_user/" + opts.uid + "/flag";
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/duppp_user/" + opts.uid + "/flag", token = Ti.App.Properties.getString("token");
     Ti.API.info("following user, url: " + url);
     xhr.open("POST", url);
     xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("X-CSRF-Token", token);
     var obj = JSON.stringify(opts.node);
     Ti.API.info("node object: " + obj);
     xhr.send(obj);
@@ -186,10 +189,11 @@ var followUser = function(opts) {
 };
 
 var userLogin = function(opts) {
-    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/user/login";
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/user/login", token = Ti.App.Properties.getString("token");
     Ti.API.info("login user, url: " + url);
     xhr.open("POST", url);
     xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("X-CSRF-Token", token);
     var obj = JSON.stringify(opts.node);
     Ti.API.info("user object: " + obj);
     xhr.send(obj);
@@ -207,10 +211,11 @@ var userLogin = function(opts) {
 };
 
 var systemInfo = function(opts) {
-    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/system/connect";
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/system/connect", token = Ti.App.Properties.getString("token");
     Ti.API.info("System info, url: " + url);
     xhr.open("POST", url);
     xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("X-CSRF-Token", token);
     xhr.send();
     xhr.onload = function() {
         var jsonObject = JSON.parse(this.responseText);
@@ -218,6 +223,24 @@ var systemInfo = function(opts) {
     };
     xhr.onerror = function() {
         console.info("systemInfo error: " + JSON.stringify(this));
+        opts.error && opts.error({
+            status: xhr.status,
+            statusText: xhr.statusText
+        });
+    };
+};
+
+var getToken = function(opts) {
+    var xhr = Titanium.Network.createHTTPClient(), url = BASE_PATH + "/services/session/token";
+    Ti.API.info("getToken info, url: " + url);
+    xhr.open("GET", url);
+    xhr.send();
+    xhr.onload = function() {
+        var jsonObject = this.responseText;
+        opts.success && opts.success(jsonObject);
+    };
+    xhr.onerror = function() {
+        console.info("getToken error: " + JSON.stringify(this));
         opts.error && opts.error({
             status: xhr.status,
             statusText: xhr.statusText
@@ -246,3 +269,5 @@ exports.followUser = followUser;
 exports.userLogin = userLogin;
 
 exports.systemInfo = systemInfo;
+
+exports.getToken = getToken;

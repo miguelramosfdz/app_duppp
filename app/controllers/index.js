@@ -3,63 +3,58 @@
  *  Init variables.
  */
 
-
 // Load child views, and initiate some vars.
 var drupalServices = require('drupalServices'),
   userLoginWin = Alloy.createController('user').getView('userLogin'),
   eventsOpenWin = Alloy.createController('eventsOpen').getView(),
   fb = require('facebook');
 
-/*
- *  Event declarations.
- */
+drupalServices.getToken({
+  success: function(token) {
+    Ti.App.Properties.setString("token", token);
 
-drupalServices.systemInfo({
-  success: function(data) {
-    if (data.user.uid !== 0) {
+    drupalServices.systemInfo({
+      success: function(data) {
+        if (data.user.uid !== 0) {
 
-      // Open default view.
-      $.indexView.open();
+          // Open default view.
+          $.indexView.open();
 
-    } else {
+        } else {
 
-      // Logout if you are connected to facebook.
-      //fb.logout();
+          // Logout if you are connected to facebook.
+          //fb.logout();
 
-      // Open User form.
-      userLoginWin.open();
+          // Open User form.
+          userLoginWin.open();
 
-    }
+        }
+      },
+      error: function(data) {
+        alert('Error, contact the admin');
+      }
+    });
   },
   error: function(data) {
     alert('Error, contact the admin');
   }
 });
 
-Titanium.App.addEventListener('resume', function () {
-  drupalServices.systemInfo({
-    success: function(data) {
-      if (data.user.uid !== 0) {
+/*
+ *  Event declarations.
+ */
 
-        // Open default view.
-        $.indexView.open();
+Titanium.API.addEventListener('user:login', function () {
 
-      } else {
-
-        // Open User form.
-        userLoginWin.open();
-
-        // Logout if you are connected to facebook.
-        //fb.logout();
-      }
+  drupalServices.getToken({
+    success: function(token) {
+      Ti.App.Properties.setString("token", token);
     },
     error: function(data) {
       alert('Error, contact the admin');
     }
   });
-});
 
-Titanium.API.addEventListener('user:login', function () {
   $.indexView.open({
     transition: Titanium.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT
   });
