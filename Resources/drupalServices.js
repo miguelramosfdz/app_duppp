@@ -210,6 +210,29 @@ var userLogin = function(opts) {
     };
 };
 
+var userRegister = function(opts) {
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/user/register", token = Ti.App.Properties.getString("token");
+    Ti.API.info("Register user, url: " + url);
+    xhr.open("POST", url);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("X-CSRF-Token", token);
+    var obj = JSON.stringify(opts.node);
+    Ti.API.info("user object: " + obj);
+    xhr.send(obj);
+    xhr.onload = function() {
+        var jsonObject = JSON.parse(this.responseText);
+        opts.success && opts.success(jsonObject);
+    };
+    xhr.onerror = function() {
+        console.info("userFollow error: " + JSON.stringify(this));
+        opts.error && opts.error({
+            status: xhr.status,
+            responseText: JSON.parse(xhr.responseText),
+            statusText: xhr.statusText
+        });
+    };
+};
+
 var systemInfo = function(opts) {
     var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/system/connect", token = Ti.App.Properties.getString("token");
     Ti.API.info("System info, url: " + url);
@@ -267,6 +290,8 @@ exports.joinNode = joinNode;
 exports.followUser = followUser;
 
 exports.userLogin = userLogin;
+
+exports.userRegister = userRegister;
 
 exports.systemInfo = systemInfo;
 

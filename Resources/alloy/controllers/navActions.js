@@ -96,7 +96,7 @@ function Controller() {
         layout: "vertical"
     });
     $.__views.tooltipContainer.add($.__views.tooltip);
-    $.__views.__alloyId14 = Ti.UI.createLabel({
+    $.__views.__alloyId16 = Ti.UI.createLabel({
         font: {
             fontSize: 18,
             fontFamily: "Lato-Regular"
@@ -105,10 +105,10 @@ function Controller() {
         textAlign: Titanium.UI.TEXT_ALIGNMENT_CENTER,
         top: 15,
         text: "Let's go !",
-        id: "__alloyId14"
+        id: "__alloyId16"
     });
-    $.__views.tooltip.add($.__views.__alloyId14);
-    $.__views.__alloyId15 = Ti.UI.createLabel({
+    $.__views.tooltip.add($.__views.__alloyId16);
+    $.__views.__alloyId17 = Ti.UI.createLabel({
         font: {
             fontSize: 16,
             fontFamily: "Lato-Light"
@@ -118,9 +118,9 @@ function Controller() {
         right: 30,
         left: 30,
         text: "You want to capture in which events ?",
-        id: "__alloyId15"
+        id: "__alloyId17"
     });
-    $.__views.tooltip.add($.__views.__alloyId15);
+    $.__views.tooltip.add($.__views.__alloyId17);
     $.__views.tableOpen = Ti.UI.createScrollView({
         height: 0,
         width: "100%",
@@ -144,7 +144,7 @@ function Controller() {
         visible: "false"
     });
     $.__views.tooltip.add($.__views.tableOpenLabel);
-    $.__views.__alloyId16 = Ti.UI.createButton({
+    $.__views.__alloyId18 = Ti.UI.createButton({
         backgroundImage: "none",
         font: {
             fontSize: 18,
@@ -159,10 +159,10 @@ function Controller() {
         borderRadius: 5,
         left: 10,
         title: "Create Event",
-        id: "__alloyId16"
+        id: "__alloyId18"
     });
-    $.__views.tooltip.add($.__views.__alloyId16);
-    openEventForm ? $.__views.__alloyId16.addEventListener("click", openEventForm) : __defers["$.__views.__alloyId16!click!openEventForm"] = true;
+    $.__views.tooltip.add($.__views.__alloyId18);
+    openEventForm ? $.__views.__alloyId18.addEventListener("click", openEventForm) : __defers["$.__views.__alloyId18!click!openEventForm"] = true;
     $.__views.menu = Ti.UI.createView({
         backgroundColor: "#3B9DCB",
         width: Titanium.UI.FILL,
@@ -173,7 +173,7 @@ function Controller() {
         layout: "vertical"
     });
     $.__views.navActions.add($.__views.menu);
-    $.__views.__alloyId17 = Ti.UI.createButton({
+    $.__views.__alloyId19 = Ti.UI.createButton({
         backgroundImage: "none",
         height: 40,
         width: Titanium.UI.FILL,
@@ -183,34 +183,6 @@ function Controller() {
         },
         index: "0",
         title: "Home",
-        id: "__alloyId17"
-    });
-    $.__views.menu.add($.__views.__alloyId17);
-    menuChild ? $.__views.__alloyId17.addEventListener("click", menuChild) : __defers["$.__views.__alloyId17!click!menuChild"] = true;
-    $.__views.__alloyId18 = Ti.UI.createButton({
-        backgroundImage: "none",
-        height: 40,
-        width: Titanium.UI.FILL,
-        font: {
-            fontSize: 18,
-            fontFamily: "Lato-Regular"
-        },
-        index: "1",
-        title: "My Events",
-        id: "__alloyId18"
-    });
-    $.__views.menu.add($.__views.__alloyId18);
-    menuChild ? $.__views.__alloyId18.addEventListener("click", menuChild) : __defers["$.__views.__alloyId18!click!menuChild"] = true;
-    $.__views.__alloyId19 = Ti.UI.createButton({
-        backgroundImage: "none",
-        height: 40,
-        width: Titanium.UI.FILL,
-        font: {
-            fontSize: 18,
-            fontFamily: "Lato-Regular"
-        },
-        index: "2",
-        title: "Explore",
         id: "__alloyId19"
     });
     $.__views.menu.add($.__views.__alloyId19);
@@ -223,12 +195,40 @@ function Controller() {
             fontSize: 18,
             fontFamily: "Lato-Regular"
         },
-        index: "3",
-        title: "Log out",
+        index: "1",
+        title: "My Events",
         id: "__alloyId20"
     });
     $.__views.menu.add($.__views.__alloyId20);
     menuChild ? $.__views.__alloyId20.addEventListener("click", menuChild) : __defers["$.__views.__alloyId20!click!menuChild"] = true;
+    $.__views.__alloyId21 = Ti.UI.createButton({
+        backgroundImage: "none",
+        height: 40,
+        width: Titanium.UI.FILL,
+        font: {
+            fontSize: 18,
+            fontFamily: "Lato-Regular"
+        },
+        index: "2",
+        title: "Explore",
+        id: "__alloyId21"
+    });
+    $.__views.menu.add($.__views.__alloyId21);
+    menuChild ? $.__views.__alloyId21.addEventListener("click", menuChild) : __defers["$.__views.__alloyId21!click!menuChild"] = true;
+    $.__views.__alloyId22 = Ti.UI.createButton({
+        backgroundImage: "none",
+        height: 40,
+        width: Titanium.UI.FILL,
+        font: {
+            fontSize: 18,
+            fontFamily: "Lato-Regular"
+        },
+        index: "3",
+        title: "Log out",
+        id: "__alloyId22"
+    });
+    $.__views.menu.add($.__views.__alloyId22);
+    menuChild ? $.__views.__alloyId22.addEventListener("click", menuChild) : __defers["$.__views.__alloyId22!click!menuChild"] = true;
     exports.destroy = function() {};
     _.extend($, $.__views);
     var dupppUpload = (Alloy.CFG.rest, require("dupppUpload"));
@@ -293,11 +293,11 @@ function Controller() {
     });
     __defers["$.__views.menuBtn!click!openMenu"] && $.__views.menuBtn.addEventListener("click", openMenu);
     __defers["$.__views.cameraBtn!click!openTooltip"] && $.__views.cameraBtn.addEventListener("click", openTooltip);
-    __defers["$.__views.__alloyId16!click!openEventForm"] && $.__views.__alloyId16.addEventListener("click", openEventForm);
-    __defers["$.__views.__alloyId17!click!menuChild"] && $.__views.__alloyId17.addEventListener("click", menuChild);
-    __defers["$.__views.__alloyId18!click!menuChild"] && $.__views.__alloyId18.addEventListener("click", menuChild);
+    __defers["$.__views.__alloyId18!click!openEventForm"] && $.__views.__alloyId18.addEventListener("click", openEventForm);
     __defers["$.__views.__alloyId19!click!menuChild"] && $.__views.__alloyId19.addEventListener("click", menuChild);
     __defers["$.__views.__alloyId20!click!menuChild"] && $.__views.__alloyId20.addEventListener("click", menuChild);
+    __defers["$.__views.__alloyId21!click!menuChild"] && $.__views.__alloyId21.addEventListener("click", menuChild);
+    __defers["$.__views.__alloyId22!click!menuChild"] && $.__views.__alloyId22.addEventListener("click", menuChild);
     _.extend($, exports);
 }
 

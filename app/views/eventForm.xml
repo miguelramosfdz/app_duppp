@@ -1,14 +1,22 @@
 <Alloy>
+
 	<Window id="eventFormWindow" title="New event" class="container" layout="vertical">
     <TextArea id="textArea"
-              borderWidth="1" borderColor="#bbb" returnKeyType="Titanium.UI.RETURNKEY_NEXT"
+              borderWidth="1" borderColor="#bbb"
               color="#888" textAlign="left" value="You have to type the title"
               top="0" width="Titanium.UI.FILL" height="150" />
-    <Switch id="switchPrivate" title="Private" value="0"/>
+    <Switch id="switchPrivate" title="Private" value="0" />
+    <RightNavButton>
+      <Button title="Next" onClick="nextStep" />
+    </RightNavButton>
+  </Window>
+
+  <Window id="eventFormWindowStep2" title="Invite Contact" class="container" layout="vertical">
     <SearchBar id="search" hintText="Search a user" />
     <TableView id="table" class="container" allowsSelectionDuringEditing="true" />
     <RightNavButton>
       <Button id="createBtn" title="OK" onClick="createEvent" />
     </RightNavButton>
-	</Window>
+  </Window>
+
 </Alloy>

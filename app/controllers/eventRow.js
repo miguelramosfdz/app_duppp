@@ -36,7 +36,7 @@ $.thumbnail.addEventListener('touchend', function(e){
   });
 });
 
-var current_row; 
+var current_row;
 
 // Let appear the actions caption.
 $.caption.addEventListener('swipe', function(e) {

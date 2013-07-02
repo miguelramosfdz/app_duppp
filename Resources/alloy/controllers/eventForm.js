@@ -1,4 +1,9 @@
 function Controller() {
+    function nextStep() {
+        Titanium.API.fireEvent("openAsNavigation", {
+            window: $.eventFormWindowStep2
+        });
+    }
     function createEvent() {
         var clickedRows = [];
         if ($.table.data.length > 0) for (var i = 0; $.table.data[0].rows.length > i; i++) true == $.table.data[0].rows[i].hasCheck && clickedRows.push($.table.data[0].rows[i].uid);
@@ -36,7 +41,8 @@ function Controller() {
                     status: 1
                 },
                 success: function(data) {
-                    $.eventFormWindow.close({
+                    $.eventFormWindow.close();
+                    $.eventFormWindowStep2.close({
                         animated: true
                     });
                     $.createBtn.enabled = true;
@@ -89,16 +95,35 @@ function Controller() {
     });
     $.__views.eventFormWindow.add($.__views.textArea);
     $.__views.switchPrivate = Ti.UI.createSwitch({
+        titleOff: "Public",
+        titleOn: "Private",
         id: "switchPrivate",
         title: "Private",
         value: "0"
     });
     $.__views.eventFormWindow.add($.__views.switchPrivate);
+    $.__views.__alloyId3 = Ti.UI.createButton({
+        title: "Next",
+        id: "__alloyId3"
+    });
+    nextStep ? $.__views.__alloyId3.addEventListener("click", nextStep) : __defers["$.__views.__alloyId3!click!nextStep"] = true;
+    $.__views.eventFormWindow.rightNavButton = $.__views.__alloyId3;
+    $.__views.eventFormWindowStep2 = Ti.UI.createWindow({
+        barImage: "bgNavBar.png",
+        barColor: "#000",
+        backgroundColor: "#F3F3F3",
+        tabBarHidden: true,
+        id: "eventFormWindowStep2",
+        title: "Invite Contact",
+        layout: "vertical"
+    });
+    $.__views.eventFormWindowStep2 && $.addTopLevelView($.__views.eventFormWindowStep2);
     $.__views.search = Ti.UI.createSearchBar({
+        barColor: "#000",
         id: "search",
         hintText: "Search a user"
     });
-    $.__views.eventFormWindow.add($.__views.search);
+    $.__views.eventFormWindowStep2.add($.__views.search);
     $.__views.table = Ti.UI.createTableView({
         barImage: "bgNavBar.png",
         barColor: "#000",
@@ -107,13 +132,13 @@ function Controller() {
         id: "table",
         allowsSelectionDuringEditing: "true"
     });
-    $.__views.eventFormWindow.add($.__views.table);
+    $.__views.eventFormWindowStep2.add($.__views.table);
     $.__views.createBtn = Ti.UI.createButton({
         id: "createBtn",
         title: "OK"
     });
     createEvent ? $.__views.createBtn.addEventListener("click", createEvent) : __defers["$.__views.createBtn!click!createEvent"] = true;
-    $.__views.eventFormWindow.rightNavButton = $.__views.createBtn;
+    $.__views.eventFormWindowStep2.rightNavButton = $.__views.createBtn;
     exports.destroy = function() {};
     _.extend($, $.__views);
     var REST_PATH = Alloy.CFG.rest;
@@ -131,6 +156,7 @@ function Controller() {
             json = JSON.parse(this.responseText);
             json.forEach(function(user) {
                 if (parseInt(user.uid) !== Titanium.App.Properties.getInt("userUid")) {
+                    user.isNoReturn = true;
                     var newsItem = Alloy.createController("userRow", user).getView();
                     data.push(newsItem);
                 }
@@ -152,6 +178,7 @@ function Controller() {
             $.search.blur();
         }
     });
+    __defers["$.__views.__alloyId3!click!nextStep"] && $.__views.__alloyId3.addEventListener("click", nextStep);
     __defers["$.__views.createBtn!click!createEvent"] && $.__views.createBtn.addEventListener("click", createEvent);
     _.extend($, exports);
 }

@@ -7,22 +7,22 @@ function Controller() {
     $.__views.indexView = Ti.UI.createTabGroup({
         id: "indexView"
     });
-    $.__views.__alloyId11 = Alloy.createController("activity", {
-        id: "__alloyId11"
-    });
-    $.__views.indexView.addTab($.__views.__alloyId11.getViewEx({
-        recurse: true
-    }));
-    $.__views.__alloyId12 = Alloy.createController("myEvents", {
-        id: "__alloyId12"
-    });
-    $.__views.indexView.addTab($.__views.__alloyId12.getViewEx({
-        recurse: true
-    }));
-    $.__views.__alloyId13 = Alloy.createController("explore", {
+    $.__views.__alloyId13 = Alloy.createController("activity", {
         id: "__alloyId13"
     });
     $.__views.indexView.addTab($.__views.__alloyId13.getViewEx({
+        recurse: true
+    }));
+    $.__views.__alloyId14 = Alloy.createController("myEvents", {
+        id: "__alloyId14"
+    });
+    $.__views.indexView.addTab($.__views.__alloyId14.getViewEx({
+        recurse: true
+    }));
+    $.__views.__alloyId15 = Alloy.createController("explore", {
+        id: "__alloyId15"
+    });
+    $.__views.indexView.addTab($.__views.__alloyId15.getViewEx({
         recurse: true
     }));
     $.__views.indexView && $.addTopLevelView($.__views.indexView);

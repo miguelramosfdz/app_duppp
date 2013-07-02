@@ -35,13 +35,13 @@ function Controller() {
         layout: "vertical"
     });
     $.__views.profilePage.add($.__views.scrollView);
-    $.__views.__alloyId21 = Ti.UI.createView({
+    $.__views.__alloyId23 = Ti.UI.createView({
         backgroundColor: "#0679FF",
         height: 107,
         layout: "horizontal",
-        id: "__alloyId21"
+        id: "__alloyId23"
     });
-    $.__views.scrollView.add($.__views.__alloyId21);
+    $.__views.scrollView.add($.__views.__alloyId23);
     $.__views.authorImage = Ti.UI.createImageView({
         borderRadius: 43,
         borderWidth: 4,
@@ -53,7 +53,7 @@ function Controller() {
         width: 90,
         id: "authorImage"
     });
-    $.__views.__alloyId21.add($.__views.authorImage);
+    $.__views.__alloyId23.add($.__views.authorImage);
     $.__views.author = Ti.UI.createLabel({
         color: "FFF",
         font: {
@@ -67,21 +67,21 @@ function Controller() {
         },
         id: "author"
     });
-    $.__views.__alloyId21.add($.__views.author);
-    $.__views.__alloyId22 = Ti.UI.createView({
+    $.__views.__alloyId23.add($.__views.author);
+    $.__views.__alloyId24 = Ti.UI.createView({
         height: 107,
         layout: "horizontal",
-        id: "__alloyId22"
+        id: "__alloyId24"
     });
-    $.__views.scrollView.add($.__views.__alloyId22);
-    $.__views.__alloyId23 = Ti.UI.createView({
+    $.__views.scrollView.add($.__views.__alloyId24);
+    $.__views.__alloyId25 = Ti.UI.createView({
         height: 106,
         width: "50%",
         backgroundColor: "#F39C12",
         layout: "vertical",
-        id: "__alloyId23"
+        id: "__alloyId25"
     });
-    $.__views.__alloyId22.add($.__views.__alloyId23);
+    $.__views.__alloyId24.add($.__views.__alloyId25);
     $.__views.followerCount = Ti.UI.createLabel({
         color: "#FFF",
         font: {
@@ -90,25 +90,25 @@ function Controller() {
         },
         id: "followerCount"
     });
-    $.__views.__alloyId23.add($.__views.followerCount);
-    $.__views.__alloyId24 = Ti.UI.createLabel({
+    $.__views.__alloyId25.add($.__views.followerCount);
+    $.__views.__alloyId26 = Ti.UI.createLabel({
         color: "#FFF",
         font: {
             fontSize: 15,
             fontFamily: "Helvetica Neue"
         },
         text: "follower",
-        id: "__alloyId24"
+        id: "__alloyId26"
     });
-    $.__views.__alloyId23.add($.__views.__alloyId24);
-    $.__views.__alloyId25 = Ti.UI.createView({
+    $.__views.__alloyId25.add($.__views.__alloyId26);
+    $.__views.__alloyId27 = Ti.UI.createView({
         height: 106,
         width: "50%",
         backgroundColor: "#E74C3C",
         layout: "vertical",
-        id: "__alloyId25"
+        id: "__alloyId27"
     });
-    $.__views.__alloyId22.add($.__views.__alloyId25);
+    $.__views.__alloyId24.add($.__views.__alloyId27);
     $.__views.eventCount = Ti.UI.createLabel({
         color: "#FFF",
         font: {
@@ -117,17 +117,17 @@ function Controller() {
         },
         id: "eventCount"
     });
-    $.__views.__alloyId25.add($.__views.eventCount);
-    $.__views.__alloyId26 = Ti.UI.createLabel({
+    $.__views.__alloyId27.add($.__views.eventCount);
+    $.__views.__alloyId28 = Ti.UI.createLabel({
         color: "#FFF",
         font: {
             fontSize: 15,
             fontFamily: "Helvetica Neue"
         },
         text: "events",
-        id: "__alloyId26"
+        id: "__alloyId28"
     });
-    $.__views.__alloyId25.add($.__views.__alloyId26);
+    $.__views.__alloyId27.add($.__views.__alloyId28);
     $.__views.follow = Ti.UI.createButton({
         id: "follow",
         title: "Follow"

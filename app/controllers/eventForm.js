@@ -32,6 +32,7 @@ var xhrUsers = Ti.Network.createHTTPClient({
     json.forEach(function(user){
       if (parseInt(user.uid) !== Titanium.App.Properties.getInt("userUid")) {
         // Keep only user different from current user.
+        user.isNoReturn = true;
         var newsItem = Alloy.createController('userRow', user).getView();
         data.push(newsItem);
       }
@@ -70,6 +71,12 @@ $.search.addEventListener('return', function (e) {
     $.search.blur();
   }
 });
+
+function nextStep() {
+  Titanium.API.fireEvent('openAsNavigation', {
+    window: $.eventFormWindowStep2
+  });
+}
 
 
 // Function to create an event
@@ -127,7 +134,8 @@ function createEvent() {
         "status": 1
       },
       success: function (data) {
-        $.eventFormWindow.close({animated:true});
+        $.eventFormWindow.close();
+        $.eventFormWindowStep2.close({animated:true});
         $.createBtn.enabled = true;
         Titanium.API.fireEvent('eventCreated');
 

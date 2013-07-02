@@ -52,11 +52,10 @@ var nodeList = function(opts) {
   };
 };
 
-
-/*
- *  @desc Create Drupal node
- *  @param {Object} opts Utility payload, should have properties: node property (JSON object), success() and error() callback functions
- *
+/**
+ * Create Drupal node
+ * @param  {Object} opts Utility payload, should have properties: node property (JSON object), success() and error() callback functions
+ * @return {Object}      Return object with callback.
  */
 var createNode = function(opts) {
   var xhr = Titanium.Network.createHTTPClient(),
@@ -330,6 +329,42 @@ var userLogin = function(opts) {
 
 
 /*
+ *  @desc Register a User
+ *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
+ *
+ */
+var userRegister = function(opts) {
+  var xhr = Titanium.Network.createHTTPClient(),
+    url = REST_PATH + '/user/register',
+    token = Ti.App.Properties.getString("token");
+
+  Ti.API.info('Register user, url: '+url);
+
+  xhr.open('POST', url);
+  xhr.setRequestHeader('Content-Type','application/json');
+  xhr.setRequestHeader('X-CSRF-Token', token);
+
+  var obj = JSON.stringify(opts.node);
+  Ti.API.info('user object: '+ obj);
+
+  xhr.send(obj);
+
+  xhr.onload = function() {
+    var jsonObject = JSON.parse(this.responseText);
+    opts.success && opts.success(jsonObject);
+  };
+  xhr.onerror = function(e) {
+    console.info("userFollow error: "+JSON.stringify(this));
+    opts.error && opts.error({
+      "status":xhr.status,
+      "responseText":JSON.parse(xhr.responseText),
+      "statusText":xhr.statusText
+    });
+  };
+};
+
+
+/*
  *  @desc Connect info.
  *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
  *
@@ -397,5 +432,6 @@ exports.likeNode = likeNode;
 exports.joinNode = joinNode;
 exports.followUser = followUser;
 exports.userLogin = userLogin;
+exports.userRegister = userRegister;
 exports.systemInfo = systemInfo;
 exports.getToken = getToken;

@@ -14,3 +14,12 @@
   height: 106.5,
   width: 106.5
 }
+
+"#search": {
+  barColor: "#000"
+}
+
+"#switchPrivate": {
+  titleOff: "Public",
+  titleOn: "Private"
+}

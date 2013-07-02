@@ -9,10 +9,13 @@ $.name.text = args.name;
 $.image.image = (args.field_avatar.length == 0) ? '' : args.field_avatar;
 $.row.uid = args.uid;
 
-$.row.addEventListener('click', function(e){
-  var win = Alloy.createController('profilePage', args).getView();
+// Don't open profile page if isNoReturn is true.
+if (!args.isNoReturn) {
+  $.row.addEventListener('click', function(e){
+    var win = Alloy.createController('profilePage', args).getView();
 
-  Titanium.API.fireEvent('openAsNavigation', {
-    window: win
+    Titanium.API.fireEvent('openAsNavigation', {
+      window: win
+    });
   });
-});
+}
