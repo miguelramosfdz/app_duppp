@@ -5,8 +5,6 @@ function Controller() {
         });
     }
     function createEvent() {
-        var clickedRows = [];
-        if ($.table.data.length > 0) for (var i = 0; $.table.data[0].rows.length > i; i++) true == $.table.data[0].rows[i].hasCheck && clickedRows.push($.table.data[0].rows[i].uid);
         $.createBtn.enabled = false;
         if (Titanium.App.Properties.getInt("userUid")) {
             var user = {
@@ -77,37 +75,72 @@ function Controller() {
         layout: "vertical"
     });
     $.__views.eventFormWindow && $.addTopLevelView($.__views.eventFormWindow);
+    $.__views.__alloyId2 = Ti.UI.createView({
+        backgroundColor: "#ecf0f1",
+        width: Titanium.UI.FILL,
+        height: Titanium.UI.SIZE,
+        id: "__alloyId2"
+    });
+    $.__views.eventFormWindow.add($.__views.__alloyId2);
+    $.__views.__alloyId3 = Ti.UI.createLabel({
+        color: "#2c3e50",
+        font: {
+            fontSize: 17,
+            fontFamily: "Lato-Regular"
+        },
+        left: 10,
+        height: 50,
+        width: "70%",
+        text: "Description",
+        id: "__alloyId3"
+    });
+    $.__views.__alloyId2.add($.__views.__alloyId3);
     $.__views.textArea = Ti.UI.createTextArea({
         font: {
-            fontSize: 13,
-            font: "HelveticaNeue"
+            fontSize: 15,
+            fontFamily: "Lato-Regular"
         },
-        color: "#888",
         id: "textArea",
-        borderWidth: "1",
-        borderColor: "#bbb",
-        returnKeyType: Titanium.UI.RETURNKEY_NEXT,
+        color: "#888",
         textAlign: "left",
         value: "You have to type the title",
-        top: "0",
         width: Titanium.UI.FILL,
         height: "150"
     });
     $.__views.eventFormWindow.add($.__views.textArea);
+    $.__views.__alloyId4 = Ti.UI.createView({
+        backgroundColor: "#ecf0f1",
+        width: Titanium.UI.FILL,
+        height: Titanium.UI.SIZE,
+        layout: "horizontal",
+        id: "__alloyId4"
+    });
+    $.__views.eventFormWindow.add($.__views.__alloyId4);
+    $.__views.__alloyId5 = Ti.UI.createLabel({
+        color: "#2c3e50",
+        font: {
+            fontSize: 17,
+            fontFamily: "Lato-Regular"
+        },
+        left: 10,
+        height: 50,
+        width: "70%",
+        text: "Private",
+        id: "__alloyId5"
+    });
+    $.__views.__alloyId4.add($.__views.__alloyId5);
     $.__views.switchPrivate = Ti.UI.createSwitch({
-        titleOff: "Public",
-        titleOn: "Private",
         id: "switchPrivate",
         title: "Private",
         value: "0"
     });
-    $.__views.eventFormWindow.add($.__views.switchPrivate);
-    $.__views.__alloyId3 = Ti.UI.createButton({
+    $.__views.__alloyId4.add($.__views.switchPrivate);
+    $.__views.__alloyId7 = Ti.UI.createButton({
         title: "Next",
-        id: "__alloyId3"
+        id: "__alloyId7"
     });
-    nextStep ? $.__views.__alloyId3.addEventListener("click", nextStep) : __defers["$.__views.__alloyId3!click!nextStep"] = true;
-    $.__views.eventFormWindow.rightNavButton = $.__views.__alloyId3;
+    nextStep ? $.__views.__alloyId7.addEventListener("click", nextStep) : __defers["$.__views.__alloyId7!click!nextStep"] = true;
+    $.__views.eventFormWindow.rightNavButton = $.__views.__alloyId7;
     $.__views.eventFormWindowStep2 = Ti.UI.createWindow({
         barImage: "bgNavBar.png",
         barColor: "#000",
@@ -119,7 +152,7 @@ function Controller() {
     });
     $.__views.eventFormWindowStep2 && $.addTopLevelView($.__views.eventFormWindowStep2);
     $.__views.search = Ti.UI.createSearchBar({
-        barColor: "#000",
+        barColor: "#2c3e50",
         id: "search",
         hintText: "Search a user"
     });
@@ -142,12 +175,20 @@ function Controller() {
     exports.destroy = function() {};
     _.extend($, $.__views);
     var REST_PATH = Alloy.CFG.rest;
-    var data = [], uie = require("UiElements"), indicator = uie.createIndicatorWindow(), drupalServices = require("drupalServices");
+    var data = [], uie = require("UiElements"), indicator = uie.createIndicatorWindow(), drupalServices = require("drupalServices"), clickedRows = [];
     $.textArea.addEventListener("focus", function() {
         $.textArea.value = "";
     });
     $.table.addEventListener("click", function(e) {
-        e.row.hasCheck = e.rowData.selected ? false : true;
+        var index = _.indexOf(clickedRows, e.row.uid);
+        if (e.rowData.selected) {
+            e.row.hasCheck = false;
+            index >= 0 && clickedRows.splice(index, 1);
+        } else {
+            e.row.hasCheck = true;
+            0 > index && clickedRows.push(e.row.uid);
+        }
+        console.log(clickedRows);
         e.rowData.selected = !e.rowData.selected;
     });
     var xhrUsers = Ti.Network.createHTTPClient({
@@ -178,7 +219,7 @@ function Controller() {
             $.search.blur();
         }
     });
-    __defers["$.__views.__alloyId3!click!nextStep"] && $.__views.__alloyId3.addEventListener("click", nextStep);
+    __defers["$.__views.__alloyId7!click!nextStep"] && $.__views.__alloyId7.addEventListener("click", nextStep);
     __defers["$.__views.createBtn!click!createEvent"] && $.__views.createBtn.addEventListener("click", createEvent);
     _.extend($, exports);
 }

@@ -108,7 +108,7 @@ function Controller() {
         layout: "horizontal"
     });
     $.__views.scrollView.add($.__views.actionBtns);
-    $.__views.__alloyId5 = Ti.UI.createButton({
+    $.__views.__alloyId9 = Ti.UI.createButton({
         backgroundImage: "none",
         borderRadius: 0,
         color: "white",
@@ -122,10 +122,10 @@ function Controller() {
         width: 100,
         backgroundColor: "#1193FC",
         title: "Comments",
-        id: "__alloyId5"
+        id: "__alloyId9"
     });
-    $.__views.actionBtns.add($.__views.__alloyId5);
-    comment ? $.__views.__alloyId5.addEventListener("click", comment) : __defers["$.__views.__alloyId5!click!comment"] = true;
+    $.__views.actionBtns.add($.__views.__alloyId9);
+    comment ? $.__views.__alloyId9.addEventListener("click", comment) : __defers["$.__views.__alloyId9!click!comment"] = true;
     $.__views.like = Ti.UI.createButton({
         backgroundImage: "none",
         borderRadius: 0,
@@ -144,7 +144,7 @@ function Controller() {
     });
     $.__views.actionBtns.add($.__views.like);
     like ? $.__views.like.addEventListener("click", like) : __defers["$.__views.like!click!like"] = true;
-    $.__views.__alloyId6 = Ti.UI.createButton({
+    $.__views.__alloyId10 = Ti.UI.createButton({
         backgroundImage: "none",
         borderRadius: 0,
         color: "white",
@@ -158,9 +158,9 @@ function Controller() {
         width: 100,
         backgroundColor: "#7CCD2F",
         title: "Extra",
-        id: "__alloyId6"
+        id: "__alloyId10"
     });
-    $.__views.actionBtns.add($.__views.__alloyId6);
+    $.__views.actionBtns.add($.__views.__alloyId10);
     $.__views.likeCount = Ti.UI.createLabel({
         bottom: 10,
         color: "#EF5250",
@@ -217,7 +217,7 @@ function Controller() {
             }
         });
     });
-    __defers["$.__views.__alloyId5!click!comment"] && $.__views.__alloyId5.addEventListener("click", comment);
+    __defers["$.__views.__alloyId9!click!comment"] && $.__views.__alloyId9.addEventListener("click", comment);
     __defers["$.__views.like!click!like"] && $.__views.like.addEventListener("click", like);
     _.extend($, exports);
 }

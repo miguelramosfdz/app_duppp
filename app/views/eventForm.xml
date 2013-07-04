@@ -1,15 +1,26 @@
 <Alloy>
 
 	<Window id="eventFormWindow" title="New event" class="container" layout="vertical">
+
+    <View class="labelLayout" >
+      <Label class="label" text="Description" />
+    </View>
     <TextArea id="textArea"
-              borderWidth="1" borderColor="#bbb"
               color="#888" textAlign="left" value="You have to type the title"
-              top="0" width="Titanium.UI.FILL" height="150" />
-    <Switch id="switchPrivate" title="Private" value="0" />
+              width="Titanium.UI.FILL" height="150" />
+
+
+    <View class="labelLayout" layout="horizontal">
+      <Label class="label" text="Private" />
+      <Switch id="switchPrivate" title="Private" value="0" />
+    </View>
+
     <RightNavButton>
       <Button title="Next" onClick="nextStep" />
     </RightNavButton>
   </Window>
+
+
 
   <Window id="eventFormWindowStep2" title="Invite Contact" class="container" layout="vertical">
     <SearchBar id="search" hintText="Search a user" />

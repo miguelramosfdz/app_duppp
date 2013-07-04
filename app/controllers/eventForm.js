@@ -6,18 +6,30 @@ var REST_PATH = Alloy.CFG.rest;
 var data = [],
   uie = require('UiElements'),
   indicator = uie.createIndicatorWindow(),
-  drupalServices = require('drupalServices');
+  drupalServices = require('drupalServices'),
+  clickedRows = [];
 
 $.textArea.addEventListener('focus', function() {
   $.textArea.value = '';
 });
 
 $.table.addEventListener('click',function(e){
+
+  var index = _.indexOf(clickedRows, e.row.uid);
+
   if (e.rowData.selected) {
     e.row.hasCheck = false;
+    if (index >= 0) {
+      clickedRows.splice(index, 1);
+    }
   } else {
     e.row.hasCheck = true;
+    if (index < 0) {
+      clickedRows.push(e.row.uid);
+    }
   }
+
+  console.log(clickedRows);
   e.rowData.selected = !e.rowData.selected;
 });
 
@@ -81,16 +93,6 @@ function nextStep() {
 
 // Function to create an event
 function createEvent() {
-
-  var clickedRows = [];
-
-  if ($.table.data.length > 0) {
-    for(var i=0; i < $.table.data[0].rows.length ; i++) {
-      if ($.table.data[0].rows[i].hasCheck == true) {
-        clickedRows.push($.table.data[0].rows[i].uid)
-      }
-    }
-  }
 
   $.createBtn.enabled = false;
 

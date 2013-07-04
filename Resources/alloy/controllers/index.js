@@ -7,22 +7,22 @@ function Controller() {
     $.__views.indexView = Ti.UI.createTabGroup({
         id: "indexView"
     });
-    $.__views.__alloyId13 = Alloy.createController("activity", {
-        id: "__alloyId13"
+    $.__views.__alloyId17 = Alloy.createController("activity", {
+        id: "__alloyId17"
     });
-    $.__views.indexView.addTab($.__views.__alloyId13.getViewEx({
+    $.__views.indexView.addTab($.__views.__alloyId17.getViewEx({
         recurse: true
     }));
-    $.__views.__alloyId14 = Alloy.createController("myEvents", {
-        id: "__alloyId14"
+    $.__views.__alloyId18 = Alloy.createController("myEvents", {
+        id: "__alloyId18"
     });
-    $.__views.indexView.addTab($.__views.__alloyId14.getViewEx({
+    $.__views.indexView.addTab($.__views.__alloyId18.getViewEx({
         recurse: true
     }));
-    $.__views.__alloyId15 = Alloy.createController("explore", {
-        id: "__alloyId15"
+    $.__views.__alloyId19 = Alloy.createController("explore", {
+        id: "__alloyId19"
     });
-    $.__views.indexView.addTab($.__views.__alloyId15.getViewEx({
+    $.__views.indexView.addTab($.__views.__alloyId19.getViewEx({
         recurse: true
     }));
     $.__views.indexView && $.addTopLevelView($.__views.indexView);
