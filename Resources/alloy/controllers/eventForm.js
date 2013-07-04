@@ -188,7 +188,6 @@ function Controller() {
             e.row.hasCheck = true;
             0 > index && clickedRows.push(e.row.uid);
         }
-        console.log(clickedRows);
         e.rowData.selected = !e.rowData.selected;
     });
     var xhrUsers = Ti.Network.createHTTPClient({
@@ -199,6 +198,10 @@ function Controller() {
                 if (parseInt(user.uid) !== Titanium.App.Properties.getInt("userUid")) {
                     user.isNoReturn = true;
                     var newsItem = Alloy.createController("userRow", user).getView();
+                    if (_.indexOf(clickedRows, newsItem.uid) >= 0) {
+                        newsItem.hasCheck = true;
+                        newsItem.selected = !newsItem.selected;
+                    }
                     data.push(newsItem);
                 }
             });

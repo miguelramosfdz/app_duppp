@@ -29,7 +29,6 @@ $.table.addEventListener('click',function(e){
     }
   }
 
-  console.log(clickedRows);
   e.rowData.selected = !e.rowData.selected;
 });
 
@@ -46,6 +45,12 @@ var xhrUsers = Ti.Network.createHTTPClient({
         // Keep only user different from current user.
         user.isNoReturn = true;
         var newsItem = Alloy.createController('userRow', user).getView();
+
+        if (_.indexOf(clickedRows, newsItem.uid) >= 0) {
+          newsItem.hasCheck = true;
+          newsItem.selected = !newsItem.selected;
+        }
+
         data.push(newsItem);
       }
     });
