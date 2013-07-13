@@ -1,8 +1,20 @@
-
-
 // Create another connection to get the user
 var drupalServices = require('drupalServices'),
   args = arguments[0] || {};
+
+function prepareData(data) {
+  dataEvents = [];
+
+  data.forEach(function(event){
+    // Add to the main view, only closed events
+    if (event.field_event_closed_value === "1") {
+      var newsItem = Alloy.createController('eventRow', event).getView();
+      dataEvents.push(newsItem);
+    }
+  });
+
+  $.table.setData(dataEvents);
+}
 
 $.profilePage.addEventListener('open', function() {
 
@@ -30,6 +42,17 @@ $.profilePage.addEventListener('open', function() {
       alert('error');
     }
   });
+
+  drupalServices.userNodesList({
+    uid: args.uid,
+    success: function(json) {
+      prepareData(json);
+    },
+    error: function(data) {
+      alert('error');
+    }
+  })
+
 });
 
 function follow () {

@@ -135,7 +135,8 @@ function Controller() {
             created: args.created,
             user_name: args.name,
             avatar: 0 == args.field_avatar.length ? "" : args.field_avatar,
-            video: 0 == args.field_event_video_final.length ? "" : args.field_event_video_final
+            video: 0 == args.field_event_video_final.length ? "" : args.field_event_video_final,
+            uid: args.uid
         };
         var win = Alloy.createController("eventPage", node).getView();
         win.title = "Event";

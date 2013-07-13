@@ -25,7 +25,8 @@ $.thumbnail.addEventListener('touchend', function(e){
     created: args.created,
     user_name: args.name,
     avatar: (args.field_avatar.length == 0) ? '' : args.field_avatar,
-    video: (args.field_event_video_final.length == 0) ? '' : args.field_event_video_final
+    video: (args.field_event_video_final.length == 0) ? '' : args.field_event_video_final,
+    uid: args.uid
   }
 
 	var win = Alloy.createController('eventPage', node).getView();

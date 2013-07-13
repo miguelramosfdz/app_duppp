@@ -4,6 +4,7 @@
       <View class="header" layout='horizontal'>
         <ImageView id="authorImage" class="authorImage" />
         <Label id="author" class="author" />
+        <Button id="follow" title="Follow" onClick="follow" class="btn follow" />
       </View>
       <View class="headerInfo" layout='horizontal'>
         <View class="wFollower wrapper" layout='vertical'>
@@ -15,7 +16,7 @@
           <Label class="wlabel" text="events" />
         </View>
       </View>
-      <Button id="follow" title="Follow" onClick="follow" class="btn follow" />
+      <TableView id="table" allowsSelection="false"/>
     </ScrollView>
   </Window>
 </Alloy>

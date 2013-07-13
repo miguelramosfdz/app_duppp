@@ -1,4 +1,14 @@
 function Controller() {
+    function prepareData(data) {
+        dataEvents = [];
+        data.forEach(function(event) {
+            if ("1" === event.field_event_closed_value) {
+                var newsItem = Alloy.createController("eventRow", event).getView();
+                dataEvents.push(newsItem);
+            }
+        });
+        $.table.setData(dataEvents);
+    }
     function follow() {
         var data;
         data = "Follow" === $.follow.title ? {
@@ -68,6 +78,12 @@ function Controller() {
         id: "author"
     });
     $.__views.__alloyId27.add($.__views.author);
+    $.__views.follow = Ti.UI.createButton({
+        id: "follow",
+        title: "Follow"
+    });
+    $.__views.__alloyId27.add($.__views.follow);
+    follow ? $.__views.follow.addEventListener("click", follow) : __defers["$.__views.follow!click!follow"] = true;
     $.__views.__alloyId28 = Ti.UI.createView({
         height: 107,
         layout: "horizontal",
@@ -128,12 +144,11 @@ function Controller() {
         id: "__alloyId32"
     });
     $.__views.__alloyId31.add($.__views.__alloyId32);
-    $.__views.follow = Ti.UI.createButton({
-        id: "follow",
-        title: "Follow"
+    $.__views.table = Ti.UI.createTableView({
+        id: "table",
+        allowsSelection: "false"
     });
-    $.__views.scrollView.add($.__views.follow);
-    follow ? $.__views.follow.addEventListener("click", follow) : __defers["$.__views.follow!click!follow"] = true;
+    $.__views.scrollView.add($.__views.table);
     exports.destroy = function() {};
     _.extend($, $.__views);
     var drupalServices = require("drupalServices"), args = arguments[0] || {};
@@ -148,6 +163,15 @@ function Controller() {
                 $.followerCount.text = data.user.follow_count;
                 $.eventCount.text = data.user.event_count;
                 $.author.text = data.user.name;
+            },
+            error: function() {
+                alert("error");
+            }
+        });
+        drupalServices.userNodesList({
+            uid: args.uid,
+            success: function(json) {
+                prepareData(json);
             },
             error: function() {
                 alert("error");

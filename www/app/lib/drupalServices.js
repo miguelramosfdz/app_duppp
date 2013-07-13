@@ -8,7 +8,33 @@ var REST_PATH = Alloy.CFG.rest,
  */
 var nodeRetrieve = function(opts) {
   var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + '/event/'+opts.nid;
+    url = REST_PATH + '/events/'+opts.nid;
+
+  xhr.open('GET', url);
+  xhr.send();
+
+  xhr.onload = function() {
+    var jsonObject = JSON.parse(this.responseText);
+    opts.success && opts.success(jsonObject);
+  };
+  xhr.onerror = function(e) {
+    console.info("nodeRetrieve error: "+JSON.stringify(this));
+    opts.error && opts.error({
+      "status":xhr.status,
+      "statusText":xhr.statusText
+    });
+  };
+};
+
+
+/*
+ *  @desc Retrieve list of nodes
+ *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
+ *
+ */
+var nodeList = function(opts) {
+  var xhr = Titanium.Network.createHTTPClient(),
+    url = REST_PATH + '/events?type='+opts.type;
 
   xhr.open('GET', url);
   xhr.send();
@@ -26,15 +52,14 @@ var nodeRetrieve = function(opts) {
   };
 };
 
-
 /*
- *  @desc Retrieve list of nodes
+ *  @desc Retrieve list of nodes of one user
  *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
  *
  */
-var nodeList = function(opts) {
+var userNodesList = function(opts) {
   var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + '/event.json?type='+opts.type;
+    url = REST_PATH + '/duppp_user/'+opts.uid+'/events';
 
   xhr.open('GET', url);
   xhr.send();
@@ -59,7 +84,7 @@ var nodeList = function(opts) {
  */
 var createNode = function(opts) {
   var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + '/node',
+    url = REST_PATH + '/events',
     token = Ti.App.Properties.getString("token");
 
   Ti.API.info('creating node, url: '+url);
@@ -99,7 +124,7 @@ var createNode = function(opts) {
  */
 var closeNode = function(opts) {
   var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + "/event/" + opts.nid + "/close",
+    url = REST_PATH + "/events/" + opts.nid + "/close",
     token = Ti.App.Properties.getString("token");
 
   Ti.API.info('closing node, url: '+url);
@@ -130,7 +155,7 @@ var closeNode = function(opts) {
  */
 var likeNode = function(opts) {
   var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + "/event/" + opts.nid + "/flag",
+    url = REST_PATH + "/events/" + opts.nid + "/flag",
     token = Ti.App.Properties.getString("token");
 
   Ti.API.info('liking node, url: '+url);
@@ -165,7 +190,7 @@ var likeNode = function(opts) {
  */
 var joinNode = function(opts) {
   var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + "/event/" + opts.nid + "/join",
+    url = REST_PATH + "/events/" + opts.nid + "/join",
     token = Ti.App.Properties.getString("token");
 
   Ti.API.info('joining node, url: '+url);
@@ -423,6 +448,7 @@ var getToken = function(opts) {
 };
 
 exports.nodeList = nodeList;
+exports.userNodesList = userNodesList;
 exports.userRetrieve = userRetrieve;
 exports.nodeRetrieve = nodeRetrieve;
 exports.createNode = createNode;

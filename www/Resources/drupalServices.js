@@ -1,7 +1,24 @@
 var REST_PATH = Alloy.CFG.rest, BASE_PATH = Alloy.CFG.base;
 
 var nodeRetrieve = function(opts) {
-    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/event/" + opts.nid;
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/events/" + opts.nid;
+    xhr.open("GET", url);
+    xhr.send();
+    xhr.onload = function() {
+        var jsonObject = JSON.parse(this.responseText);
+        opts.success && opts.success(jsonObject);
+    };
+    xhr.onerror = function() {
+        console.info("nodeRetrieve error: " + JSON.stringify(this));
+        opts.error && opts.error({
+            status: xhr.status,
+            statusText: xhr.statusText
+        });
+    };
+};
+
+var nodeList = function(opts) {
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/events?type=" + opts.type;
     xhr.open("GET", url);
     xhr.send();
     xhr.onload = function() {
@@ -17,8 +34,8 @@ var nodeRetrieve = function(opts) {
     };
 };
 
-var nodeList = function(opts) {
-    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/event.json?type=" + opts.type;
+var userNodesList = function(opts) {
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/duppp_user/" + opts.uid + "/events";
     xhr.open("GET", url);
     xhr.send();
     xhr.onload = function() {
@@ -35,7 +52,7 @@ var nodeList = function(opts) {
 };
 
 var createNode = function(opts) {
-    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/node", token = Ti.App.Properties.getString("token");
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/events", token = Ti.App.Properties.getString("token");
     Ti.API.info("creating node, url: " + url);
     xhr.open("POST", url);
     xhr.setRequestHeader("Content-Type", "application/json");
@@ -58,7 +75,7 @@ var createNode = function(opts) {
 };
 
 var closeNode = function(opts) {
-    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/event/" + opts.nid + "/close", token = Ti.App.Properties.getString("token");
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/events/" + opts.nid + "/close", token = Ti.App.Properties.getString("token");
     Ti.API.info("closing node, url: " + url);
     xhr.open("POST", url);
     xhr.setRequestHeader("Content-Type", "application/json");
@@ -78,7 +95,7 @@ var closeNode = function(opts) {
 };
 
 var likeNode = function(opts) {
-    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/event/" + opts.nid + "/flag", token = Ti.App.Properties.getString("token");
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/events/" + opts.nid + "/flag", token = Ti.App.Properties.getString("token");
     Ti.API.info("liking node, url: " + url);
     xhr.open("POST", url);
     xhr.setRequestHeader("Content-Type", "application/json");
@@ -100,7 +117,7 @@ var likeNode = function(opts) {
 };
 
 var joinNode = function(opts) {
-    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/event/" + opts.nid + "/join", token = Ti.App.Properties.getString("token");
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/events/" + opts.nid + "/join", token = Ti.App.Properties.getString("token");
     Ti.API.info("joining node, url: " + url);
     xhr.open("POST", url);
     xhr.setRequestHeader("Content-Type", "application/json");
@@ -272,6 +289,8 @@ var getToken = function(opts) {
 };
 
 exports.nodeList = nodeList;
+
+exports.userNodesList = userNodesList;
 
 exports.userRetrieve = userRetrieve;
 
