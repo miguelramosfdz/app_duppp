@@ -26,13 +26,13 @@ function Controller() {
         id: "table"
     });
     $.__views.__alloyId16.add($.__views.table);
-    $.__views.tab2 = Ti.UI.createTab({
+    $.__views.tab3 = Ti.UI.createTab({
         window: $.__views.child_window,
-        id: "tab2",
-        title: "Tab 2",
+        id: "tab3",
+        title: "Tab 3",
         icon: "KS_nav_views.png"
     });
-    $.__views.tab2 && $.addTopLevelView($.__views.tab2);
+    $.__views.tab3 && $.addTopLevelView($.__views.tab3);
     exports.destroy = function() {};
     _.extend($, $.__views);
     var REST_PATH = Alloy.CFG.rest;

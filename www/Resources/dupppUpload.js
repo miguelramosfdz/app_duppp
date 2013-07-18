@@ -17,7 +17,7 @@ if ("iPhone" === Ti.Platform.osname || "iPad" === Ti.Platform.osname) var ios = 
 var uploadFile = function(media, contribution) {
     if (Titanium.Network.online && !processed) {
         processed = true;
-        drupalServices.createNode({
+        drupalServices.createNodeContribution({
             node: contribution,
             success: function(data) {
                 Titanium.API.fireEvent("startUpload");

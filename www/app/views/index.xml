@@ -3,5 +3,6 @@
     <Require src="activity" />
     <Require src="myEvents" />
     <Require src="explore" />
+    <Require src="configuration" />
   </TabGroup>
 </Alloy>

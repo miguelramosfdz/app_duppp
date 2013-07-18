@@ -5,6 +5,10 @@
     "base": "http://duppp.local"
   },
   "env:production": {
+    "rest": "http://admin.duppp.com/api/1.0",
+    "base": "http://admin.duppp.com"
+  },
+  "env:test": {
     "rest": "http://develop.duppp.com/api/1.0",
     "base": "http://develop.duppp.com"
   },

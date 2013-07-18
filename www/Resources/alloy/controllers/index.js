@@ -25,27 +25,36 @@ function Controller() {
     $.__views.indexView.addTab($.__views.__alloyId19.getViewEx({
         recurse: true
     }));
+    $.__views.__alloyId20 = Alloy.createController("configuration", {
+        id: "__alloyId20"
+    });
+    $.__views.indexView.addTab($.__views.__alloyId20.getViewEx({
+        recurse: true
+    }));
     $.__views.indexView && $.addTopLevelView($.__views.indexView);
     exports.destroy = function() {};
     _.extend($, $.__views);
     var drupalServices = require("drupalServices"), userLoginWin = Alloy.createController("user").getView("userLogin"), eventsOpenWin = Alloy.createController("eventsOpen").getView();
     require("facebook");
-    drupalServices.getToken({
-        success: function(token) {
-            Ti.App.Properties.setString("token", token);
-            drupalServices.systemInfo({
-                success: function(data) {
-                    0 !== data.user.uid ? $.indexView.open() : userLoginWin.open();
-                },
-                error: function() {
-                    alert("Error, contact the admin");
-                }
-            });
-        },
-        error: function() {
-            alert("Error, contact the admin");
-        }
-    });
+    if (null == Ti.App.Properties.getInt("installComplete")) {
+        drupalServices.getToken({
+            success: function(token) {
+                Ti.App.Properties.setString("token", token);
+                drupalServices.systemInfo({
+                    success: function(data) {
+                        0 !== data.user.uid ? $.indexView.open() : userLoginWin.open();
+                    },
+                    error: function() {
+                        alert("Error, contact the admin");
+                    }
+                });
+            },
+            error: function() {
+                alert("Error, contact the admin");
+            }
+        });
+        Ti.App.Properties.setInt("installComplete", 1);
+    } else 0 !== Titanium.App.Properties.getInt("userUid") && $.indexView.open();
     Titanium.API.addEventListener("user:login", function() {
         drupalServices.getToken({
             success: function(token) {

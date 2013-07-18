@@ -9,36 +9,50 @@ var drupalServices = require('drupalServices'),
   eventsOpenWin = Alloy.createController('eventsOpen').getView(),
   fb = require('facebook');
 
-drupalServices.getToken({
-  success: function(token) {
-    Ti.App.Properties.setString("token", token);
+if (Ti.App.Properties.getInt('installComplete') == null) {
 
-    drupalServices.systemInfo({
-      success: function(data) {
-        if (data.user.uid !== 0) {
+  drupalServices.getToken({
+    success: function(token) {
+      Ti.App.Properties.setString("token", token);
 
-          // Open default view.
-          $.indexView.open();
+      drupalServices.systemInfo({
+        success: function(data) {
+          if (data.user.uid !== 0) {
 
-        } else {
+            // Open default view.
+            $.indexView.open();
 
-          // Logout if you are connected to facebook.
-          //fb.logout();
+          } else {
 
-          // Open User form.
-          userLoginWin.open();
+            // Logout if you are connected to facebook.
+            //fb.logout();
 
+            // Open User form.
+            userLoginWin.open();
+
+          }
+        },
+        error: function(data) {
+          alert('Error, contact the admin');
         }
-      },
-      error: function(data) {
-        alert('Error, contact the admin');
-      }
-    });
-  },
-  error: function(data) {
-    alert('Error, contact the admin');
+      });
+    },
+    error: function(data) {
+      alert('Error, contact the admin');
+    }
+  });
+
+  Ti.App.Properties.setInt("installComplete", 1);
+} else {
+
+  if (Titanium.App.Properties.getInt("userUid") !== 0) {
+
+    // Open default view.
+    $.indexView.open();
+
   }
-});
+
+}
 
 /*
  *  Event declarations.

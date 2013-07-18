@@ -16,6 +16,17 @@ module.exports = function(grunt) {
           tall: true
         },
       },
+      ios_device: {
+        platform : 'ios',
+        project_dir : './www/',
+        options: {
+          distribution_name: 'Arthur Itey (628272242K)',
+          pp_uuid: '95B7636E-CEF0-4D11-9EC0-E6811FE73D37',
+          developer_name: 'Arthur Itey (JU5JW4MF8W)',
+          device_family: 'iphone',
+          target: 'device',
+        },
+      },
       ios_distrib: {
         platform : 'ios',
         project_dir : './www/',
@@ -37,5 +48,6 @@ module.exports = function(grunt) {
 
   // Default task(s).
   grunt.registerTask('default', ['scandium:ios_sim']);
+  grunt.registerTask('device', ['scandium:ios_device']);
   grunt.registerTask('distrib', ['scandium:ios_distrib']);
 };

@@ -74,6 +74,29 @@ var createNode = function(opts) {
     };
 };
 
+var createNodeContribution = function(opts) {
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/node", token = Ti.App.Properties.getString("token");
+    Ti.API.info("creating node, url: " + url);
+    xhr.open("POST", url);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("X-CSRF-Token", token);
+    var obj = JSON.stringify(opts.node);
+    Ti.API.info("node object: " + obj);
+    xhr.send(obj);
+    xhr.onload = function(e) {
+        Ti.API.info("nodeObject: " + JSON.stringify(e));
+        var jsonObject = JSON.parse(this.responseText);
+        opts.success && opts.success(jsonObject);
+    };
+    xhr.onerror = function() {
+        Titanium.API.info("createNode error: " + xhr.statusText);
+        opts.error && opts.error({
+            status: xhr.status,
+            statusText: xhr.statusText
+        });
+    };
+};
+
 var closeNode = function(opts) {
     var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/events/" + opts.nid + "/close", token = Ti.App.Properties.getString("token");
     Ti.API.info("closing node, url: " + url);
@@ -140,19 +163,19 @@ var joinNode = function(opts) {
 
 var attachFile = function(opts) {
     var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/node/" + opts.nid + "/attach_file", token = Ti.App.Properties.getString("token");
-    Ti.API.info("following user, url: " + url);
-    xhr.open("POST", url);
-    xhr.setRequestHeader("Content-Type", "multipart/form-data");
-    xhr.setRequestHeader("X-CSRF-Token", token);
-    var obj = opts.node;
-    Ti.API.info("node object: " + obj);
-    xhr.send(obj);
+    Ti.API.info("Attach file, url: " + url);
     xhr.onsendstream = function(e) {
         var data = {
             progressValue: e.progress
         };
         opts.sending && opts.sending(data);
     };
+    xhr.open("POST", url);
+    xhr.setRequestHeader("Content-Type", "multipart/form-data");
+    xhr.setRequestHeader("X-CSRF-Token", token);
+    var obj = opts.node;
+    Ti.API.info("node object: " + obj);
+    xhr.send(obj);
     xhr.onload = function() {
         var jsonObject = JSON.parse(this.responseText);
         opts.success && opts.success(jsonObject);
@@ -297,6 +320,8 @@ exports.userRetrieve = userRetrieve;
 exports.nodeRetrieve = nodeRetrieve;
 
 exports.createNode = createNode;
+
+exports.createNodeContribution = createNodeContribution;
 
 exports.closeNode = closeNode;
 

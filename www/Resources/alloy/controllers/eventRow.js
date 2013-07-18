@@ -144,18 +144,6 @@ function Controller() {
             window: win
         });
     });
-    var current_row;
-    $.caption.addEventListener("swipe", function(e) {
-        !current_row || $.caption.animate({
-            right: 0,
-            duration: 300
-        });
-        current_row = "android" == Ti.Platform.osname ? this : e.row;
-        $.caption.animate({
-            right: -340,
-            duration: 300
-        });
-    });
     _.extend($, exports);
 }
 

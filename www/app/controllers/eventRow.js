@@ -40,20 +40,20 @@ $.thumbnail.addEventListener('touchend', function(e){
 var current_row;
 
 // Let appear the actions caption.
-$.caption.addEventListener('swipe', function(e) {
+// $.caption.addEventListener('swipe', function(e) {
 
-	if (!!current_row) {
-		$.caption.animate({
-			right: 0,
-			duration: 300
-		});
-	}
+// 	if (!!current_row) {
+// 		$.caption.animate({
+// 			right: 0,
+// 			duration: 300
+// 		});
+// 	}
 
-	current_row = Ti.Platform.osname == 'android' ? this : e.row; // it looks like android does not have the e.row property for this event.
+// 	current_row = Ti.Platform.osname == 'android' ? this : e.row; // it looks like android does not have the e.row property for this event.
 
-	$.caption.animate({
-		right: -340,
-		duration: 300
-	});
-});
+// 	$.caption.animate({
+// 		right: -340,
+// 		duration: 300
+// 	});
+// });
 

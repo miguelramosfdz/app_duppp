@@ -27,7 +27,7 @@ var uploadFile = function (media, contribution) {
     // Pass to true to avoid parallel upload.
     processed = true;
 
-    drupalServices.createNode({
+    drupalServices.createNodeContribution({
       node: contribution,
       success: function (data) {
         // Add callback events when the contribution is created.

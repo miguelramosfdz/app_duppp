@@ -116,6 +116,45 @@ var createNode = function(opts) {
   };
 };
 
+/**
+ * Create Drupal node
+ * @param  {Object} opts Utility payload, should have properties: node property (JSON object), success() and error() callback functions
+ * @return {Object}      Return object with callback.
+ */
+var createNodeContribution = function(opts) {
+  var xhr = Titanium.Network.createHTTPClient(),
+    url = REST_PATH + '/node',
+    token = Ti.App.Properties.getString("token");
+
+  Ti.API.info('creating node, url: '+url);
+
+  xhr.open('POST', url);
+
+  xhr.setRequestHeader('Content-Type','application/json');
+  xhr.setRequestHeader('X-CSRF-Token', token);
+
+  var obj = JSON.stringify(opts.node);
+  Ti.API.info('node object: '+ obj);
+
+  xhr.send(obj);
+
+  xhr.onload = function(e) {
+    //var nodeObject = JSON.parse(this.responseText);
+    Ti.API.info('nodeObject: '+JSON.stringify(e));
+    var jsonObject = JSON.parse(this.responseText);
+    opts.success && opts.success(jsonObject);
+  };
+
+  xhr.onerror = function(e) {
+    // should do something more robust
+    Titanium.API.info('createNode error: '+xhr.statusText);
+    opts.error && opts.error({
+      "status":xhr.status,
+      "statusText":xhr.statusText
+    });
+  };
+};
+
 
 /*
  *  @desc Close an event.
@@ -227,7 +266,12 @@ var attachFile = function(opts) {
     url = REST_PATH + '/node/' + opts.nid + '/attach_file',
     token = Ti.App.Properties.getString("token");
 
-  Ti.API.info('following user, url: '+url);
+  Ti.API.info('Attach file, url: '+url);
+
+  xhr.onsendstream = function(e){
+    var data = { progressValue: e.progress };
+    opts.sending && opts.sending(data);
+  };
 
   xhr.open('POST', url);
   xhr.setRequestHeader('Content-Type', "multipart/form-data");
@@ -237,11 +281,6 @@ var attachFile = function(opts) {
   Ti.API.info('node object: '+ obj);
 
   xhr.send(obj);
-
-  xhr.onsendstream = function(e){
-    var data = { progressValue: e.progress };
-    opts.sending && opts.sending(data);
-  };
 
   xhr.onload = function() {
     var jsonObject = JSON.parse(this.responseText);
@@ -452,6 +491,7 @@ exports.userNodesList = userNodesList;
 exports.userRetrieve = userRetrieve;
 exports.nodeRetrieve = nodeRetrieve;
 exports.createNode = createNode;
+exports.createNodeContribution = createNodeContribution;
 exports.closeNode = closeNode;
 exports.attachFile = attachFile;
 exports.likeNode = likeNode;
