@@ -60,6 +60,9 @@ function Controller() {
     var uie = require("UiElements");
     var indicator = uie.createIndicatorWindow();
     $.title.text = args.title;
+    console.log(args.uid);
+    console.log(Titanium.App.Properties.getInt("userUid"));
+    args.uid != Titanium.App.Properties.getInt("userUid") && $.button.hide();
     __defers["$.__views.button!click!close"] && $.__views.button.addEventListener("click", close);
     _.extend($, exports);
 }
