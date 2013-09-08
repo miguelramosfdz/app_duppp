@@ -67,8 +67,8 @@ function Controller() {
     $.__views.author = Ti.UI.createLabel({
         color: "FFF",
         font: {
-            fontSize: 35,
-            fontFamily: "Helvetica Neue"
+            fontSize: 30,
+            fontFamily: "Lato-Regular"
         },
         shadowColor: "#444",
         shadowOffset: {
@@ -78,12 +78,6 @@ function Controller() {
         id: "author"
     });
     $.__views.__alloyId27.add($.__views.author);
-    $.__views.follow = Ti.UI.createButton({
-        id: "follow",
-        title: "Follow"
-    });
-    $.__views.__alloyId27.add($.__views.follow);
-    follow ? $.__views.follow.addEventListener("click", follow) : __defers["$.__views.follow!click!follow"] = true;
     $.__views.__alloyId28 = Ti.UI.createView({
         height: 107,
         layout: "horizontal",
@@ -102,7 +96,7 @@ function Controller() {
         color: "#FFF",
         font: {
             fontSize: 62,
-            fontFamily: "Helvetica Neue"
+            fontFamily: "Lato-Regular"
         },
         id: "followerCount"
     });
@@ -111,7 +105,7 @@ function Controller() {
         color: "#FFF",
         font: {
             fontSize: 15,
-            fontFamily: "Helvetica Neue"
+            fontFamily: "Lato-Regular"
         },
         text: "follower",
         id: "__alloyId30"
@@ -129,7 +123,7 @@ function Controller() {
         color: "#FFF",
         font: {
             fontSize: 62,
-            fontFamily: "Helvetica Neue"
+            fontFamily: "Lato-Regular"
         },
         id: "eventCount"
     });
@@ -138,7 +132,7 @@ function Controller() {
         color: "#FFF",
         font: {
             fontSize: 15,
-            fontFamily: "Helvetica Neue"
+            fontFamily: "Lato-Regular"
         },
         text: "events",
         id: "__alloyId32"
@@ -149,6 +143,12 @@ function Controller() {
         allowsSelection: "false"
     });
     $.__views.scrollView.add($.__views.table);
+    $.__views.follow = Ti.UI.createButton({
+        id: "follow",
+        title: "Follow"
+    });
+    follow ? $.__views.follow.addEventListener("click", follow) : __defers["$.__views.follow!click!follow"] = true;
+    $.__views.profilePage.rightNavButton = $.__views.follow;
     exports.destroy = function() {};
     _.extend($, $.__views);
     var drupalServices = require("drupalServices"), args = arguments[0] || {};

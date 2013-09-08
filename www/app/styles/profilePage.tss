@@ -22,7 +22,7 @@
 
 ".author": {
   color: "FFF",
-  font: {fontSize: 35, fontFamily: 'Helvetica Neue'},
+  font: {fontSize: 30, fontFamily: 'Lato-Regular'},
   shadowColor:"#444",
   shadowOffset: {x: 1, y: 1},
 }
@@ -46,15 +46,15 @@
 
 "#followerCount": {
   color: "#FFF",
-  font: {fontSize: 62, fontFamily: 'Helvetica Neue'}
+  font: {fontSize: 62, fontFamily: 'Lato-Regular'}
 }
 
 "#eventCount": {
   color: "#FFF",
-  font: {fontSize: 62, fontFamily: 'Helvetica Neue'}
+  font: {fontSize: 62, fontFamily: 'Lato-Regular'}
 }
 
 ".wlabel": {
   color: "#FFF",
-  font: {fontSize: 15, fontFamily: 'Helvetica Neue'}
+  font: {fontSize: 15, fontFamily: 'Lato-Regular'}
 }
