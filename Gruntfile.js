@@ -27,7 +27,7 @@ module.exports = function(grunt) {
           target: 'device',
         },
       },
-      ios_distrib: {
+      ios_adhoc: {
         platform : 'ios',
         project_dir : './www/',
         log_level: 'info',
@@ -40,6 +40,20 @@ module.exports = function(grunt) {
           tall: true
         },
       },
+      ios_distrib: {
+        platform : 'ios',
+        project_dir : './www/',
+        log_level: 'info',
+        options: {
+          distribution_name: 'Arthur Itey (628272242K)',
+          pp_uuid: 'F2F065DA-B393-4705-91EF-4CCF07BE15DE',
+          output_dir: '/Users/Atu/Sites/distrib',
+          target: 'dist-appstore',
+          retina: true,
+          tall: true
+        },
+      },
+
     }
 
   });
@@ -50,4 +64,6 @@ module.exports = function(grunt) {
   grunt.registerTask('default', ['scandium:ios_sim']);
   grunt.registerTask('device', ['scandium:ios_device']);
   grunt.registerTask('distrib', ['scandium:ios_distrib']);
+  grunt.registerTask('adhoc', ['scandium:ios_adhoc']);
+
 };

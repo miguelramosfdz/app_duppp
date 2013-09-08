@@ -27,6 +27,8 @@ function login(e){
       Titanium.App.Properties.setInt("userSessionId", data.sessid);
       Titanium.App.Properties.setInt("userSessionName", data.sesion_name);
 
+      console.log(data);
+
       // Close the window.
       $.userLoginDuppp.close();
 

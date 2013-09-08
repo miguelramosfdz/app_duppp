@@ -219,34 +219,6 @@ function Controller() {
     });
     $.__views.menu.add($.__views.__alloyId26);
     menuChild ? $.__views.__alloyId26.addEventListener("click", menuChild) : __defers["$.__views.__alloyId26!click!menuChild"] = true;
-    $.__views.__alloyId27 = Ti.UI.createButton({
-        backgroundImage: "none",
-        height: 40,
-        width: Titanium.UI.FILL,
-        font: {
-            fontSize: 18,
-            fontFamily: "Lato-Regular"
-        },
-        index: "3",
-        title: "Configuration",
-        id: "__alloyId27"
-    });
-    $.__views.menu.add($.__views.__alloyId27);
-    menuChild ? $.__views.__alloyId27.addEventListener("click", menuChild) : __defers["$.__views.__alloyId27!click!menuChild"] = true;
-    $.__views.__alloyId28 = Ti.UI.createButton({
-        backgroundImage: "none",
-        height: 40,
-        width: Titanium.UI.FILL,
-        font: {
-            fontSize: 18,
-            fontFamily: "Lato-Regular"
-        },
-        index: "4",
-        title: "Log out",
-        id: "__alloyId28"
-    });
-    $.__views.menu.add($.__views.__alloyId28);
-    menuChild ? $.__views.__alloyId28.addEventListener("click", menuChild) : __defers["$.__views.__alloyId28!click!menuChild"] = true;
     exports.destroy = function() {};
     _.extend($, $.__views);
     var dupppUpload = (Alloy.CFG.rest, require("dupppUpload")), container = {};
@@ -421,8 +393,6 @@ function Controller() {
     __defers["$.__views.__alloyId24!click!menuChild"] && $.__views.__alloyId24.addEventListener("click", menuChild);
     __defers["$.__views.__alloyId25!click!menuChild"] && $.__views.__alloyId25.addEventListener("click", menuChild);
     __defers["$.__views.__alloyId26!click!menuChild"] && $.__views.__alloyId26.addEventListener("click", menuChild);
-    __defers["$.__views.__alloyId27!click!menuChild"] && $.__views.__alloyId27.addEventListener("click", menuChild);
-    __defers["$.__views.__alloyId28!click!menuChild"] && $.__views.__alloyId28.addEventListener("click", menuChild);
     _.extend($, exports);
 }
 

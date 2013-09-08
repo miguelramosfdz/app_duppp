@@ -69,7 +69,7 @@ var userNodesList = function(opts) {
     opts.success && opts.success(jsonObject);
   };
   xhr.onerror = function(e) {
-    console.info("nodeList error: "+JSON.stringify(this));
+    console.info("userNodesList error: "+JSON.stringify(this));
     opts.error && opts.error({
       "status":xhr.status,
       "statusText":xhr.statusText
@@ -147,7 +147,7 @@ var createNodeContribution = function(opts) {
 
   xhr.onerror = function(e) {
     // should do something more robust
-    Titanium.API.info('createNode error: '+xhr.statusText);
+    Titanium.API.info('createNodeContribution error: '+xhr.statusText);
     opts.error && opts.error({
       "status":xhr.status,
       "statusText":xhr.statusText
@@ -213,7 +213,7 @@ var likeNode = function(opts) {
     opts.success && opts.success(jsonObject);
   };
   xhr.onerror = function(e) {
-    console.info("closeNode error: "+JSON.stringify(this));
+    console.info("likeNode error: "+JSON.stringify(this));
     opts.error && opts.error({
       "status":xhr.status,
       "statusText":xhr.statusText
@@ -287,7 +287,7 @@ var attachFile = function(opts) {
     opts.success && opts.success(jsonObject);
   };
   xhr.onerror = function(e) {
-    console.info("userFollow error: "+JSON.stringify(this));
+    console.info("attachFile error: "+JSON.stringify(this));
     opts.error && opts.error({
       "status":xhr.status,
       "statusText":xhr.statusText
@@ -348,7 +348,7 @@ var followUser = function(opts) {
     opts.success && opts.success(jsonObject);
   };
   xhr.onerror = function(e) {
-    console.info("userFollow error: "+JSON.stringify(this));
+    console.info("followUser error: "+JSON.stringify(this));
     opts.error && opts.error({
       "status":xhr.status,
       "statusText":xhr.statusText
@@ -383,7 +383,7 @@ var userLogin = function(opts) {
     opts.success && opts.success(jsonObject);
   };
   xhr.onerror = function(e) {
-    console.info("userFollow error: "+JSON.stringify(this));
+    console.info("userLogin error: "+JSON.stringify(this));
     opts.error && opts.error({
       "status":xhr.status,
       "statusText":xhr.statusText
@@ -418,7 +418,7 @@ var userRegister = function(opts) {
     opts.success && opts.success(jsonObject);
   };
   xhr.onerror = function(e) {
-    console.info("userFollow error: "+JSON.stringify(this));
+    console.info("userRegister error: "+JSON.stringify(this));
     opts.error && opts.error({
       "status":xhr.status,
       "responseText":JSON.parse(xhr.responseText),
