@@ -227,9 +227,15 @@ Titanium.API.addEventListener('myEvents:fetched', function (data) {
 
     data.data.forEach(function(event){
 
+      var label = event.title;
+
+      if (event.uid != Titanium.App.Properties.getInt("userUid")) {
+        label = event.title + ' - ' + event.name;
+      }
+
       // Create button for each event.
       var openItem = Titanium.UI.createButton({
-        title: event.title,
+        title: label,
         backgroundImage: "none",
         backgroundGradient: {
           type: 'linear',

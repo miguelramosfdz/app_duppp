@@ -338,8 +338,10 @@ function Controller() {
         $.tableOpen.hide();
         $.tableOpenLabel.hide();
         data.data.length > 0 && data.data.forEach(function(event) {
+            var label = event.title;
+            event.uid != Titanium.App.Properties.getInt("userUid") && (label = event.title + " - " + event.name);
             var openItem = Titanium.UI.createButton({
-                title: event.title,
+                title: label,
                 backgroundImage: "none",
                 backgroundGradient: {
                     type: "linear",

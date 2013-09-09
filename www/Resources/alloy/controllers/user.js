@@ -9,7 +9,6 @@ function Controller() {
                 Titanium.App.Properties.setInt("userUid", data.user.uid);
                 Titanium.App.Properties.setInt("userSessionId", data.sessid);
                 Titanium.App.Properties.setInt("userSessionName", data.sesion_name);
-                console.log(data);
                 $.userLoginDuppp.close();
                 Titanium.API.fireEvent("user:login");
             },

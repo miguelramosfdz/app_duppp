@@ -13,9 +13,6 @@ var indicator = uie.createIndicatorWindow();
 // Map field with correct values
 $.title.text = args.title;
 
-console.log(args.uid);
-console.log(Titanium.App.Properties.getInt('userUid'));
-
 if (args.uid != Titanium.App.Properties.getInt('userUid')) {
   $.button.hide();
 }
