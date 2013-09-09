@@ -244,7 +244,7 @@ Titanium.API.addEventListener('myEvents:fetched', function (data) {
           colors: [ { color: '#0C99FC', offset: 0.0}, { color: '#0E76FC', offset: 1.0 } ]
         },
         width: Titanium.UI.FILL,
-        font:{fontSize:18, fontWeight:"bold", fontFamily:'Helvetica Neue'},
+        font:{fontSize:17, fontFamily: 'Lato-Regular'},
         right: 10,
         top: 10,
         bottom: 5,

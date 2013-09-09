@@ -363,9 +363,8 @@ function Controller() {
                 },
                 width: Titanium.UI.FILL,
                 font: {
-                    fontSize: 18,
-                    fontWeight: "bold",
-                    fontFamily: "Helvetica Neue"
+                    fontSize: 17,
+                    fontFamily: "Lato-Regular"
                 },
                 right: 10,
                 top: 10,
