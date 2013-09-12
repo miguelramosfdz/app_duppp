@@ -14,6 +14,9 @@ function prepareData(data) {
   });
 
   $.table.setData(dataEvents);
+
+  var height = dataEvents.length * 200;
+  $.table.setHeight(height);
 }
 
 $.profilePage.addEventListener('open', function() {
@@ -21,7 +24,7 @@ $.profilePage.addEventListener('open', function() {
   $.authorImage.image = args.field_avatar;
   $.followerCount.text = args.follower_count;
 
-  $.profilePage.title = args.name;
+  $.profilePage.title = 'Profil';
 
   drupalServices.userRetrieve({
     uid: args.uid,
@@ -61,11 +64,11 @@ function follow () {
 
   if ($.follow.title === 'Follow') {
     data = {
-      "action": "flag"
+      'action': 'flag'
     };
   } else {
     data = {
-      "action": "unflag"
+      'action': 'unflag'
     };
   }
 

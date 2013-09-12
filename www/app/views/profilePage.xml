@@ -15,7 +15,7 @@
           <Label class="wlabel" text="events" />
         </View>
       </View>
-      <TableView id="table" allowsSelection="false"/>
+      <TableView id="table" allowsSelection="false" scrollable="false" />
     </ScrollView>
     <RightNavButton>
       <Button id="follow" title="Follow" onClick="follow" class="btn follow" />

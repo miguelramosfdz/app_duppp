@@ -8,6 +8,8 @@ function Controller() {
             }
         });
         $.table.setData(dataEvents);
+        var height = 200 * dataEvents.length;
+        $.table.setHeight(height);
     }
     function follow() {
         var data;
@@ -140,7 +142,8 @@ function Controller() {
     $.__views.__alloyId33.add($.__views.__alloyId34);
     $.__views.table = Ti.UI.createTableView({
         id: "table",
-        allowsSelection: "false"
+        allowsSelection: "false",
+        scrollable: "false"
     });
     $.__views.scrollView.add($.__views.table);
     $.__views.follow = Ti.UI.createButton({
@@ -155,7 +158,7 @@ function Controller() {
     $.profilePage.addEventListener("open", function() {
         $.authorImage.image = args.field_avatar;
         $.followerCount.text = args.follower_count;
-        $.profilePage.title = args.name;
+        $.profilePage.title = "Profil";
         drupalServices.userRetrieve({
             uid: args.uid,
             success: function(data) {
