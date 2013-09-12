@@ -15,8 +15,8 @@
       <Button class="menuItem" index="0" title="Home" onClick="menuChild" />
       <Button class="menuItem" index="1" title="My Events" onClick="menuChild" />
       <Button class="menuItem" index="2" title="Explore" onClick="menuChild" />
-      <!-- <Button class="menuItem" index="3" title="Configuration" onClick="menuChild" />
-      <Button class="menuItem" index="4" title="Log out" onClick="menuChild" /> -->
+      <Button class="menuItem" index="3" title="Configuration" onClick="menuChild" />
+      <!-- <Button class="menuItem" index="4" title="Log out" onClick="menuChild" /> -->
     </View>
 	</View>
 </Alloy>

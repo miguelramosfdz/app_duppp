@@ -30,8 +30,10 @@ function Controller() {
         });
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
+    this.__controllerPath = "profilePage";
     arguments[0] ? arguments[0]["__parentSymbol"] : null;
     arguments[0] ? arguments[0]["$model"] : null;
+    arguments[0] ? arguments[0]["__itemTemplate"] : null;
     var $ = this;
     var exports = {};
     var __defers = {};
@@ -47,13 +49,13 @@ function Controller() {
         layout: "vertical"
     });
     $.__views.profilePage.add($.__views.scrollView);
-    $.__views.__alloyId29 = Ti.UI.createView({
+    $.__views.__alloyId32 = Ti.UI.createView({
         backgroundColor: "#0679FF",
         height: 107,
         layout: "horizontal",
-        id: "__alloyId29"
+        id: "__alloyId32"
     });
-    $.__views.scrollView.add($.__views.__alloyId29);
+    $.__views.scrollView.add($.__views.__alloyId32);
     $.__views.authorImage = Ti.UI.createImageView({
         borderRadius: 43,
         borderWidth: 4,
@@ -65,7 +67,7 @@ function Controller() {
         width: 90,
         id: "authorImage"
     });
-    $.__views.__alloyId29.add($.__views.authorImage);
+    $.__views.__alloyId32.add($.__views.authorImage);
     $.__views.author = Ti.UI.createLabel({
         color: "FFF",
         font: {
@@ -79,21 +81,21 @@ function Controller() {
         },
         id: "author"
     });
-    $.__views.__alloyId29.add($.__views.author);
-    $.__views.__alloyId30 = Ti.UI.createView({
+    $.__views.__alloyId32.add($.__views.author);
+    $.__views.__alloyId33 = Ti.UI.createView({
         height: 107,
         layout: "horizontal",
-        id: "__alloyId30"
+        id: "__alloyId33"
     });
-    $.__views.scrollView.add($.__views.__alloyId30);
-    $.__views.__alloyId31 = Ti.UI.createView({
+    $.__views.scrollView.add($.__views.__alloyId33);
+    $.__views.__alloyId34 = Ti.UI.createView({
         height: 106,
         width: "50%",
         backgroundColor: "#F39C12",
         layout: "vertical",
-        id: "__alloyId31"
+        id: "__alloyId34"
     });
-    $.__views.__alloyId30.add($.__views.__alloyId31);
+    $.__views.__alloyId33.add($.__views.__alloyId34);
     $.__views.followerCount = Ti.UI.createLabel({
         color: "#FFF",
         font: {
@@ -102,25 +104,25 @@ function Controller() {
         },
         id: "followerCount"
     });
-    $.__views.__alloyId31.add($.__views.followerCount);
-    $.__views.__alloyId32 = Ti.UI.createLabel({
+    $.__views.__alloyId34.add($.__views.followerCount);
+    $.__views.__alloyId35 = Ti.UI.createLabel({
         color: "#FFF",
         font: {
             fontSize: 15,
             fontFamily: "Lato-Regular"
         },
         text: "follower",
-        id: "__alloyId32"
+        id: "__alloyId35"
     });
-    $.__views.__alloyId31.add($.__views.__alloyId32);
-    $.__views.__alloyId33 = Ti.UI.createView({
+    $.__views.__alloyId34.add($.__views.__alloyId35);
+    $.__views.__alloyId36 = Ti.UI.createView({
         height: 106,
         width: "50%",
         backgroundColor: "#E74C3C",
         layout: "vertical",
-        id: "__alloyId33"
+        id: "__alloyId36"
     });
-    $.__views.__alloyId30.add($.__views.__alloyId33);
+    $.__views.__alloyId33.add($.__views.__alloyId36);
     $.__views.eventCount = Ti.UI.createLabel({
         color: "#FFF",
         font: {
@@ -129,17 +131,17 @@ function Controller() {
         },
         id: "eventCount"
     });
-    $.__views.__alloyId33.add($.__views.eventCount);
-    $.__views.__alloyId34 = Ti.UI.createLabel({
+    $.__views.__alloyId36.add($.__views.eventCount);
+    $.__views.__alloyId37 = Ti.UI.createLabel({
         color: "#FFF",
         font: {
             fontSize: 15,
             fontFamily: "Lato-Regular"
         },
         text: "events",
-        id: "__alloyId34"
+        id: "__alloyId37"
     });
-    $.__views.__alloyId33.add($.__views.__alloyId34);
+    $.__views.__alloyId36.add($.__views.__alloyId37);
     $.__views.table = Ti.UI.createTableView({
         id: "table",
         allowsSelection: "false",

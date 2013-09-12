@@ -11,51 +11,62 @@ var data = [],
   usersSelected = [],
   recents = Alloy.Collections.recent;
 
+//
+//
+// HELPERS
+//
+//
+
+// Save the recent user selected to the database.
+function recentUsers(users) {
+
+  _.each(users, function(user) {
+    var model = Alloy.createModel('recent', {name: user.name, uid: user.uid, field_avatar: user.field_avatar});
+    var isExisting = recents.where({name: user.name});
+
+    if (isExisting.length === 0) {
+      recents.add(model);
+
+      model.save();
+    }
+  });
+}
+
+// Store in Array all users selected.
+function storeUsers(e) {
+  var index = _.indexOf(clickedRows, e.row.uid);
+
+  if (e.rowData.selected) {
+    e.row.hasCheck = false;
+    if (index >= 0) {
+      clickedRows.splice(index, 1);
+      usersSelected.splice(index, 1);
+    }
+  } else {
+    e.row.hasCheck = true;
+    if (index < 0) {
+      clickedRows.push(e.row.uid);
+      usersSelected.push(e.row);
+    }
+  }
+
+  e.rowData.selected = !e.rowData.selected;
+}
+
+//
+//
+// EVENTS
+//
+//
+
 $.textArea.addEventListener('focus', function() {
   $.textArea.value = '';
 });
 
-$.table.addEventListener('click',function(e){
+$.table.addEventListener('click', storeUsers);
+$.table_recent.addEventListener('click', storeUsers);
 
-  var index = _.indexOf(clickedRows, e.row.uid);
-
-  if (e.rowData.selected) {
-    e.row.hasCheck = false;
-    if (index >= 0) {
-      clickedRows.splice(index, 1);
-      usersSelected.splice(index, 1);
-    }
-  } else {
-    e.row.hasCheck = true;
-    if (index < 0) {
-      clickedRows.push(e.row.uid);
-      usersSelected.push(e.row);
-    }
-  }
-
-  e.rowData.selected = !e.rowData.selected;
-});
-
-$.table_recent.addEventListener('click',function(e){
-
-  var index = _.indexOf(clickedRows, e.row.uid);
-
-  if (e.rowData.selected) {
-    e.row.hasCheck = false;
-    if (index >= 0) {
-      clickedRows.splice(index, 1);
-      usersSelected.splice(index, 1);
-    }
-  } else {
-    e.row.hasCheck = true;
-    if (index < 0) {
-      clickedRows.push(e.row.uid);
-      usersSelected.push(e.row);
-    }
-  }
-
-  e.rowData.selected = !e.rowData.selected;
-});
+///////////////
 
 var xhrUsers = Ti.Network.createHTTPClient({
   // Success callback.
@@ -146,22 +157,6 @@ function nextStep() {
     window: $.eventFormWindowStep2
   });
 }
-
-function recentUsers(users) {
-
-
-  _.each(users, function(user) {
-    var model = Alloy.createModel('recent', {name: user.name, uid: user.uid, field_avatar: user.field_avatar});
-    var isExisting = recents.where({name: user.name});
-
-    if (isExisting.length === 0) {
-      recents.add(model);
-
-      model.save();
-    }
-
-  });
-};
 
 // Function to create an event
 function createEvent() {

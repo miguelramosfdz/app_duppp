@@ -76,7 +76,7 @@ var addFile = function(media, gid, date, uid) {
 };
 
 var processUpload = function() {
-    if (Titanium.Network.online) {
+    if (Titanium.Network.online && (Titanium.Network.networkTypeName == Ti.App.Properties.getString("sendConnection") || "3G" == Ti.App.Properties.getString("sendConnection"))) {
         if (0 === mediaQueue.length) return Ti.API.info("No video need to be upload");
         var contribution = mediaQueue[0], file = Ti.Filesystem.getFile(contribution.mediaElement);
         contribution && uploadFile(file.read(), contribution.node);

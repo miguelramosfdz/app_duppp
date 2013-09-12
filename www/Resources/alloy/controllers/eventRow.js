@@ -1,7 +1,9 @@
 function Controller() {
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
+    this.__controllerPath = "eventRow";
     arguments[0] ? arguments[0]["__parentSymbol"] : null;
     arguments[0] ? arguments[0]["$model"] : null;
+    arguments[0] ? arguments[0]["__itemTemplate"] : null;
     var $ = this;
     var exports = {};
     $.__views.row = Ti.UI.createTableViewRow({
@@ -23,38 +25,38 @@ function Controller() {
         layout: "horizontal"
     });
     $.__views.row.add($.__views.actions);
-    $.__views.__alloyId13 = Ti.UI.createImageView({
-        top: 20,
-        right: 20,
-        height: 30,
-        image: "love.png",
-        id: "__alloyId13"
-    });
-    $.__views.actions.add($.__views.__alloyId13);
-    $.__views.__alloyId14 = Ti.UI.createImageView({
-        top: 20,
-        right: 20,
-        width: 32.5,
-        image: "comment.png",
-        id: "__alloyId14"
-    });
-    $.__views.actions.add($.__views.__alloyId14);
     $.__views.__alloyId15 = Ti.UI.createImageView({
         top: 20,
         right: 20,
         height: 30,
-        image: "share.png",
+        image: "love.png",
         id: "__alloyId15"
     });
     $.__views.actions.add($.__views.__alloyId15);
     $.__views.__alloyId16 = Ti.UI.createImageView({
+        top: 20,
+        right: 20,
+        width: 32.5,
+        image: "comment.png",
+        id: "__alloyId16"
+    });
+    $.__views.actions.add($.__views.__alloyId16);
+    $.__views.__alloyId17 = Ti.UI.createImageView({
+        top: 20,
+        right: 20,
+        height: 30,
+        image: "share.png",
+        id: "__alloyId17"
+    });
+    $.__views.actions.add($.__views.__alloyId17);
+    $.__views.__alloyId18 = Ti.UI.createImageView({
         top: 30,
         right: 20,
         width: 36,
         image: "extra.png",
-        id: "__alloyId16"
+        id: "__alloyId18"
     });
-    $.__views.actions.add($.__views.__alloyId16);
+    $.__views.actions.add($.__views.__alloyId18);
     $.__views.caption = Ti.UI.createView({
         backgroundImage: "infoBg.png",
         width: "100%",
@@ -83,7 +85,7 @@ function Controller() {
         id: "author"
     });
     $.__views.caption.add($.__views.author);
-    $.__views.__alloyId17 = Ti.UI.createView({
+    $.__views.__alloyId19 = Ti.UI.createView({
         width: 250,
         font: {
             fontSize: 12,
@@ -92,9 +94,9 @@ function Controller() {
         top: 22,
         left: 70,
         layout: "horizontal",
-        id: "__alloyId17"
+        id: "__alloyId19"
     });
-    $.__views.caption.add($.__views.__alloyId17);
+    $.__views.caption.add($.__views.__alloyId19);
     $.__views.f_title = Ti.UI.createLabel({
         font: {
             fontSize: 12,
@@ -102,7 +104,7 @@ function Controller() {
         },
         id: "f_title"
     });
-    $.__views.__alloyId17.add($.__views.f_title);
+    $.__views.__alloyId19.add($.__views.f_title);
     $.__views.f_date = Ti.UI.createLabel({
         font: {
             fontSize: 11,

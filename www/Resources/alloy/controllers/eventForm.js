@@ -1,4 +1,38 @@
 function Controller() {
+    function recentUsers(users) {
+        _.each(users, function(user) {
+            var model = Alloy.createModel("recent", {
+                name: user.name,
+                uid: user.uid,
+                field_avatar: user.field_avatar
+            });
+            var isExisting = recents.where({
+                name: user.name
+            });
+            if (0 === isExisting.length) {
+                recents.add(model);
+                model.save();
+            }
+        });
+    }
+    function storeUsers(e) {
+        var index = _.indexOf(clickedRows, e.row.uid);
+        console.log(e);
+        if (e.rowData.selected) {
+            e.row.hasCheck = false;
+            if (index >= 0) {
+                clickedRows.splice(index, 1);
+                usersSelected.splice(index, 1);
+            }
+        } else {
+            e.row.hasCheck = true;
+            if (0 > index) {
+                clickedRows.push(e.row.uid);
+                usersSelected.push(e.row);
+            }
+        }
+        e.rowData.selected = !e.rowData.selected;
+    }
     function nextStep() {
         recents.fetch();
         var users = recents.toJSON(), data = [];
@@ -17,22 +51,6 @@ function Controller() {
         $.table_recent.setData(data);
         Titanium.API.fireEvent("openAsNavigation", {
             window: $.eventFormWindowStep2
-        });
-    }
-    function recentUsers(users) {
-        _.each(users, function(user) {
-            var model = Alloy.createModel("recent", {
-                name: user.name,
-                uid: user.uid,
-                field_avatar: user.field_avatar
-            });
-            var isExisting = recents.where({
-                name: user.name
-            });
-            if (0 === isExisting.length) {
-                recents.add(model);
-                model.save();
-            }
         });
     }
     function createEvent() {
@@ -92,8 +110,10 @@ function Controller() {
         } else alert("You need to login first");
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
+    this.__controllerPath = "eventForm";
     arguments[0] ? arguments[0]["__parentSymbol"] : null;
     arguments[0] ? arguments[0]["$model"] : null;
+    arguments[0] ? arguments[0]["__itemTemplate"] : null;
     var $ = this;
     var exports = {};
     var __defers = {};
@@ -107,14 +127,14 @@ function Controller() {
         layout: "vertical"
     });
     $.__views.eventFormWindow && $.addTopLevelView($.__views.eventFormWindow);
-    $.__views.__alloyId2 = Ti.UI.createView({
+    $.__views.__alloyId4 = Ti.UI.createView({
         backgroundColor: "#ecf0f1",
         width: Titanium.UI.FILL,
         height: Titanium.UI.SIZE,
-        id: "__alloyId2"
+        id: "__alloyId4"
     });
-    $.__views.eventFormWindow.add($.__views.__alloyId2);
-    $.__views.__alloyId3 = Ti.UI.createLabel({
+    $.__views.eventFormWindow.add($.__views.__alloyId4);
+    $.__views.__alloyId5 = Ti.UI.createLabel({
         color: "#2c3e50",
         font: {
             fontSize: 17,
@@ -124,9 +144,9 @@ function Controller() {
         height: 50,
         width: "70%",
         text: "Description",
-        id: "__alloyId3"
+        id: "__alloyId5"
     });
-    $.__views.__alloyId2.add($.__views.__alloyId3);
+    $.__views.__alloyId4.add($.__views.__alloyId5);
     $.__views.textArea = Ti.UI.createTextArea({
         font: {
             fontSize: 15,
@@ -140,15 +160,15 @@ function Controller() {
         height: "150"
     });
     $.__views.eventFormWindow.add($.__views.textArea);
-    $.__views.__alloyId4 = Ti.UI.createView({
+    $.__views.__alloyId6 = Ti.UI.createView({
         backgroundColor: "#ecf0f1",
         width: Titanium.UI.FILL,
         height: Titanium.UI.SIZE,
         layout: "horizontal",
-        id: "__alloyId4"
+        id: "__alloyId6"
     });
-    $.__views.eventFormWindow.add($.__views.__alloyId4);
-    $.__views.__alloyId5 = Ti.UI.createLabel({
+    $.__views.eventFormWindow.add($.__views.__alloyId6);
+    $.__views.__alloyId7 = Ti.UI.createLabel({
         color: "#2c3e50",
         font: {
             fontSize: 17,
@@ -158,21 +178,21 @@ function Controller() {
         height: 50,
         width: "70%",
         text: "Private",
-        id: "__alloyId5"
+        id: "__alloyId7"
     });
-    $.__views.__alloyId4.add($.__views.__alloyId5);
+    $.__views.__alloyId6.add($.__views.__alloyId7);
     $.__views.switchPrivate = Ti.UI.createSwitch({
         id: "switchPrivate",
         title: "Private",
         value: "0"
     });
-    $.__views.__alloyId4.add($.__views.switchPrivate);
-    $.__views.__alloyId7 = Ti.UI.createButton({
+    $.__views.__alloyId6.add($.__views.switchPrivate);
+    $.__views.__alloyId9 = Ti.UI.createButton({
         title: "Next",
-        id: "__alloyId7"
+        id: "__alloyId9"
     });
-    nextStep ? $.__views.__alloyId7.addEventListener("click", nextStep) : __defers["$.__views.__alloyId7!click!nextStep"] = true;
-    $.__views.eventFormWindow.rightNavButton = $.__views.__alloyId7;
+    nextStep ? $.__views.__alloyId9.addEventListener("click", nextStep) : __defers["$.__views.__alloyId9!click!nextStep"] = true;
+    $.__views.eventFormWindow.rightNavButton = $.__views.__alloyId9;
     $.__views.eventFormWindowStep2 = Ti.UI.createWindow({
         barImage: "bgNavBar.png",
         barColor: "#000",
@@ -183,14 +203,14 @@ function Controller() {
         layout: "vertical"
     });
     $.__views.eventFormWindowStep2 && $.addTopLevelView($.__views.eventFormWindowStep2);
-    $.__views.__alloyId8 = Ti.UI.createView({
+    $.__views.__alloyId10 = Ti.UI.createView({
         backgroundColor: "#16a085",
         height: 35,
         width: "100%",
-        id: "__alloyId8"
+        id: "__alloyId10"
     });
-    $.__views.eventFormWindowStep2.add($.__views.__alloyId8);
-    $.__views.__alloyId9 = Ti.UI.createLabel({
+    $.__views.eventFormWindowStep2.add($.__views.__alloyId10);
+    $.__views.__alloyId11 = Ti.UI.createLabel({
         color: "#fff",
         backgroundColor: "#16a085",
         font: {
@@ -199,9 +219,9 @@ function Controller() {
         },
         left: 10,
         text: "Recent Users",
-        id: "__alloyId9"
+        id: "__alloyId11"
     });
-    $.__views.__alloyId8.add($.__views.__alloyId9);
+    $.__views.__alloyId10.add($.__views.__alloyId11);
     $.__views.table_recent = Ti.UI.createTableView({
         barImage: "bgNavBar.png",
         barColor: "#000",
@@ -240,40 +260,8 @@ function Controller() {
     $.textArea.addEventListener("focus", function() {
         $.textArea.value = "";
     });
-    $.table.addEventListener("click", function(e) {
-        var index = _.indexOf(clickedRows, e.row.uid);
-        if (e.rowData.selected) {
-            e.row.hasCheck = false;
-            if (index >= 0) {
-                clickedRows.splice(index, 1);
-                usersSelected.splice(index, 1);
-            }
-        } else {
-            e.row.hasCheck = true;
-            if (0 > index) {
-                clickedRows.push(e.row.uid);
-                usersSelected.push(e.row);
-            }
-        }
-        e.rowData.selected = !e.rowData.selected;
-    });
-    $.table_recent.addEventListener("click", function(e) {
-        var index = _.indexOf(clickedRows, e.row.uid);
-        if (e.rowData.selected) {
-            e.row.hasCheck = false;
-            if (index >= 0) {
-                clickedRows.splice(index, 1);
-                usersSelected.splice(index, 1);
-            }
-        } else {
-            e.row.hasCheck = true;
-            if (0 > index) {
-                clickedRows.push(e.row.uid);
-                usersSelected.push(e.row);
-            }
-        }
-        e.rowData.selected = !e.rowData.selected;
-    });
+    $.table.addEventListener("click", storeUsers);
+    $.table_recent.addEventListener("click", storeUsers);
     var xhrUsers = Ti.Network.createHTTPClient({
         onload: function() {
             data = [];
@@ -306,7 +294,7 @@ function Controller() {
             $.search.blur();
         }
     });
-    __defers["$.__views.__alloyId7!click!nextStep"] && $.__views.__alloyId7.addEventListener("click", nextStep);
+    __defers["$.__views.__alloyId9!click!nextStep"] && $.__views.__alloyId9.addEventListener("click", nextStep);
     __defers["$.__views.createBtn!click!createEvent"] && $.__views.createBtn.addEventListener("click", createEvent);
     _.extend($, exports);
 }

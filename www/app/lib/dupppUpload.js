@@ -126,19 +126,24 @@ var addFile = function (media, gid, date, uid) {
 var processUpload = function () {
 
   if (Titanium.Network.online) {
-    // Check if array still have file to upload.
-    if (mediaQueue.length === 0) {
 
-      return Ti.API.info("No video need to be upload");
+    if (Titanium.Network.networkTypeName == Ti.App.Properties.getString('sendConnection') || Ti.App.Properties.getString('sendConnection') == "3G") {
 
-    } else {
+      // Check if array still have file to upload.
+      if (mediaQueue.length === 0) {
 
-      // Get the row and upload her.
-      var contribution = mediaQueue[0],
-        file = Ti.Filesystem.getFile(contribution.mediaElement);
+        return Ti.API.info("No video need to be upload");
 
-      if (contribution) {
-        uploadFile(file.read(), contribution.node);
+      } else {
+
+        // Get the row and upload her.
+        var contribution = mediaQueue[0],
+          file = Ti.Filesystem.getFile(contribution.mediaElement);
+
+        if (contribution) {
+          uploadFile(file.read(), contribution.node);
+        }
+
       }
 
     }

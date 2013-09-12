@@ -1,34 +1,36 @@
 function Controller() {
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
+    this.__controllerPath = "index";
     arguments[0] ? arguments[0]["__parentSymbol"] : null;
     arguments[0] ? arguments[0]["$model"] : null;
+    arguments[0] ? arguments[0]["__itemTemplate"] : null;
     var $ = this;
     var exports = {};
     $.__views.indexView = Ti.UI.createTabGroup({
         id: "indexView"
     });
-    $.__views.__alloyId19 = Alloy.createController("activity", {
-        id: "__alloyId19"
-    });
-    $.__views.indexView.addTab($.__views.__alloyId19.getViewEx({
-        recurse: true
-    }));
-    $.__views.__alloyId20 = Alloy.createController("myEvents", {
-        id: "__alloyId20"
-    });
-    $.__views.indexView.addTab($.__views.__alloyId20.getViewEx({
-        recurse: true
-    }));
-    $.__views.__alloyId21 = Alloy.createController("explore", {
+    $.__views.__alloyId21 = Alloy.createController("activity", {
         id: "__alloyId21"
     });
     $.__views.indexView.addTab($.__views.__alloyId21.getViewEx({
         recurse: true
     }));
-    $.__views.__alloyId22 = Alloy.createController("configuration", {
+    $.__views.__alloyId22 = Alloy.createController("myEvents", {
         id: "__alloyId22"
     });
     $.__views.indexView.addTab($.__views.__alloyId22.getViewEx({
+        recurse: true
+    }));
+    $.__views.__alloyId23 = Alloy.createController("explore", {
+        id: "__alloyId23"
+    });
+    $.__views.indexView.addTab($.__views.__alloyId23.getViewEx({
+        recurse: true
+    }));
+    $.__views.__alloyId24 = Alloy.createController("configuration", {
+        id: "__alloyId24"
+    });
+    $.__views.indexView.addTab($.__views.__alloyId24.getViewEx({
         recurse: true
     }));
     $.__views.indexView && $.addTopLevelView($.__views.indexView);

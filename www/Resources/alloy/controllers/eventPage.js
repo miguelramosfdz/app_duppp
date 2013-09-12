@@ -25,8 +25,10 @@ function Controller() {
         });
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
+    this.__controllerPath = "eventPage";
     arguments[0] ? arguments[0]["__parentSymbol"] : null;
     arguments[0] ? arguments[0]["$model"] : null;
+    arguments[0] ? arguments[0]["__itemTemplate"] : null;
     var $ = this;
     var exports = {};
     var __defers = {};
@@ -108,7 +110,7 @@ function Controller() {
         layout: "horizontal"
     });
     $.__views.scrollView.add($.__views.actionBtns);
-    $.__views.__alloyId11 = Ti.UI.createButton({
+    $.__views.__alloyId13 = Ti.UI.createButton({
         backgroundImage: "none",
         borderRadius: 0,
         color: "white",
@@ -122,10 +124,10 @@ function Controller() {
         width: 100,
         backgroundColor: "#1193FC",
         title: "Comments",
-        id: "__alloyId11"
+        id: "__alloyId13"
     });
-    $.__views.actionBtns.add($.__views.__alloyId11);
-    comment ? $.__views.__alloyId11.addEventListener("click", comment) : __defers["$.__views.__alloyId11!click!comment"] = true;
+    $.__views.actionBtns.add($.__views.__alloyId13);
+    comment ? $.__views.__alloyId13.addEventListener("click", comment) : __defers["$.__views.__alloyId13!click!comment"] = true;
     $.__views.like = Ti.UI.createButton({
         backgroundImage: "none",
         borderRadius: 0,
@@ -144,7 +146,7 @@ function Controller() {
     });
     $.__views.actionBtns.add($.__views.like);
     like ? $.__views.like.addEventListener("click", like) : __defers["$.__views.like!click!like"] = true;
-    $.__views.__alloyId12 = Ti.UI.createButton({
+    $.__views.__alloyId14 = Ti.UI.createButton({
         backgroundImage: "none",
         borderRadius: 0,
         color: "white",
@@ -158,9 +160,9 @@ function Controller() {
         width: 100,
         backgroundColor: "#7CCD2F",
         title: "Extra",
-        id: "__alloyId12"
+        id: "__alloyId14"
     });
-    $.__views.actionBtns.add($.__views.__alloyId12);
+    $.__views.actionBtns.add($.__views.__alloyId14);
     $.__views.likeCount = Ti.UI.createLabel({
         bottom: 10,
         color: "#EF5250",
@@ -217,7 +219,7 @@ function Controller() {
             }
         });
     });
-    __defers["$.__views.__alloyId11!click!comment"] && $.__views.__alloyId11.addEventListener("click", comment);
+    __defers["$.__views.__alloyId13!click!comment"] && $.__views.__alloyId13.addEventListener("click", comment);
     __defers["$.__views.like!click!like"] && $.__views.like.addEventListener("click", like);
     _.extend($, exports);
 }

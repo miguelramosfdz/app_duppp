@@ -1,7 +1,9 @@
 function Controller() {
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
+    this.__controllerPath = "explore";
     arguments[0] ? arguments[0]["__parentSymbol"] : null;
     arguments[0] ? arguments[0]["$model"] : null;
+    arguments[0] ? arguments[0]["__itemTemplate"] : null;
     var $ = this;
     var exports = {};
     $.__views.child_window = Ti.UI.createWindow({
@@ -12,20 +14,20 @@ function Controller() {
         id: "child_window",
         title: "Explore"
     });
-    $.__views.__alloyId18 = Ti.UI.createView({
+    $.__views.__alloyId20 = Ti.UI.createView({
         layout: "vertical",
-        id: "__alloyId18"
+        id: "__alloyId20"
     });
-    $.__views.child_window.add($.__views.__alloyId18);
+    $.__views.child_window.add($.__views.__alloyId20);
     $.__views.search = Ti.UI.createSearchBar({
         id: "search",
         hintText: "Search a user"
     });
-    $.__views.__alloyId18.add($.__views.search);
+    $.__views.__alloyId20.add($.__views.search);
     $.__views.table = Ti.UI.createTableView({
         id: "table"
     });
-    $.__views.__alloyId18.add($.__views.table);
+    $.__views.__alloyId20.add($.__views.table);
     $.__views.tab3 = Ti.UI.createTab({
         window: $.__views.child_window,
         id: "tab3",
