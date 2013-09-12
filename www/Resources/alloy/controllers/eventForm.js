@@ -17,7 +17,6 @@ function Controller() {
     }
     function storeUsers(e) {
         var index = _.indexOf(clickedRows, e.row.uid);
-        console.log(e);
         if (e.rowData.selected) {
             e.row.hasCheck = false;
             if (index >= 0) {
