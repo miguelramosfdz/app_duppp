@@ -100,7 +100,7 @@ function Controller() {
         layout: "vertical"
     });
     $.__views.tooltipContainer.add($.__views.tooltip);
-    $.__views.__alloyId21 = Ti.UI.createLabel({
+    $.__views.__alloyId23 = Ti.UI.createLabel({
         font: {
             fontSize: 18,
             fontFamily: "Lato-Regular"
@@ -109,10 +109,10 @@ function Controller() {
         textAlign: Titanium.UI.TEXT_ALIGNMENT_CENTER,
         top: 15,
         text: "Let's go !",
-        id: "__alloyId21"
+        id: "__alloyId23"
     });
-    $.__views.tooltip.add($.__views.__alloyId21);
-    $.__views.__alloyId22 = Ti.UI.createLabel({
+    $.__views.tooltip.add($.__views.__alloyId23);
+    $.__views.__alloyId24 = Ti.UI.createLabel({
         font: {
             fontSize: 16,
             fontFamily: "Lato-Light"
@@ -122,9 +122,9 @@ function Controller() {
         right: 30,
         left: 30,
         text: "You want to capture in which events ?",
-        id: "__alloyId22"
+        id: "__alloyId24"
     });
-    $.__views.tooltip.add($.__views.__alloyId22);
+    $.__views.tooltip.add($.__views.__alloyId24);
     $.__views.tableOpen = Ti.UI.createScrollView({
         height: 0,
         width: "100%",
@@ -148,7 +148,7 @@ function Controller() {
         visible: "false"
     });
     $.__views.tooltip.add($.__views.tableOpenLabel);
-    $.__views.__alloyId23 = Ti.UI.createButton({
+    $.__views.__alloyId25 = Ti.UI.createButton({
         backgroundImage: "none",
         font: {
             fontSize: 18,
@@ -163,10 +163,10 @@ function Controller() {
         borderRadius: 5,
         left: 10,
         title: "Create Event",
-        id: "__alloyId23"
+        id: "__alloyId25"
     });
-    $.__views.tooltip.add($.__views.__alloyId23);
-    openEventForm ? $.__views.__alloyId23.addEventListener("click", openEventForm) : __defers["$.__views.__alloyId23!click!openEventForm"] = true;
+    $.__views.tooltip.add($.__views.__alloyId25);
+    openEventForm ? $.__views.__alloyId25.addEventListener("click", openEventForm) : __defers["$.__views.__alloyId25!click!openEventForm"] = true;
     $.__views.menu = Ti.UI.createView({
         backgroundColor: "#3B9DCB",
         width: Titanium.UI.FILL,
@@ -177,7 +177,7 @@ function Controller() {
         layout: "vertical"
     });
     $.__views.navActions.add($.__views.menu);
-    $.__views.__alloyId24 = Ti.UI.createButton({
+    $.__views.__alloyId26 = Ti.UI.createButton({
         backgroundImage: "none",
         height: 40,
         width: Titanium.UI.FILL,
@@ -187,11 +187,11 @@ function Controller() {
         },
         index: "0",
         title: "Home",
-        id: "__alloyId24"
+        id: "__alloyId26"
     });
-    $.__views.menu.add($.__views.__alloyId24);
-    menuChild ? $.__views.__alloyId24.addEventListener("click", menuChild) : __defers["$.__views.__alloyId24!click!menuChild"] = true;
-    $.__views.__alloyId25 = Ti.UI.createButton({
+    $.__views.menu.add($.__views.__alloyId26);
+    menuChild ? $.__views.__alloyId26.addEventListener("click", menuChild) : __defers["$.__views.__alloyId26!click!menuChild"] = true;
+    $.__views.__alloyId27 = Ti.UI.createButton({
         backgroundImage: "none",
         height: 40,
         width: Titanium.UI.FILL,
@@ -201,11 +201,11 @@ function Controller() {
         },
         index: "1",
         title: "My Events",
-        id: "__alloyId25"
+        id: "__alloyId27"
     });
-    $.__views.menu.add($.__views.__alloyId25);
-    menuChild ? $.__views.__alloyId25.addEventListener("click", menuChild) : __defers["$.__views.__alloyId25!click!menuChild"] = true;
-    $.__views.__alloyId26 = Ti.UI.createButton({
+    $.__views.menu.add($.__views.__alloyId27);
+    menuChild ? $.__views.__alloyId27.addEventListener("click", menuChild) : __defers["$.__views.__alloyId27!click!menuChild"] = true;
+    $.__views.__alloyId28 = Ti.UI.createButton({
         backgroundImage: "none",
         height: 40,
         width: Titanium.UI.FILL,
@@ -215,10 +215,10 @@ function Controller() {
         },
         index: "2",
         title: "Explore",
-        id: "__alloyId26"
+        id: "__alloyId28"
     });
-    $.__views.menu.add($.__views.__alloyId26);
-    menuChild ? $.__views.__alloyId26.addEventListener("click", menuChild) : __defers["$.__views.__alloyId26!click!menuChild"] = true;
+    $.__views.menu.add($.__views.__alloyId28);
+    menuChild ? $.__views.__alloyId28.addEventListener("click", menuChild) : __defers["$.__views.__alloyId28!click!menuChild"] = true;
     exports.destroy = function() {};
     _.extend($, $.__views);
     var dupppUpload = (Alloy.CFG.rest, require("dupppUpload")), container = {};
@@ -390,10 +390,10 @@ function Controller() {
     });
     __defers["$.__views.menuBtn!click!openMenu"] && $.__views.menuBtn.addEventListener("click", openMenu);
     __defers["$.__views.cameraBtn!click!openTooltip"] && $.__views.cameraBtn.addEventListener("click", openTooltip);
-    __defers["$.__views.__alloyId23!click!openEventForm"] && $.__views.__alloyId23.addEventListener("click", openEventForm);
-    __defers["$.__views.__alloyId24!click!menuChild"] && $.__views.__alloyId24.addEventListener("click", menuChild);
-    __defers["$.__views.__alloyId25!click!menuChild"] && $.__views.__alloyId25.addEventListener("click", menuChild);
+    __defers["$.__views.__alloyId25!click!openEventForm"] && $.__views.__alloyId25.addEventListener("click", openEventForm);
     __defers["$.__views.__alloyId26!click!menuChild"] && $.__views.__alloyId26.addEventListener("click", menuChild);
+    __defers["$.__views.__alloyId27!click!menuChild"] && $.__views.__alloyId27.addEventListener("click", menuChild);
+    __defers["$.__views.__alloyId28!click!menuChild"] && $.__views.__alloyId28.addEventListener("click", menuChild);
     _.extend($, exports);
 }
 

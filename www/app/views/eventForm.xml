@@ -23,8 +23,16 @@
 
 
   <Window id="eventFormWindowStep2" title="Invite Contact" class="container" layout="vertical">
+
+    <View class="label_header">
+      <Label class="label_header_text" text="Recent Users" />
+    </View>
+    <TableView id="table_recent" class="container" allowsSelectionDuringEditing="true" />
+
     <SearchBar id="search" hintText="Search a user" />
     <TableView id="table" class="container" allowsSelectionDuringEditing="true" />
+
+
     <RightNavButton>
       <Button id="createBtn" title="OK" onClick="createEvent" />
     </RightNavButton>

@@ -8,6 +8,8 @@ var args = arguments[0] || {};
 $.name.text = args.name;
 $.image.image = (args.field_avatar.length == 0) ? '' : args.field_avatar;
 $.row.uid = args.uid;
+$.row.name = args.name;
+$.row.field_avatar = args.field_avatar;
 
 // Don't open profile page if isNoReturn is true.
 if (!args.isNoReturn) {

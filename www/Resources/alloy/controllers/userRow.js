@@ -36,6 +36,8 @@ function Controller() {
     $.name.text = args.name;
     $.image.image = 0 == args.field_avatar.length ? "" : args.field_avatar;
     $.row.uid = args.uid;
+    $.row.name = args.name;
+    $.row.field_avatar = args.field_avatar;
     args.isNoReturn || $.row.addEventListener("click", function() {
         var win = Alloy.createController("profilePage", args).getView();
         Titanium.API.fireEvent("openAsNavigation", {

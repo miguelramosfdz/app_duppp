@@ -29,5 +29,22 @@
 }
 
 "#search": {
-  barColor: "#2c3e50"
+  barColor: "#16a085"
+}
+
+"#table_recent": {
+  height: 175
+}
+
+".label_header": {
+  backgroundColor: "#16a085",
+  height: 35,
+  width: "100%"
+}
+
+".label_header_text": {
+  color: "#fff",
+  backgroundColor: "#16a085",
+  font: { fontSize: 17, fontFamily: 'Lato-Regular' },
+  left: 10
 }

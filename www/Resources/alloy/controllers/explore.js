@@ -12,20 +12,20 @@ function Controller() {
         id: "child_window",
         title: "Explore"
     });
-    $.__views.__alloyId16 = Ti.UI.createView({
+    $.__views.__alloyId18 = Ti.UI.createView({
         layout: "vertical",
-        id: "__alloyId16"
+        id: "__alloyId18"
     });
-    $.__views.child_window.add($.__views.__alloyId16);
+    $.__views.child_window.add($.__views.__alloyId18);
     $.__views.search = Ti.UI.createSearchBar({
         id: "search",
         hintText: "Search a user"
     });
-    $.__views.__alloyId16.add($.__views.search);
+    $.__views.__alloyId18.add($.__views.search);
     $.__views.table = Ti.UI.createTableView({
         id: "table"
     });
-    $.__views.__alloyId16.add($.__views.table);
+    $.__views.__alloyId18.add($.__views.table);
     $.__views.tab3 = Ti.UI.createTab({
         window: $.__views.child_window,
         id: "tab3",

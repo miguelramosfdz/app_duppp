@@ -1,7 +1,38 @@
 function Controller() {
     function nextStep() {
+        recents.fetch();
+        var users = recents.toJSON(), data = [];
+        users.forEach(function(user) {
+            if (parseInt(user.uid) !== Titanium.App.Properties.getInt("userUid")) {
+                user.isNoReturn = true;
+                var newsItem = Alloy.createController("userRow", user).getView();
+                if (_.indexOf(clickedRows, newsItem.uid) >= 0) {
+                    newsItem.hasCheck = true;
+                    newsItem.selected = !newsItem.selected;
+                }
+                data.push(newsItem);
+            }
+        });
+        data.reverse();
+        $.table_recent.setData(data);
         Titanium.API.fireEvent("openAsNavigation", {
             window: $.eventFormWindowStep2
+        });
+    }
+    function recentUsers(users) {
+        _.each(users, function(user) {
+            var model = Alloy.createModel("recent", {
+                name: user.name,
+                uid: user.uid,
+                field_avatar: user.field_avatar
+            });
+            var isExisting = recents.where({
+                name: user.name
+            });
+            if (0 === isExisting.length) {
+                recents.add(model);
+                model.save();
+            }
         });
     }
     function createEvent() {
@@ -48,6 +79,7 @@ function Controller() {
                     var join = {
                         uid: clickedRows
                     };
+                    recentUsers(usersSelected);
                     drupalServices.joinNode({
                         node: join,
                         nid: data.nid
@@ -151,8 +183,37 @@ function Controller() {
         layout: "vertical"
     });
     $.__views.eventFormWindowStep2 && $.addTopLevelView($.__views.eventFormWindowStep2);
+    $.__views.__alloyId8 = Ti.UI.createView({
+        backgroundColor: "#16a085",
+        height: 35,
+        width: "100%",
+        id: "__alloyId8"
+    });
+    $.__views.eventFormWindowStep2.add($.__views.__alloyId8);
+    $.__views.__alloyId9 = Ti.UI.createLabel({
+        color: "#fff",
+        backgroundColor: "#16a085",
+        font: {
+            fontSize: 17,
+            fontFamily: "Lato-Regular"
+        },
+        left: 10,
+        text: "Recent Users",
+        id: "__alloyId9"
+    });
+    $.__views.__alloyId8.add($.__views.__alloyId9);
+    $.__views.table_recent = Ti.UI.createTableView({
+        barImage: "bgNavBar.png",
+        barColor: "#000",
+        backgroundColor: "#F3F3F3",
+        tabBarHidden: true,
+        height: 175,
+        id: "table_recent",
+        allowsSelectionDuringEditing: "true"
+    });
+    $.__views.eventFormWindowStep2.add($.__views.table_recent);
     $.__views.search = Ti.UI.createSearchBar({
-        barColor: "#2c3e50",
+        barColor: "#16a085",
         id: "search",
         hintText: "Search a user"
     });
@@ -175,7 +236,7 @@ function Controller() {
     exports.destroy = function() {};
     _.extend($, $.__views);
     var REST_PATH = Alloy.CFG.rest;
-    var data = [], uie = require("UiElements"), indicator = uie.createIndicatorWindow(), drupalServices = require("drupalServices"), clickedRows = [];
+    var data = [], uie = require("UiElements"), indicator = uie.createIndicatorWindow(), drupalServices = require("drupalServices"), clickedRows = [], usersSelected = [], recents = Alloy.Collections.recent;
     $.textArea.addEventListener("focus", function() {
         $.textArea.value = "";
     });
@@ -183,10 +244,33 @@ function Controller() {
         var index = _.indexOf(clickedRows, e.row.uid);
         if (e.rowData.selected) {
             e.row.hasCheck = false;
-            index >= 0 && clickedRows.splice(index, 1);
+            if (index >= 0) {
+                clickedRows.splice(index, 1);
+                usersSelected.splice(index, 1);
+            }
         } else {
             e.row.hasCheck = true;
-            0 > index && clickedRows.push(e.row.uid);
+            if (0 > index) {
+                clickedRows.push(e.row.uid);
+                usersSelected.push(e.row);
+            }
+        }
+        e.rowData.selected = !e.rowData.selected;
+    });
+    $.table_recent.addEventListener("click", function(e) {
+        var index = _.indexOf(clickedRows, e.row.uid);
+        if (e.rowData.selected) {
+            e.row.hasCheck = false;
+            if (index >= 0) {
+                clickedRows.splice(index, 1);
+                usersSelected.splice(index, 1);
+            }
+        } else {
+            e.row.hasCheck = true;
+            if (0 > index) {
+                clickedRows.push(e.row.uid);
+                usersSelected.push(e.row);
+            }
         }
         e.rowData.selected = !e.rowData.selected;
     });
