@@ -1,5 +1,7 @@
 function saveFile(_args) {
-    if (Ti.Filesystem.isExternalStoragePresent()) var file = Ti.Filesystem.getFile(Ti.Filesystem.externalStorageDirectory, _args.filename); else var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, _args.filename);
+    "use strict";
+    var file;
+    file = Ti.Filesystem.isExternalStoragePresent() ? Ti.Filesystem.getFile(Ti.Filesystem.externalStorageDirectory, _args.filename) : Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, _args.filename);
     file.write(_args.file);
     file.exists ? Ti.API.info("[saveFile] Saved: YES! (" + file.nativePath + ")") : Ti.API.info("[saveFile] Saved: NO!");
     if (ios && "1.8.2" >= Ti.version) {
@@ -10,11 +12,12 @@ function saveFile(_args) {
     return file.nativePath;
 }
 
-var mediaQueue = [], REST_PATH = Alloy.CFG.rest, drupalServices = require("drupalServices"), processed = false;
+var mediaQueue = [], drupalServices = require("drupalServices"), processed = false, medias = Alloy.Collections.media;
 
 if ("iPhone" === Ti.Platform.osname || "iPad" === Ti.Platform.osname) var ios = true;
 
 var uploadFile = function(media, contribution) {
+    "use strict";
     if (Titanium.Network.online && !processed) {
         processed = true;
         drupalServices.createNodeContribution({
@@ -32,8 +35,10 @@ var uploadFile = function(media, contribution) {
                         Titanium.API.fireEvent("uploadInProgress", json);
                     },
                     success: function() {
-                        mediaQueue.shift();
+                        var model = medias.shift();
+                        model.destroy();
                         processed = false;
+                        console.log(medias.toJSON());
                         processUpload();
                         Titanium.API.fireEvent("uploadFinish");
                     },
@@ -51,7 +56,8 @@ var uploadFile = function(media, contribution) {
 };
 
 var addFile = function(media, gid, date, uid) {
-    var file;
+    "use strict";
+    var file, model;
     var contribution = {
         node: {
             title: date,
@@ -71,15 +77,24 @@ var addFile = function(media, gid, date, uid) {
         filename: date + "_" + gid + ".MOV"
     });
     contribution.mediaElement = file;
-    mediaQueue.push(contribution);
+    model = Alloy.createModel("media", {
+        node: JSON.stringify(contribution.node),
+        file: contribution.mediaElement
+    });
+    medias.add(model);
+    model.save();
     processUpload();
 };
 
 var processUpload = function() {
+    "use strict";
     if (Titanium.Network.online && (Titanium.Network.networkTypeName == Ti.App.Properties.getString("sendConnection") || "3G" == Ti.App.Properties.getString("sendConnection"))) {
-        if (0 === mediaQueue.length) return Ti.API.info("No video need to be upload");
-        var contribution = mediaQueue[0], file = Ti.Filesystem.getFile(contribution.mediaElement);
-        contribution && uploadFile(file.read(), contribution.node);
+        medias.fetch();
+        console.log(medias.toJSON());
+        if (0 === medias.length) return Ti.API.info("No video need to be upload");
+        var contributions = medias.toJSON();
+        var contribution = contributions.shift(), file = Ti.Filesystem.getFile(contribution.file);
+        contribution && uploadFile(file.read(), JSON.parse(contribution.node));
     }
 };
 

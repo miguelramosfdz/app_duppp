@@ -32,10 +32,9 @@ function Controller() {
         }
         e.rowData.selected = !e.rowData.selected;
     }
-    function nextStep() {
-        recents.fetch();
-        var users = recents.toJSON(), data = [];
-        users.forEach(function(user) {
+    function prepareData(json) {
+        var data = [];
+        json.forEach(function(user) {
             if (parseInt(user.uid) !== Titanium.App.Properties.getInt("userUid")) {
                 user.isNoReturn = true;
                 var newsItem = Alloy.createController("userRow", user).getView();
@@ -46,6 +45,11 @@ function Controller() {
                 data.push(newsItem);
             }
         });
+        return data;
+    }
+    function nextStep() {
+        recents.fetch();
+        var users = recents.toJSON(), data = prepareData(users);
         data.reverse();
         $.table_recent.setData(data);
         Titanium.API.fireEvent("openAsNavigation", {
@@ -254,45 +258,29 @@ function Controller() {
     $.__views.eventFormWindowStep2.rightNavButton = $.__views.createBtn;
     exports.destroy = function() {};
     _.extend($, $.__views);
-    var REST_PATH = Alloy.CFG.rest;
-    var data = [], uie = require("UiElements"), indicator = uie.createIndicatorWindow(), drupalServices = require("drupalServices"), clickedRows = [], usersSelected = [], recents = Alloy.Collections.recent;
+    Alloy.CFG.rest;
+    var uie = require("UiElements"), indicator = uie.createIndicatorWindow(), clickedRows = [], usersSelected = [], recents = Alloy.Collections.recent, drupalServices = require("drupalServices");
     $.textArea.addEventListener("focus", function() {
         $.textArea.value = "";
-    });
-    $.table.addEventListener("click", storeUsers);
-    $.table_recent.addEventListener("click", storeUsers);
-    var xhrUsers = Ti.Network.createHTTPClient({
-        onload: function() {
-            data = [];
-            json = JSON.parse(this.responseText);
-            json.forEach(function(user) {
-                if (parseInt(user.uid) !== Titanium.App.Properties.getInt("userUid")) {
-                    user.isNoReturn = true;
-                    var newsItem = Alloy.createController("userRow", user).getView();
-                    if (_.indexOf(clickedRows, newsItem.uid) >= 0) {
-                        newsItem.hasCheck = true;
-                        newsItem.selected = !newsItem.selected;
-                    }
-                    data.push(newsItem);
-                }
-            });
-            $.table.setData(data);
-            indicator.closeIndicator();
-        },
-        onerror: function() {},
-        timeout: 5e3
     });
     var last_search = null;
     $.search.addEventListener("return", function(e) {
         if (e.value != last_search) {
             last_search = e.value;
             indicator.openIndicator();
-            var urlUsers = REST_PATH + "/duppp_user.json?username=" + e.value;
-            xhrUsers.open("GET", urlUsers);
-            xhrUsers.send();
+            drupalServices.searchUser({
+                search: e.value,
+                success: function(users) {
+                    var data = prepareData(JSON.parse(users));
+                    $.table.setData(data);
+                    indicator.closeIndicator();
+                }
+            });
             $.search.blur();
         }
     });
+    $.table.addEventListener("click", storeUsers);
+    $.table_recent.addEventListener("click", storeUsers);
     __defers["$.__views.__alloyId9!click!nextStep"] && $.__views.__alloyId9.addEventListener("click", nextStep);
     __defers["$.__views.createBtn!click!createEvent"] && $.__views.createBtn.addEventListener("click", createEvent);
     _.extend($, exports);

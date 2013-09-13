@@ -311,6 +311,24 @@ var getToken = function(opts) {
     };
 };
 
+var searchUser = function(opts) {
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/duppp_user.json?username=" + opts.search;
+    Ti.API.info("searchUser info, url: " + url);
+    xhr.open("GET", url);
+    xhr.send();
+    xhr.onload = function() {
+        var jsonObject = this.responseText;
+        opts.success && opts.success(jsonObject);
+    };
+    xhr.onerror = function() {
+        console.info("searchUser error: " + JSON.stringify(this));
+        opts.error && opts.error({
+            status: xhr.status,
+            statusText: xhr.statusText
+        });
+    };
+};
+
 exports.nodeList = nodeList;
 
 exports.userNodesList = userNodesList;
@@ -340,3 +358,5 @@ exports.userRegister = userRegister;
 exports.systemInfo = systemInfo;
 
 exports.getToken = getToken;
+
+exports.searchUser = searchUser;

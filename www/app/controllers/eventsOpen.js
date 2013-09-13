@@ -1,6 +1,7 @@
 var dupppUpload = require('dupppUpload'),
     drupalServices = require('drupalServices'),
     data = [],
+    medias = Alloy.Collections.media,
     eventsRaw;
 
 
@@ -95,7 +96,7 @@ Titanium.API.addEventListener('startUpload', function (data) {
 
 Titanium.API.addEventListener('uploadInProgress', function (data) {
 
-  $.provressViewLabel.text = dupppUpload.mediaQueue.length + ' video';
+  $.provressViewLabel.text = medias.length + ' video';
   $.pb.setValue(data.progressValue * 100);
 
 });

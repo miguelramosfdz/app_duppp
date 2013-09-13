@@ -6,10 +6,10 @@ var REST_PATH = Alloy.CFG.rest;
 var data = [],
   uie = require('UiElements'),
   indicator = uie.createIndicatorWindow(),
-  drupalServices = require('drupalServices'),
   clickedRows = [],
   usersSelected = [],
-  recents = Alloy.Collections.recent;
+  recents = Alloy.Collections.recent,
+  drupalServices = require('drupalServices');
 
 //
 //
@@ -34,6 +34,7 @@ function recentUsers(users) {
 
 // Store in Array all users selected.
 function storeUsers(e) {
+
   var index = _.indexOf(clickedRows, e.row.uid);
 
   if (e.rowData.selected) {
@@ -53,87 +54,12 @@ function storeUsers(e) {
   e.rowData.selected = !e.rowData.selected;
 }
 
-//
-//
-// EVENTS
-//
-//
+// Prepare data to put in table.
+function prepareData(json) {
 
-$.textArea.addEventListener('focus', function() {
-  $.textArea.value = '';
-});
+  var data = [];
 
-$.table.addEventListener('click', storeUsers);
-$.table_recent.addEventListener('click', storeUsers);
-
-///////////////
-
-var xhrUsers = Ti.Network.createHTTPClient({
-  // Success callback.
-  onload: function(e) {
-
-    data = [];
-
-    // Add events to views.
-    json = JSON.parse(this.responseText);
-    json.forEach(function(user){
-      if (parseInt(user.uid) !== Titanium.App.Properties.getInt("userUid")) {
-        // Keep only user different from current user.
-        user.isNoReturn = true;
-
-        var newsItem = Alloy.createController('userRow', user).getView();
-
-        if (_.indexOf(clickedRows, newsItem.uid) >= 0) {
-          newsItem.hasCheck = true;
-          newsItem.selected = !newsItem.selected;
-        }
-
-        data.push(newsItem);
-      }
-    });
-
-    // Update View.
-    $.table.setData(data);
-
-    indicator.closeIndicator();
-
-  },
-
-  // Error callback
-  onerror: function(e) {
-    // Do ...
-  },
-
-  timeout: 5000
-});
-
-/*
- * When the view is instantiate.
- */
-
-var last_search = null;
-
-$.search.addEventListener('return', function (e) {
-  if (e.value !=  last_search) {
-    last_search = e.value;
-    indicator.openIndicator();
-
-    var urlUsers = REST_PATH + '/duppp_user.json?username=' + e.value;
-    xhrUsers.open("GET", urlUsers);
-    xhrUsers.send();
-
-    $.search.blur();
-  }
-});
-
-function nextStep() {
-
-  recents.fetch();
-
-  var users = recents.toJSON(),
-    data = [];
-
-  users.forEach(function(user){
+  json.forEach(function(user){
     if (parseInt(user.uid) !== Titanium.App.Properties.getInt("userUid")) {
       // Keep only user different from current user.
       user.isNoReturn = true;
@@ -148,6 +74,55 @@ function nextStep() {
       data.push(newsItem);
     }
   });
+
+  return data;
+}
+
+//
+//
+// EVENTS
+//
+//
+
+$.textArea.addEventListener('focus', function() {
+  $.textArea.value = '';
+});
+
+var last_search = null;
+
+$.search.addEventListener('return', function (e) {
+  if (e.value !=  last_search) {
+    last_search = e.value;
+    indicator.openIndicator();
+
+    drupalServices.searchUser({
+      search: e.value,
+      success: function(users) {
+
+        var data = prepareData(JSON.parse(users));
+
+        // Update View.
+        $.table.setData(data);
+
+        indicator.closeIndicator();
+      }
+    });
+
+    $.search.blur();
+  }
+});
+
+$.table.addEventListener('click', storeUsers);
+$.table_recent.addEventListener('click', storeUsers);
+
+///////////////
+
+function nextStep() {
+
+  recents.fetch();
+
+  var users = recents.toJSON(),
+    data = prepareData(users);
 
   data.reverse();
 
@@ -166,41 +141,41 @@ function createEvent() {
   if (Titanium.App.Properties.getInt("userUid")) {
     // Create a user variable to hold some information about the user
     var user = {
-      uid: Titanium.App.Properties.getInt("userUid"),
-      sessid: Titanium.App.Properties.getString("userSessionId"),
-      session_name: Titanium.App.Properties.getString("userSessionName"),
-      name: Titanium.App.Properties.getString("userName")
+      uid: Titanium.App.Properties.getInt('userUid'),
+      sessid: Titanium.App.Properties.getString('userSessionId'),
+      session_name: Titanium.App.Properties.getString('userSessionName'),
+      name: Titanium.App.Properties.getString('userName')
     };
     var switchPrivate;
 
     if ($.switchPrivate.value == 1) {
-      switchPrivate = "1";
+      switchPrivate = '1';
     } else {
-      switchPrivate = "0";
+      switchPrivate = '0';
     }
 
     drupalServices.createNode({
       node: {
-        "type": "event",
-        "title": $.textArea.value,
-        "language": "und",
-        "group_access": {
-          "und": switchPrivate
+        'type': 'event',
+        'title': $.textArea.value,
+        'language': 'und',
+        'group_access': {
+          'und': switchPrivate
         },
-        "field_event_date": {
-          "und":[{
-            "show_todate": "0",
-            "value": {
-              "month": "2",
-              "day": "14",
-              "year": "2013",
-              "hour": "20",
-              "minute": "15"
+        'field_event_date': {
+          'und':[{
+            'show_todate': '0',
+            'value': {
+              'month': '2',
+              'day': '14',
+              'year': '2013',
+              'hour': '20',
+              'minute': '15'
             }
           }]
         },
-        "uid": user.uid,
-        "status": 1
+        'uid': user.uid,
+        'status': 1
       },
       success: function (data) {
         $.eventFormWindow.close();

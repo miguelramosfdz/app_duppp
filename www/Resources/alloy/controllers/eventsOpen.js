@@ -132,7 +132,7 @@ function Controller() {
     $.__views.view2.add($.__views.table);
     exports.destroy = function() {};
     _.extend($, $.__views);
-    var eventsRaw, dupppUpload = require("dupppUpload"), drupalServices = require("drupalServices"), data = [];
+    var eventsRaw, dupppUpload = require("dupppUpload"), drupalServices = require("drupalServices"), data = [], medias = Alloy.Collections.media;
     $.labelOpen.hide();
     $.activityIndicator.show();
     Titanium.API.addEventListener("index:open", function() {
@@ -159,7 +159,7 @@ function Controller() {
         $.pb.show();
     });
     Titanium.API.addEventListener("uploadInProgress", function(data) {
-        $.provressViewLabel.text = dupppUpload.mediaQueue.length + " video";
+        $.provressViewLabel.text = medias.length + " video";
         $.pb.setValue(100 * data.progressValue);
     });
     Titanium.API.addEventListener("uploadFinish", function() {

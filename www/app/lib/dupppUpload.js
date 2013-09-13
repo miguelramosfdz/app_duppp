@@ -2,10 +2,11 @@
  *  Initialize variables
  */
 
-var mediaQueue = [],
-  REST_PATH = Alloy.CFG.rest,
-  drupalServices = require('drupalServices'),
-  processed = false;
+/* global Ti, Alloy, Titanium, alert */
+
+var drupalServices = require('drupalServices'),
+  processed = false,
+  medias = Alloy.Collections.media;
 
 // OS
 if(Ti.Platform.osname === 'iPhone' || Ti.Platform.osname === 'iPad') {
@@ -21,6 +22,8 @@ if(Ti.Platform.osname === 'iPhone' || Ti.Platform.osname === 'iPad') {
  */
 var uploadFile = function (media, contribution) {
 
+  'use strict';
+
   // Need to be online.
   if (Titanium.Network.online && !processed) {
 
@@ -34,8 +37,8 @@ var uploadFile = function (media, contribution) {
         Titanium.API.fireEvent('startUpload');
 
         var node = {
-          "files[video]": media, // Blob file
-          "field_name": "field_contribution_video" // Field name in API
+          'files[video]': media, // Blob file
+          'field_name': 'field_contribution_video' // Field name in API
         };
 
         drupalServices.attachFile({
@@ -46,7 +49,10 @@ var uploadFile = function (media, contribution) {
           },
           success: function() {
             // Delete current row, if the video is uploaded.
-            mediaQueue.shift();
+            var model = medias.shift();
+
+            model.destroy();
+
             processed = false;
 
             // try to upload the next row.
@@ -64,8 +70,8 @@ var uploadFile = function (media, contribution) {
         });
 
       },
-      error: function(data) {
-        alert("There was an error, try again.");
+      error: function() {
+        alert('There was an error, try again.');
       }
     });
   }
@@ -83,7 +89,10 @@ var uploadFile = function (media, contribution) {
  */
 var addFile = function (media, gid, date, uid) {
 
-  var file;
+  'use strict';
+
+  var file,
+    model;
 
   // Create structure of node object.
   var contribution = {
@@ -91,10 +100,10 @@ var addFile = function (media, gid, date, uid) {
       title: date,
       type: 'contribution',
       language: 'und',
-      "og_group_ref": {
-        "und": [
+      'og_group_ref': {
+        'und': [
           {
-            "target_id": gid
+            'target_id': gid
           }
         ]
       },
@@ -112,8 +121,9 @@ var addFile = function (media, gid, date, uid) {
 
   contribution.mediaElement = file;
 
-  // Add to the mediaQueue.
-  mediaQueue.push(contribution);
+  model = Alloy.createModel('media', {node: JSON.stringify(contribution.node), file: contribution.mediaElement});
+  medias.add(model);
+  model.save();
 
   // Process the upload.
   processUpload();
@@ -125,23 +135,29 @@ var addFile = function (media, gid, date, uid) {
  */
 var processUpload = function () {
 
+  'use strict';
+
   if (Titanium.Network.online) {
 
-    if (Titanium.Network.networkTypeName == Ti.App.Properties.getString('sendConnection') || Ti.App.Properties.getString('sendConnection') == "3G") {
+    if (Titanium.Network.networkTypeName == Ti.App.Properties.getString('sendConnection') || Ti.App.Properties.getString('sendConnection') == '3G') {
+
+      medias.fetch();
 
       // Check if array still have file to upload.
-      if (mediaQueue.length === 0) {
+      if (medias.length === 0) {
 
-        return Ti.API.info("No video need to be upload");
+        return Ti.API.info('No video need to be upload');
 
       } else {
 
         // Get the row and upload her.
-        var contribution = mediaQueue[0],
-          file = Ti.Filesystem.getFile(contribution.mediaElement);
+        var contributions = medias.toJSON();
+
+        var contribution = contributions.shift(),
+          file = Ti.Filesystem.getFile(contribution.file);
 
         if (contribution) {
-          uploadFile(file.read(), contribution.node);
+          uploadFile(file.read(), JSON.parse(contribution.node));
         }
 
       }
@@ -161,14 +177,18 @@ var processUpload = function () {
  */
 function saveFile(_args) {
 
+  'use strict';
+
+  var file;
+
   // Test if External Storage (Android only)
   if(Ti.Filesystem.isExternalStoragePresent()){
-    var file = Ti.Filesystem.getFile(Ti.Filesystem.externalStorageDirectory, _args.filename);
+    file = Ti.Filesystem.getFile(Ti.Filesystem.externalStorageDirectory, _args.filename);
   }
 
   // No SD or iOS
   else {
-    var file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, _args.filename);
+    file = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, _args.filename);
   }
 
   // Save file
@@ -193,6 +213,5 @@ function saveFile(_args) {
   }
 }
 
-exports.mediaQueue = mediaQueue;
 exports.addFile = addFile;
 exports.processUpload = processUpload;
