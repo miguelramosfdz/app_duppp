@@ -134,34 +134,47 @@ function Controller() {
     });
     $.__views.userLogin && $.addTopLevelView($.__views.userLogin);
     $.__views.__alloyId39 = Ti.UI.createView({
-        layout: "horizontal",
+        layout: "vertical",
         id: "__alloyId39"
     });
     $.__views.userLogin.add($.__views.__alloyId39);
-    $.__views.headImage = Ti.UI.createImageView({
-        id: "headImage",
-        image: "bg.jpg"
+    $.__views.__alloyId40 = Ti.UI.createView({
+        height: "80%",
+        backgroundColor: "#bdc3c7",
+        id: "__alloyId40"
     });
-    $.__views.__alloyId39.add($.__views.headImage);
-    $.__views.__alloyId40 = Ti.UI.createButton({
+    $.__views.__alloyId39.add($.__views.__alloyId40);
+    $.__views.headImage = Ti.UI.createImageView({
+        top: 100,
+        id: "headImage",
+        image: "firstLogo.png"
+    });
+    $.__views.__alloyId40.add($.__views.headImage);
+    $.__views.__alloyId41 = Ti.UI.createView({
+        height: "20%",
+        layout: "horizontal",
+        id: "__alloyId41"
+    });
+    $.__views.__alloyId39.add($.__views.__alloyId41);
+    $.__views.__alloyId42 = Ti.UI.createButton({
         backgroundImage: "none",
         backgroundColor: "#27ae60",
         font: {
             fontSize: 24,
             fontFamily: "Lato-Light"
         },
-        height: 106,
+        height: "100%",
         bottom: 0,
         width: "50%",
         title: "Login",
-        id: "__alloyId40"
+        id: "__alloyId42"
     });
-    $.__views.__alloyId39.add($.__views.__alloyId40);
-    openLoginDuppp ? $.__views.__alloyId40.addEventListener("click", openLoginDuppp) : __defers["$.__views.__alloyId40!click!openLoginDuppp"] = true;
-    $.__views.__alloyId41 = Ti.UI.createButton({
+    $.__views.__alloyId41.add($.__views.__alloyId42);
+    openLoginDuppp ? $.__views.__alloyId42.addEventListener("click", openLoginDuppp) : __defers["$.__views.__alloyId42!click!openLoginDuppp"] = true;
+    $.__views.__alloyId43 = Ti.UI.createButton({
         backgroundImage: "none",
         backgroundColor: "#c0392b",
-        height: 106,
+        height: "100%",
         bottom: 0,
         font: {
             fontSize: 24,
@@ -169,10 +182,10 @@ function Controller() {
         },
         width: "50%",
         title: "Register",
-        id: "__alloyId41"
+        id: "__alloyId43"
     });
-    $.__views.__alloyId39.add($.__views.__alloyId41);
-    openRegisterDuppp ? $.__views.__alloyId41.addEventListener("click", openRegisterDuppp) : __defers["$.__views.__alloyId41!click!openRegisterDuppp"] = true;
+    $.__views.__alloyId41.add($.__views.__alloyId43);
+    openRegisterDuppp ? $.__views.__alloyId43.addEventListener("click", openRegisterDuppp) : __defers["$.__views.__alloyId43!click!openRegisterDuppp"] = true;
     $.__views.userLoginDuppp = Ti.UI.createWindow({
         backgroundColor: "#edeff1",
         height: 200,
@@ -182,11 +195,11 @@ function Controller() {
         layout: "vertical"
     });
     $.__views.userLoginDuppp && $.addTopLevelView($.__views.userLoginDuppp);
-    $.__views.__alloyId42 = Ti.UI.createView({
+    $.__views.__alloyId44 = Ti.UI.createView({
         layout: "vertical",
-        id: "__alloyId42"
+        id: "__alloyId44"
     });
-    $.__views.userLoginDuppp.add($.__views.__alloyId42);
+    $.__views.userLoginDuppp.add($.__views.__alloyId44);
     $.__views.loginUsr = Ti.UI.createTextField({
         clearOnEdit: true,
         height: 40,
@@ -205,7 +218,7 @@ function Controller() {
         value: "Username",
         autocapitalization: Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE
     });
-    $.__views.__alloyId42.add($.__views.loginUsr);
+    $.__views.__alloyId44.add($.__views.loginUsr);
     $.__views.loginPwd = Ti.UI.createTextField({
         clearOnEdit: true,
         height: 40,
@@ -225,7 +238,7 @@ function Controller() {
         value: "Password",
         autocapitalization: Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE
     });
-    $.__views.__alloyId42.add($.__views.loginPwd);
+    $.__views.__alloyId44.add($.__views.loginPwd);
     $.__views.loginBtn = Ti.UI.createButton({
         top: 20,
         font: {
@@ -241,7 +254,7 @@ function Controller() {
         id: "loginBtn",
         title: "Login"
     });
-    $.__views.__alloyId42.add($.__views.loginBtn);
+    $.__views.__alloyId44.add($.__views.loginBtn);
     login ? $.__views.loginBtn.addEventListener("click", login) : __defers["$.__views.loginBtn!click!login"] = true;
     $.__views.userRegisterDuppp = Ti.UI.createWindow({
         backgroundColor: "#edeff1",
@@ -251,11 +264,11 @@ function Controller() {
         id: "userRegisterDuppp"
     });
     $.__views.userRegisterDuppp && $.addTopLevelView($.__views.userRegisterDuppp);
-    $.__views.__alloyId43 = Ti.UI.createView({
+    $.__views.__alloyId45 = Ti.UI.createView({
         layout: "vertical",
-        id: "__alloyId43"
+        id: "__alloyId45"
     });
-    $.__views.userRegisterDuppp.add($.__views.__alloyId43);
+    $.__views.userRegisterDuppp.add($.__views.__alloyId45);
     $.__views.usernameField = Ti.UI.createTextField({
         clearOnEdit: true,
         height: 40,
@@ -274,7 +287,7 @@ function Controller() {
         value: "Username",
         autocapitalization: Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE
     });
-    $.__views.__alloyId43.add($.__views.usernameField);
+    $.__views.__alloyId45.add($.__views.usernameField);
     $.__views.emailField = Ti.UI.createTextField({
         clearOnEdit: true,
         height: 40,
@@ -294,7 +307,7 @@ function Controller() {
         keyboardType: Titanium.UI.KEYBOARD_EMAIL,
         autocapitalization: Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE
     });
-    $.__views.__alloyId43.add($.__views.emailField);
+    $.__views.__alloyId45.add($.__views.emailField);
     $.__views.passwordRegisterField = Ti.UI.createTextField({
         clearOnEdit: true,
         height: 40,
@@ -314,7 +327,7 @@ function Controller() {
         value: "Password",
         autocapitalization: Titanium.UI.TEXT_AUTOCAPITALIZATION_NONE
     });
-    $.__views.__alloyId43.add($.__views.passwordRegisterField);
+    $.__views.__alloyId45.add($.__views.passwordRegisterField);
     $.__views.registerBtn = Ti.UI.createButton({
         top: 20,
         font: {
@@ -330,7 +343,7 @@ function Controller() {
         id: "registerBtn",
         title: "Register"
     });
-    $.__views.__alloyId43.add($.__views.registerBtn);
+    $.__views.__alloyId45.add($.__views.registerBtn);
     register ? $.__views.registerBtn.addEventListener("click", register) : __defers["$.__views.registerBtn!click!register"] = true;
     exports.destroy = function() {};
     _.extend($, $.__views);
@@ -339,8 +352,8 @@ function Controller() {
     fb.appid = "457579484312297";
     fb.forceDialogAuth = true;
     fb.addEventListener("login", facebook);
-    __defers["$.__views.__alloyId40!click!openLoginDuppp"] && $.__views.__alloyId40.addEventListener("click", openLoginDuppp);
-    __defers["$.__views.__alloyId41!click!openRegisterDuppp"] && $.__views.__alloyId41.addEventListener("click", openRegisterDuppp);
+    __defers["$.__views.__alloyId42!click!openLoginDuppp"] && $.__views.__alloyId42.addEventListener("click", openLoginDuppp);
+    __defers["$.__views.__alloyId43!click!openRegisterDuppp"] && $.__views.__alloyId43.addEventListener("click", openRegisterDuppp);
     __defers["$.__views.loginBtn!click!login"] && $.__views.loginBtn.addEventListener("click", login);
     __defers["$.__views.registerBtn!click!register"] && $.__views.registerBtn.addEventListener("click", register);
     _.extend($, exports);

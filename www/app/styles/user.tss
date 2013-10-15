@@ -35,7 +35,7 @@
   backgroundImage: "none",
   backgroundColor: "#27ae60",
   font: { fontSize: 24, fontFamily: 'Lato-Light' },
-  height: 106,
+  height: "100%",
   bottom: 0,
   width: "50%"
 }
@@ -43,7 +43,7 @@
 ".registerDuppp": {
   backgroundImage: "none",
   backgroundColor: "#c0392b",
-  height: 106,
+  height: "100%",
   bottom: 0,
   font: { fontSize: 24, fontFamily: 'Lato-Light' },
   width: "50%"
@@ -59,10 +59,23 @@
 '.windowStyle': {
   backgroundColor: "#edeff1",
   height:200,
-	borderRadius: 5,
+  borderRadius: 5,
   width:300
 }
 
 '#userRegisterDuppp': {
   height: 260
+}
+
+'.wrapperLogo': {
+  height: '80%',
+  backgroundColor: '#bdc3c7'
+}
+
+'.wrapperButton': {
+  height: '20%'
+}
+
+'#headImage': {
+  top: 100
 }

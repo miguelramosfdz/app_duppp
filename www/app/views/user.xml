@@ -1,12 +1,16 @@
 <Alloy>
   <Window id="userLogin" class="container" layout="vertical">
-    <View layout='horizontal'>
-      <ImageView id="headImage" class="image" image="bg.jpg" />
+    <View layout='vertical'>
+      <View class='wrapperLogo'>
+        <ImageView id="headImage" class="image" image="firstLogo.png" />
+      </View>
 <!--
       <Button class="facebook" onClick="openLoginFacebook" title="Login with Facebook" />
 -->
-      <Button class="loginDuppp" onClick="openLoginDuppp" title="Login" />
-      <Button class="registerDuppp" onClick="openRegisterDuppp" title="Register" />
+      <View class='wrapperButton' layout='horizontal'>
+        <Button class="loginDuppp" onClick="openLoginDuppp" title="Login" />
+        <Button class="registerDuppp" onClick="openRegisterDuppp" title="Register" />
+      </View>
     </View>
   </Window>
   <Window id="userLoginDuppp" class="windowStyle" layout="vertical">
