@@ -59,7 +59,6 @@ Titanium.API.addEventListener('index:open', function(data) {
   fetchEvents();
 });
 
-
 /*
  * Event callback.
  */

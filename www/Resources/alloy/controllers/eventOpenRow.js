@@ -1,6 +1,6 @@
 function Controller() {
     function close() {
-        if (0 === dupppUpload.mediaQueue.length) {
+        if (0 === medias.length) {
             indicator.openIndicator();
             drupalServices.closeNode({
                 nid: args.nid,
@@ -58,7 +58,7 @@ function Controller() {
     close ? $.__views.button.addEventListener("click", close) : __defers["$.__views.button!click!close"] = true;
     exports.destroy = function() {};
     _.extend($, $.__views);
-    var args = arguments[0] || {}, dupppUpload = require("dupppUpload"), drupalServices = require("drupalServices");
+    var args = arguments[0] || {}, drupalServices = require("drupalServices");
     var uie = require("UiElements");
     var indicator = uie.createIndicatorWindow();
     $.title.text = args.title;

@@ -37,27 +37,14 @@ function Controller() {
     exports.destroy = function() {};
     _.extend($, $.__views);
     var drupalServices = require("drupalServices"), userLoginWin = Alloy.createController("user").getView("userLogin"), eventsOpenWin = Alloy.createController("eventsOpen").getView();
-    require("facebook");
-    if (null == Ti.App.Properties.getInt("installComplete")) {
-        drupalServices.getToken({
-            success: function(token) {
-                Ti.App.Properties.setString("token", token);
-                drupalServices.systemInfo({
-                    success: function(data) {
-                        0 !== data.user.uid ? $.indexView.open() : userLoginWin.open();
-                    },
-                    error: function() {
-                        alert("Error, contact the admin");
-                    }
-                });
-            },
-            error: function() {
-                alert("Error, contact the admin");
-            }
-        });
-        Ti.App.Properties.setInt("installComplete", 1);
-    } else 0 !== Titanium.App.Properties.getInt("userUid") && $.indexView.open();
-    Titanium.API.addEventListener("user:login", function() {
+    $.indexView.add(eventsOpenWin);
+    Ti.API.addEventListener("app:registred", function() {
+        $.indexView.open();
+    });
+    Ti.API.addEventListener("app:anonymous", function() {
+        userLoginWin.open();
+    });
+    Ti.API.addEventListener("user:login", function() {
         drupalServices.getToken({
             success: function(token) {
                 Ti.App.Properties.setString("token", token);
@@ -67,17 +54,16 @@ function Controller() {
             }
         });
         $.indexView.open({
-            transition: Titanium.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT
+            transition: Ti.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT
         });
-        Titanium.API.fireEvent("index:open");
+        Ti.API.fireEvent("index:open");
     });
-    Titanium.API.addEventListener("clickMenuChild", function(data) {
+    Ti.API.addEventListener("clickMenuChild", function(data) {
         $.indexView.tabs[data.tab_id].active = true;
     });
-    Titanium.API.addEventListener("openAsNavigation", function(data) {
+    Ti.API.addEventListener("openAsNavigation", function(data) {
         $.indexView.activeTab.open(data.window);
     });
-    $.indexView.add(eventsOpenWin);
     _.extend($, exports);
 }
 

@@ -6,63 +6,30 @@
 // Load child views, and initiate some vars.
 var drupalServices = require('drupalServices'),
   userLoginWin = Alloy.createController('user').getView('userLogin'),
-  eventsOpenWin = Alloy.createController('eventsOpen').getView(),
-  fb = require('facebook');
+  eventsOpenWin = Alloy.createController('eventsOpen').getView();
 
-if (Ti.App.Properties.getInt('installComplete') == null) {
-
-  drupalServices.getToken({
-    success: function(token) {
-      Ti.App.Properties.setString("token", token);
-
-      drupalServices.systemInfo({
-        success: function(data) {
-          if (data.user.uid !== 0) {
-
-            // Open default view.
-            $.indexView.open();
-
-          } else {
-
-            // Logout if you are connected to facebook.
-            //fb.logout();
-
-            // Open User form.
-            userLoginWin.open();
-
-          }
-        },
-        error: function(data) {
-          alert('Error, contact the admin');
-        }
-      });
-    },
-    error: function(data) {
-      alert('Error, contact the admin');
-    }
-  });
-
-  Ti.App.Properties.setInt("installComplete", 1);
-} else {
-
-  if (Titanium.App.Properties.getInt("userUid") !== 0) {
-
-    // Open default view.
-    $.indexView.open();
-
-  }
-
-}
+// add open view.
+$.indexView.add(eventsOpenWin);
 
 /*
  *  Event declarations.
  */
 
-Titanium.API.addEventListener('user:login', function () {
+// If user is connected.
+Ti.API.addEventListener('app:registred', function () {
+  $.indexView.open();
+});
+
+// If user is anonymous.
+Ti.API.addEventListener('app:anonymous', function () {
+  userLoginWin.open();
+});
+
+Ti.API.addEventListener('user:login', function () {
 
   drupalServices.getToken({
     success: function(token) {
-      Ti.App.Properties.setString("token", token);
+      Ti.App.Properties.setString('token', token);
     },
     error: function(data) {
       alert('Error, contact the admin');
@@ -70,18 +37,20 @@ Titanium.API.addEventListener('user:login', function () {
   });
 
   $.indexView.open({
-    transition: Titanium.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT
+    transition: Ti.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT
   });
-  Titanium.API.fireEvent('index:open');
+
+  Ti.API.fireEvent('index:open');
 });
 
-// Navigation between tabs.
-Titanium.API.addEventListener('clickMenuChild', function(data) {
+/*
+ *  Navigations behavior declarations.
+ */
+
+Ti.API.addEventListener('clickMenuChild', function(data) {
   $.indexView.tabs[data.tab_id].active = true;
 });
 
-Titanium.API.addEventListener('openAsNavigation', function(data) {
+Ti.API.addEventListener('openAsNavigation', function(data) {
   $.indexView.activeTab.open(data.window);
 });
-
-$.indexView.add(eventsOpenWin);

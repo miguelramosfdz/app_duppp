@@ -12,7 +12,7 @@ function saveFile(_args) {
     return file.nativePath;
 }
 
-var mediaQueue = [], drupalServices = require("drupalServices"), processed = false, medias = Alloy.Collections.media;
+var drupalServices = require("drupalServices"), processed = false, medias = Alloy.Collections.media;
 
 if ("iPhone" === Ti.Platform.osname || "iPad" === Ti.Platform.osname) var ios = true;
 
@@ -38,7 +38,6 @@ var uploadFile = function(media, contribution) {
                         var model = medias.shift();
                         model.destroy();
                         processed = false;
-                        console.log(medias.toJSON());
                         processUpload();
                         Titanium.API.fireEvent("uploadFinish");
                     },
@@ -90,15 +89,12 @@ var processUpload = function() {
     "use strict";
     if (Titanium.Network.online && (Titanium.Network.networkTypeName == Ti.App.Properties.getString("sendConnection") || "3G" == Ti.App.Properties.getString("sendConnection"))) {
         medias.fetch();
-        console.log(medias.toJSON());
         if (0 === medias.length) return Ti.API.info("No video need to be upload");
         var contributions = medias.toJSON();
         var contribution = contributions.shift(), file = Ti.Filesystem.getFile(contribution.file);
         contribution && uploadFile(file.read(), JSON.parse(contribution.node));
     }
 };
-
-exports.mediaQueue = mediaQueue;
 
 exports.addFile = addFile;
 

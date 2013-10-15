@@ -25,6 +25,11 @@ $.eventPage.addEventListener('open', function () {
   drupalServices.nodeRetrieve({
     nid: args.nid,
     success: function(json) {
+
+      if (Titanium.App.Properties.getInt("userUid") == json.uid) {
+        
+      }
+
       if (json.is_flagged) {
         $.like.title = 'Unlike';
       } else {

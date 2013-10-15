@@ -209,6 +209,7 @@ function Controller() {
         drupalServices.nodeRetrieve({
             nid: args.nid,
             success: function(json) {
+                Titanium.App.Properties.getInt("userUid") == json.uid;
                 $.like.title = json.is_flagged ? "Unlike" : "Like";
                 $.likeCount.text = json.like_count.count ? "Likes " + json.like_count.count : "Likes 0";
                 $.commentCount.text = "Comments " + json.comment_count;
