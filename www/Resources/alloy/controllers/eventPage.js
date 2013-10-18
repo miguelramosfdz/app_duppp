@@ -201,8 +201,9 @@ function Controller() {
     $.init = function() {
         APP.log("debug", "event_event.init | " + JSON.stringify(CONFIG));
         $.NavigationBar.setBackgroundColor(APP.Settings.colors.primary || "#000");
-        APP.Device.isHandheld && $.NavigationBar.showBack({
+        $.NavigationBar.showBack({
             callback: function() {
+                $.videoPlayer.stop();
                 APP.removeAllChildren();
             }
         });

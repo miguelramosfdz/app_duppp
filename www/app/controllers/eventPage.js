@@ -8,13 +8,13 @@ $.init = function() {
 
   $.NavigationBar.setBackgroundColor(APP.Settings.colors.primary || "#000");
 
-  if(APP.Device.isHandheld) {
-    $.NavigationBar.showBack({
-      callback: function(_event) {
-        APP.removeAllChildren();
-      }
-    });
-  }
+  $.NavigationBar.showBack({
+    callback: function(_event) {
+      $.videoPlayer.stop();
+
+      APP.removeAllChildren();
+    }
+  });
 
   $.retrieveData();
 };

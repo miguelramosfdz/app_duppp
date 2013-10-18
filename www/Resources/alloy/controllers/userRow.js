@@ -36,17 +36,15 @@ function Controller() {
     $.__views.row.add($.__views.name);
     exports.destroy = function() {};
     _.extend($, $.__views);
-    var args = arguments[0] || {};
-    $.name.text = args.name;
-    $.image.image = 0 == args.field_avatar.length ? "" : args.field_avatar;
-    $.row.uid = args.uid;
-    $.row.name = args.name;
-    $.row.field_avatar = args.field_avatar;
-    args.isNoReturn || $.row.addEventListener("click", function() {
-        var win = Alloy.createController("profilePage", args).getView();
-        Titanium.API.fireEvent("openAsNavigation", {
-            window: win
-        });
+    var APP = require("core");
+    var CONFIG = arguments[0];
+    $.name.text = CONFIG.name;
+    $.image.image = 0 == CONFIG.field_avatar.length ? "" : CONFIG.field_avatar;
+    $.row.uid = CONFIG.uid;
+    $.row.name = CONFIG.name;
+    $.row.field_avatar = CONFIG.field_avatar;
+    CONFIG.isNoReturn || $.row.addEventListener("click", function() {
+        APP.addChild("profilePage", CONFIG);
     });
     _.extend($, exports);
 }
