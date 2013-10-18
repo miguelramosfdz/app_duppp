@@ -1,57 +1,59 @@
-/*
- *	Initialize variables
- */
+var APP = require('core');
+var CONFIG = arguments[0];
+var drupalServices = require('drupalServices');
 
-var dataEvents = [],
-    nav = Alloy.createController('navActions'),
-    uie = require('UiElements'),
-    drupalServices = require('drupalServices'),
-    indicator = uie.createIndicatorWindow();
+$.init = function() {
+  APP.log("debug", "activity.init | " + JSON.stringify(CONFIG));
 
-// Map fields with correct values.
-$.child_window.setLeftNavButton(nav.getView('menuBtn'));
-$.child_window.setRightNavButton(nav.getView('cameraBtn'));
-$.child_window.add(nav.getView("tooltipContainer"));
-$.child_window.add(nav.getView("menu"));
+  APP.openLoading();
 
-/*
- * Get all of my events.
- */
+  $.retrieveData();
 
-// Prepare data and push to the tableView
-function prepareData(data) {
-  dataEvents = [];
+  $.NavigationBar.setBackgroundColor(APP.Settings.colors.primary || "#000");
 
-  data.forEach(function(event){
-    // Add to the main view, only closed events
-    if (event.field_event_closed === "1") {
-      var newsItem = Alloy.createController('eventRow', event).getView();
-      dataEvents.push(newsItem);
-    }
-  });
+  if(CONFIG.isChild === true) {
+    $.NavigationBar.showBack();
+  }
 
-  $.table.setData(dataEvents);
-}
+  if(APP.Settings.useSlideMenu) {
+    $.NavigationBar.showMenu();
+    $.NavigationBar.showCamera();
+  } else {
+    $.NavigationBar.showSettings();
+  }
+};
 
-// Fetch events.
-$.child_window.addEventListener('open', function() {
-  indicator.openIndicator();
-
+$.retrieveData = function() {
   drupalServices.nodeList({
     type: 'my_events',
     success: function(data) {
-      prepareData(data);
-      indicator.closeIndicator();
+      $.handleData(data);
+      APP.closeLoading();
     },
     error: function(data) {
-      indicator.closeIndicator();
-      alert('error');
+      APP.closeLoading();
     }
   });
-});
+};
+
+$.handleData = function(_data) {
+  APP.log("debug", "event.handleData");
+
+  var rows = [];
+
+  _data.forEach(function(event){
+    // Add to the main view, only closed events
+    if (event.field_event_closed === "1") {
+      var newsItem = Alloy.createController('eventRow', event).getView();
+      rows.push(newsItem);
+    }
+  });
+
+  $.container.setData(rows);
+};
 
 var ptrCtrl = Alloy.createWidget('nl.fokkezb.pullToRefresh', null, {
-  table: $.table,
+  table: $.container,
   loader: myLoaderCallback
 });
 
@@ -59,12 +61,14 @@ function myLoaderCallback(widgetCallback) {
   drupalServices.nodeList({
     type: 'my_events',
     success: function(data) {
-      prepareData(data);
+      $.handleData(data);
       widgetCallback(true);
     },
     error: function(data) {
       widgetCallback(true);
-      alert('error');
     }
   });
 }
+
+// Kick off the init
+$.init();

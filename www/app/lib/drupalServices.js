@@ -34,10 +34,12 @@ var nodeRetrieve = function(opts) {
  */
 var nodeList = function(opts) {
   var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + '/events?type='+opts.type;
+    url = REST_PATH + '/events?type='+opts.type+'&search='+opts.title;
 
   xhr.open('GET', url);
   xhr.send();
+
+  Ti.API.info('nodeList info, url: '+url);
 
   xhr.onload = function() {
     var jsonObject = JSON.parse(this.responseText);

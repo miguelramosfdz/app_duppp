@@ -1,0 +1,29 @@
+"Window[platform=ios]": {
+  statusBarStyle: Ti.UI.iPhone.StatusBar.OPAQUE_BLACK
+},
+
+"#MainWindow": {
+  backgroundColor: "#EEE",
+},
+"#MainWindow[platform=android]": {
+  navBarHidden: true,
+  exitOnClose: true
+},
+"#MainWindow[platform=android formFactor=tablet]": {
+  orientationModes: [
+    Ti.UI.LANDSCAPE_LEFT
+  ]
+},
+"#MainWindow[formFactor=handheld]": {
+  orientationModes: [
+    Ti.UI.PORTRAIT
+  ]
+},
+"#GlobalWrapper": {
+  width: "100%",
+  zIndex: 5,
+},
+"#containerWrapper": {
+  top: "0dp",
+  bottom: "60dp"
+}

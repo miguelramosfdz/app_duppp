@@ -21,7 +21,7 @@ module.exports = function(grunt) {
         project_dir : './www/',
         options: {
           distribution_name: 'Arthur Itey (628272242K)',
-          pp_uuid: '95B7636E-CEF0-4D11-9EC0-E6811FE73D37',
+          pp_uuid: 'EFA13848-144D-46DE-9AB1-7FE785AEE428',
           developer_name: 'Arthur Itey (JU5JW4MF8W)',
           device_family: 'iphone',
           target: 'device',

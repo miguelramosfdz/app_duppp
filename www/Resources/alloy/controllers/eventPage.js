@@ -16,12 +16,7 @@ function Controller() {
         }
         drupalServices.likeNode({
             node: data,
-            nid: args.nid
-        });
-    }
-    function comment() {
-        commentFormWin.open({
-            modal: true
+            nid: CONFIG.nid
         });
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
@@ -32,18 +27,23 @@ function Controller() {
     var $ = this;
     var exports = {};
     var __defers = {};
-    $.__views.eventPage = Ti.UI.createWindow({
-        barImage: "bgNavBar.png",
-        barColor: "#000",
+    $.__views.Wrapper = Ti.UI.createView({
         backgroundColor: "#F3F3F3",
-        id: "eventPage"
+        layout: "vertical",
+        id: "Wrapper"
     });
-    $.__views.eventPage && $.addTopLevelView($.__views.eventPage);
+    $.__views.Wrapper && $.addTopLevelView($.__views.Wrapper);
+    $.__views.NavigationBar = Alloy.createWidget("com.chariti.navigationBar", "widget", {
+        id: "NavigationBar",
+        image: "duppp.png",
+        __parentSymbol: $.__views.Wrapper
+    });
+    $.__views.NavigationBar.setParent($.__views.Wrapper);
     $.__views.scrollView = Ti.UI.createScrollView({
         id: "scrollView",
         layout: "vertical"
     });
-    $.__views.eventPage.add($.__views.scrollView);
+    $.__views.Wrapper.add($.__views.scrollView);
     $.__views.videoPlayer = Ti.Media.createVideoPlayer({
         id: "videoPlayer",
         ns: Ti.Media,
@@ -110,7 +110,7 @@ function Controller() {
         layout: "horizontal"
     });
     $.__views.scrollView.add($.__views.actionBtns);
-    $.__views.__alloyId13 = Ti.UI.createButton({
+    $.__views.__alloyId6 = Ti.UI.createButton({
         backgroundImage: "none",
         borderRadius: 0,
         color: "white",
@@ -124,10 +124,9 @@ function Controller() {
         width: 100,
         backgroundColor: "#1193FC",
         title: "Comments",
-        id: "__alloyId13"
+        id: "__alloyId6"
     });
-    $.__views.actionBtns.add($.__views.__alloyId13);
-    comment ? $.__views.__alloyId13.addEventListener("click", comment) : __defers["$.__views.__alloyId13!click!comment"] = true;
+    $.__views.actionBtns.add($.__views.__alloyId6);
     $.__views.like = Ti.UI.createButton({
         backgroundImage: "none",
         borderRadius: 0,
@@ -146,7 +145,7 @@ function Controller() {
     });
     $.__views.actionBtns.add($.__views.like);
     like ? $.__views.like.addEventListener("click", like) : __defers["$.__views.like!click!like"] = true;
-    $.__views.__alloyId14 = Ti.UI.createButton({
+    $.__views.__alloyId7 = Ti.UI.createButton({
         backgroundImage: "none",
         borderRadius: 0,
         color: "white",
@@ -160,9 +159,9 @@ function Controller() {
         width: 100,
         backgroundColor: "#7CCD2F",
         title: "Extra",
-        id: "__alloyId14"
+        id: "__alloyId7"
     });
-    $.__views.actionBtns.add($.__views.__alloyId14);
+    $.__views.actionBtns.add($.__views.__alloyId7);
     $.__views.likeCount = Ti.UI.createLabel({
         bottom: 10,
         color: "#EF5250",
@@ -195,21 +194,25 @@ function Controller() {
     $.__views.scrollView.add($.__views.commentsList);
     exports.destroy = function() {};
     _.extend($, $.__views);
-    Alloy.CFG.rest;
-    var commentFormWin = Alloy.createController("commentForm").getView(), args = arguments[0] || {}, drupalServices = require("drupalServices");
-    $.author.text = args.user_name;
-    $.author_image.image = args.avatar;
-    $.videoPlayer.url = args.video;
-    $.f_title.text = args.title;
-    $.f_date.text = args.created;
-    $.videoPlayer.addEventListener("durationavailable", function() {
-        6e5 > this.duration && $.videoPlayer.play();
-    });
-    $.eventPage.addEventListener("open", function() {
+    var APP = require("core");
+    var CONFIG = arguments[0] || {};
+    var drupalServices = require("drupalServices");
+    Alloy.createController("commentForm").getView();
+    $.init = function() {
+        APP.log("debug", "event_event.init | " + JSON.stringify(CONFIG));
+        $.NavigationBar.setBackgroundColor(APP.Settings.colors.primary || "#000");
+        APP.Device.isHandheld && $.NavigationBar.showBack({
+            callback: function() {
+                APP.removeAllChildren();
+            }
+        });
+        $.retrieveData();
+    };
+    $.retrieveData = function() {
         drupalServices.nodeRetrieve({
-            nid: args.nid,
+            nid: CONFIG.nid,
             success: function(json) {
-                Titanium.App.Properties.getInt("userUid") == json.uid;
+                $.handleData(CONFIG);
                 $.like.title = json.is_flagged ? "Unlike" : "Like";
                 $.likeCount.text = json.like_count.count ? "Likes " + json.like_count.count : "Likes 0";
                 $.commentCount.text = "Comments " + json.comment_count;
@@ -219,8 +222,19 @@ function Controller() {
                 }
             }
         });
+    };
+    $.handleData = function(_data) {
+        APP.log("debug", "event_event.handleData");
+        $.author.text = _data.user_name;
+        $.author_image.image = _data.avatar;
+        $.videoPlayer.url = _data.video;
+        $.f_title.text = _data.title;
+        $.f_date.text = _data.created;
+    };
+    $.videoPlayer.addEventListener("durationavailable", function() {
+        6e5 > this.duration && $.videoPlayer.play();
     });
-    __defers["$.__views.__alloyId13!click!comment"] && $.__views.__alloyId13.addEventListener("click", comment);
+    $.init();
     __defers["$.__views.like!click!like"] && $.__views.like.addEventListener("click", like);
     _.extend($, exports);
 }

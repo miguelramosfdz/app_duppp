@@ -1,15 +1,15 @@
 function Controller() {
     function close() {
         if (0 === medias.length) {
-            indicator.openIndicator();
+            APP.openLoading();
             drupalServices.closeNode({
                 nid: args.nid,
                 success: function() {
-                    indicator.closeIndicator();
+                    APP.closeLoading();
                     Titanium.API.fireEvent("eventCreated");
                 },
                 error: function() {
-                    indicator.closeIndicator();
+                    APP.closeLoading();
                     alert("Sorry, your event cannot be closed.");
                 }
             });
@@ -58,9 +58,8 @@ function Controller() {
     close ? $.__views.button.addEventListener("click", close) : __defers["$.__views.button!click!close"] = true;
     exports.destroy = function() {};
     _.extend($, $.__views);
-    var args = arguments[0] || {}, drupalServices = require("drupalServices");
-    var uie = require("UiElements");
-    var indicator = uie.createIndicatorWindow();
+    var args = arguments[0] || {}, drupalServices = require("drupalServices"), medias = Alloy.Collections.media;
+    var APP = require("core");
     $.title.text = args.title;
     args.uid != Titanium.App.Properties.getInt("userUid") && $.button.hide();
     __defers["$.__views.button!click!close"] && $.__views.button.addEventListener("click", close);

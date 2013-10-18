@@ -1,8 +1,12 @@
 <Alloy>
-  <TabGroup id="indexView">
-    <Require src="activity" />
-    <Require src="myEvents" />
-    <Require src="explore" />
-    <Require src="configuration" />
-  </TabGroup>
+  <Window id="MainWindow">
+    <Require type="widget" src="com.chariti.slideMenu" id="SlideMenu" />
+    <Require type="widget" src="com.chariti.slideMenuRight" id="SlideMenuRight" />
+
+    <View id="GlobalWrapper">
+      <View id="ContentWrapper" />
+
+      <Require type="widget" src="com.chariti.tabs" id="Tabs" />
+    </View>
+  </Window>
 </Alloy>

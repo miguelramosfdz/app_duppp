@@ -6,70 +6,96 @@ function Controller() {
     arguments[0] ? arguments[0]["__itemTemplate"] : null;
     var $ = this;
     var exports = {};
-    $.__views.child_window = Ti.UI.createWindow({
-        barImage: "bgNavBar.png",
-        barColor: "#000",
+    $.__views.Wrapper = Ti.UI.createView({
         backgroundColor: "#F3F3F3",
-        tabBarHidden: true,
-        id: "child_window",
-        title: "Explore"
-    });
-    $.__views.__alloyId20 = Ti.UI.createView({
         layout: "vertical",
-        id: "__alloyId20"
+        id: "Wrapper"
     });
-    $.__views.child_window.add($.__views.__alloyId20);
+    $.__views.Wrapper && $.addTopLevelView($.__views.Wrapper);
+    $.__views.NavigationBar = Alloy.createWidget("com.chariti.navigationBar", "widget", {
+        id: "NavigationBar",
+        image: "duppp.png",
+        __parentSymbol: $.__views.Wrapper
+    });
+    $.__views.NavigationBar.setParent($.__views.Wrapper);
+    $.__views.__alloyId9 = Ti.UI.createView({
+        layout: "vertical",
+        id: "__alloyId9"
+    });
+    $.__views.Wrapper.add($.__views.__alloyId9);
     $.__views.search = Ti.UI.createSearchBar({
         id: "search",
-        hintText: "Search a user"
+        hintText: "Search a @user or #hashtag"
     });
-    $.__views.__alloyId20.add($.__views.search);
+    $.__views.__alloyId9.add($.__views.search);
     $.__views.table = Ti.UI.createTableView({
         id: "table"
     });
-    $.__views.__alloyId20.add($.__views.table);
-    $.__views.tab3 = Ti.UI.createTab({
-        window: $.__views.child_window,
-        id: "tab3",
-        title: "Tab 3",
-        icon: "KS_nav_views.png"
-    });
-    $.__views.tab3 && $.addTopLevelView($.__views.tab3);
+    $.__views.__alloyId9.add($.__views.table);
     exports.destroy = function() {};
     _.extend($, $.__views);
-    var REST_PATH = Alloy.CFG.rest;
-    var data = [], nav = Alloy.createController("navActions"), uie = require("UiElements"), indicator = uie.createIndicatorWindow();
-    $.child_window.setLeftNavButton(nav.getView("menuBtn"));
-    $.child_window.setRightNavButton(nav.getView("cameraBtn"));
-    $.child_window.add(nav.getView("tooltipContainer"));
-    $.child_window.add(nav.getView("menu"));
-    var xhrUsers = Ti.Network.createHTTPClient({
-        onload: function() {
-            data = [];
-            json = JSON.parse(this.responseText);
-            json.forEach(function(user) {
-                if (parseInt(user.uid) !== Titanium.App.Properties.getInt("userUid")) {
-                    var newsItem = Alloy.createController("userRow", user).getView();
-                    data.push(newsItem);
-                }
-            });
-            $.table.setData(data);
-            indicator.closeIndicator();
-        },
-        onerror: function() {},
-        timeout: 5e3
-    });
+    var APP = require("core");
+    var CONFIG = arguments[0];
+    var data = [];
     var last_search = null;
+    var drupalServices = require("drupalServices");
+    $.init = function() {
+        APP.log("debug", "explore.init | " + JSON.stringify(CONFIG));
+        APP.openLoading();
+        $.retrieveData("public", "");
+        $.NavigationBar.setBackgroundColor(APP.Settings.colors.primary || "#000");
+        true === CONFIG.isChild && $.NavigationBar.showBack();
+        if (APP.Settings.useSlideMenu) {
+            $.NavigationBar.showMenu();
+            $.NavigationBar.showCamera();
+        } else $.NavigationBar.showSettings();
+    };
+    $.retrieveData = function(type, search) {
+        drupalServices.nodeList({
+            type: type,
+            title: search,
+            success: function(data) {
+                $.handleData(data);
+                APP.closeLoading();
+            },
+            error: function() {
+                APP.closeLoading();
+            }
+        });
+    };
+    $.handleData = function(_data) {
+        APP.log("debug", "event.handleData");
+        var rows = [];
+        _data.forEach(function(event) {
+            if ("1" === event.field_event_closed) {
+                var newsItem = Alloy.createController("eventRow", event).getView();
+                rows.push(newsItem);
+            }
+        });
+        $.table.setData(rows);
+    };
     $.search.addEventListener("return", function(e) {
         if (e.value != last_search) {
             last_search = e.value;
-            indicator.openIndicator();
-            var urlUsers = REST_PATH + "/duppp_user.json?username=" + e.value;
-            xhrUsers.open("GET", urlUsers);
-            xhrUsers.send();
+            0 === e.value.indexOf("@") ? drupalServices.searchUser({
+                search: e.value.substring(1),
+                success: function(users) {
+                    data = [];
+                    var json = JSON.parse(users);
+                    json.forEach(function(user) {
+                        if (parseInt(user.uid) !== Titanium.App.Properties.getInt("userUid")) {
+                            var newsItem = Alloy.createController("userRow", user).getView();
+                            data.push(newsItem);
+                        }
+                    });
+                    $.table.setData(data);
+                    APP.closeLoading();
+                }
+            }) : $.retrieveData("public", e.value);
             $.search.blur();
         }
     });
+    $.init();
     _.extend($, exports);
 }
 

@@ -1,9 +1,7 @@
-".container": {
-  barImage: "bgNavBar.png",
-  barColor: "#000",
+"#Wrapper": {
   backgroundColor: "#F3F3F3",
-  tabBarHidden: true
-}
+  layout: "vertical"
+},
 
 ".menuItem": {
   color: "white",

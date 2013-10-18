@@ -1,34 +1,4 @@
 function Controller() {
-    function prepareData(data) {
-        dataEvents = [];
-        data.forEach(function(event) {
-            if ("1" === event.field_event_closed_value) {
-                var newsItem = Alloy.createController("eventRow", event).getView();
-                dataEvents.push(newsItem);
-            }
-        });
-        $.table.setData(dataEvents);
-        var height = 200 * dataEvents.length;
-        $.table.setHeight(height);
-    }
-    function follow() {
-        var data;
-        data = "Follow" === $.follow.title ? {
-            action: "flag"
-        } : {
-            action: "unflag"
-        };
-        drupalServices.followUser({
-            node: data,
-            uid: args.uid,
-            success: function() {
-                $.follow.title = "Follow" === $.follow.title ? "Unfollow" : "Follow";
-            },
-            error: function() {
-                alert("error");
-            }
-        });
-    }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     this.__controllerPath = "profilePage";
     arguments[0] ? arguments[0]["__parentSymbol"] : null;
@@ -36,26 +6,30 @@ function Controller() {
     arguments[0] ? arguments[0]["__itemTemplate"] : null;
     var $ = this;
     var exports = {};
-    var __defers = {};
-    $.__views.profilePage = Ti.UI.createWindow({
-        barImage: "bgNavBar.png",
-        barColor: "#000",
+    $.__views.Wrapper = Ti.UI.createView({
         backgroundColor: "#F3F3F3",
-        id: "profilePage"
+        layout: "vertical",
+        id: "Wrapper"
     });
-    $.__views.profilePage && $.addTopLevelView($.__views.profilePage);
+    $.__views.Wrapper && $.addTopLevelView($.__views.Wrapper);
+    $.__views.NavigationBar = Alloy.createWidget("com.chariti.navigationBar", "widget", {
+        id: "NavigationBar",
+        image: "duppp.png",
+        __parentSymbol: $.__views.Wrapper
+    });
+    $.__views.NavigationBar.setParent($.__views.Wrapper);
     $.__views.scrollView = Ti.UI.createScrollView({
         id: "scrollView",
         layout: "vertical"
     });
-    $.__views.profilePage.add($.__views.scrollView);
-    $.__views.__alloyId32 = Ti.UI.createView({
+    $.__views.Wrapper.add($.__views.scrollView);
+    $.__views.__alloyId10 = Ti.UI.createView({
         backgroundColor: "#0679FF",
         height: 107,
         layout: "horizontal",
-        id: "__alloyId32"
+        id: "__alloyId10"
     });
-    $.__views.scrollView.add($.__views.__alloyId32);
+    $.__views.scrollView.add($.__views.__alloyId10);
     $.__views.authorImage = Ti.UI.createImageView({
         borderRadius: 43,
         borderWidth: 4,
@@ -67,7 +41,7 @@ function Controller() {
         width: 90,
         id: "authorImage"
     });
-    $.__views.__alloyId32.add($.__views.authorImage);
+    $.__views.__alloyId10.add($.__views.authorImage);
     $.__views.author = Ti.UI.createLabel({
         color: "FFF",
         font: {
@@ -81,21 +55,21 @@ function Controller() {
         },
         id: "author"
     });
-    $.__views.__alloyId32.add($.__views.author);
-    $.__views.__alloyId33 = Ti.UI.createView({
+    $.__views.__alloyId10.add($.__views.author);
+    $.__views.__alloyId11 = Ti.UI.createView({
         height: 107,
         layout: "horizontal",
-        id: "__alloyId33"
+        id: "__alloyId11"
     });
-    $.__views.scrollView.add($.__views.__alloyId33);
-    $.__views.__alloyId34 = Ti.UI.createView({
+    $.__views.scrollView.add($.__views.__alloyId11);
+    $.__views.__alloyId12 = Ti.UI.createView({
         height: 106,
         width: "50%",
         backgroundColor: "#F39C12",
         layout: "vertical",
-        id: "__alloyId34"
+        id: "__alloyId12"
     });
-    $.__views.__alloyId33.add($.__views.__alloyId34);
+    $.__views.__alloyId11.add($.__views.__alloyId12);
     $.__views.followerCount = Ti.UI.createLabel({
         color: "#FFF",
         font: {
@@ -104,25 +78,25 @@ function Controller() {
         },
         id: "followerCount"
     });
-    $.__views.__alloyId34.add($.__views.followerCount);
-    $.__views.__alloyId35 = Ti.UI.createLabel({
+    $.__views.__alloyId12.add($.__views.followerCount);
+    $.__views.__alloyId13 = Ti.UI.createLabel({
         color: "#FFF",
         font: {
             fontSize: 15,
             fontFamily: "Lato-Regular"
         },
         text: "follower",
-        id: "__alloyId35"
+        id: "__alloyId13"
     });
-    $.__views.__alloyId34.add($.__views.__alloyId35);
-    $.__views.__alloyId36 = Ti.UI.createView({
+    $.__views.__alloyId12.add($.__views.__alloyId13);
+    $.__views.__alloyId14 = Ti.UI.createView({
         height: 106,
         width: "50%",
         backgroundColor: "#E74C3C",
         layout: "vertical",
-        id: "__alloyId36"
+        id: "__alloyId14"
     });
-    $.__views.__alloyId33.add($.__views.__alloyId36);
+    $.__views.__alloyId11.add($.__views.__alloyId14);
     $.__views.eventCount = Ti.UI.createLabel({
         color: "#FFF",
         font: {
@@ -131,40 +105,52 @@ function Controller() {
         },
         id: "eventCount"
     });
-    $.__views.__alloyId36.add($.__views.eventCount);
-    $.__views.__alloyId37 = Ti.UI.createLabel({
+    $.__views.__alloyId14.add($.__views.eventCount);
+    $.__views.__alloyId15 = Ti.UI.createLabel({
         color: "#FFF",
         font: {
             fontSize: 15,
             fontFamily: "Lato-Regular"
         },
         text: "events",
-        id: "__alloyId37"
+        id: "__alloyId15"
     });
-    $.__views.__alloyId36.add($.__views.__alloyId37);
+    $.__views.__alloyId14.add($.__views.__alloyId15);
     $.__views.table = Ti.UI.createTableView({
         id: "table",
         allowsSelection: "false",
         scrollable: "false"
     });
     $.__views.scrollView.add($.__views.table);
-    $.__views.follow = Ti.UI.createButton({
-        id: "follow",
-        title: "Follow"
-    });
-    follow ? $.__views.follow.addEventListener("click", follow) : __defers["$.__views.follow!click!follow"] = true;
-    $.__views.profilePage.rightNavButton = $.__views.follow;
     exports.destroy = function() {};
     _.extend($, $.__views);
-    var drupalServices = require("drupalServices"), args = arguments[0] || {};
-    $.profilePage.addEventListener("open", function() {
-        $.authorImage.image = args.field_avatar;
-        $.followerCount.text = args.follower_count;
-        $.profilePage.title = "Profil";
+    var APP = require("core");
+    var CONFIG = arguments[0] || {};
+    var drupalServices = require("drupalServices");
+    $.init = function() {
+        APP.log("debug", "profile.init | " + JSON.stringify(CONFIG));
+        $.NavigationBar.setBackgroundColor(APP.Settings.colors.primary || "#000");
+        $.authorImage.image = CONFIG.field_avatar;
+        $.followerCount.text = CONFIG.follower_count;
+        APP.Device.isHandheld && $.NavigationBar.showBack({
+            callback: function() {
+                APP.removeAllChildren();
+            }
+        });
+        $.retrieveData();
+    };
+    $.retrieveData = function() {
         drupalServices.userRetrieve({
-            uid: args.uid,
+            uid: CONFIG.uid,
             success: function(data) {
-                $.follow.title = data.user.is_flagged ? "Unfollow" : "Follow";
+                var value;
+                value = data.user.is_flagged ? "Unfollow" : "Follow";
+                $.NavigationBar.showFollow({
+                    text: value,
+                    callback: function() {
+                        $.follow(value);
+                    }
+                });
                 $.followerCount.text = data.user.follow_count;
                 $.eventCount.text = data.user.event_count;
                 $.author.text = data.user.name;
@@ -174,16 +160,47 @@ function Controller() {
             }
         });
         drupalServices.userNodesList({
-            uid: args.uid,
+            uid: CONFIG.uid,
             success: function(json) {
-                prepareData(json);
+                $.handleData(json);
             },
             error: function() {
                 alert("error");
             }
         });
-    });
-    __defers["$.__views.follow!click!follow"] && $.__views.follow.addEventListener("click", follow);
+    };
+    $.handleData = function(_data) {
+        APP.log("debug", "profile.handleData");
+        var rows = [];
+        _data.forEach(function(event) {
+            if ("1" === event.field_event_closed_value) {
+                var newsItem = Alloy.createController("eventRow", event).getView();
+                rows.push(newsItem);
+            }
+        });
+        $.table.setData(rows);
+        var height = 200 * rows.length;
+        $.table.setHeight(height);
+    };
+    $.follow = function(value) {
+        var data;
+        data = "Follow" === value ? {
+            action: "flag"
+        } : {
+            action: "unflag"
+        };
+        drupalServices.followUser({
+            node: data,
+            uid: CONFIG.uid,
+            success: function() {
+                $.NavigationBar.rightLabel.title = "Follow" === value ? "Unfollow" : "Follow";
+            },
+            error: function() {
+                alert("error");
+            }
+        });
+    };
+    $.init();
     _.extend($, exports);
 }
 

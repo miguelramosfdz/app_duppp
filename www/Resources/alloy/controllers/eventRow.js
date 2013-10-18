@@ -16,47 +16,6 @@ function Controller() {
         id: "thumbnail"
     });
     $.__views.row.add($.__views.thumbnail);
-    $.__views.actions = Ti.UI.createView({
-        backgroundImage: "infoBg.png",
-        width: "100%",
-        height: 80,
-        top: 0,
-        id: "actions",
-        layout: "horizontal"
-    });
-    $.__views.row.add($.__views.actions);
-    $.__views.__alloyId15 = Ti.UI.createImageView({
-        top: 20,
-        right: 20,
-        height: 30,
-        image: "love.png",
-        id: "__alloyId15"
-    });
-    $.__views.actions.add($.__views.__alloyId15);
-    $.__views.__alloyId16 = Ti.UI.createImageView({
-        top: 20,
-        right: 20,
-        width: 32.5,
-        image: "comment.png",
-        id: "__alloyId16"
-    });
-    $.__views.actions.add($.__views.__alloyId16);
-    $.__views.__alloyId17 = Ti.UI.createImageView({
-        top: 20,
-        right: 20,
-        height: 30,
-        image: "share.png",
-        id: "__alloyId17"
-    });
-    $.__views.actions.add($.__views.__alloyId17);
-    $.__views.__alloyId18 = Ti.UI.createImageView({
-        top: 30,
-        right: 20,
-        width: 36,
-        image: "extra.png",
-        id: "__alloyId18"
-    });
-    $.__views.actions.add($.__views.__alloyId18);
     $.__views.caption = Ti.UI.createView({
         backgroundImage: "infoBg.png",
         width: "100%",
@@ -85,7 +44,7 @@ function Controller() {
         id: "author"
     });
     $.__views.caption.add($.__views.author);
-    $.__views.__alloyId19 = Ti.UI.createView({
+    $.__views.__alloyId8 = Ti.UI.createView({
         width: 250,
         font: {
             fontSize: 12,
@@ -94,9 +53,9 @@ function Controller() {
         top: 22,
         left: 70,
         layout: "horizontal",
-        id: "__alloyId19"
+        id: "__alloyId8"
     });
-    $.__views.caption.add($.__views.__alloyId19);
+    $.__views.caption.add($.__views.__alloyId8);
     $.__views.f_title = Ti.UI.createLabel({
         font: {
             fontSize: 12,
@@ -104,7 +63,7 @@ function Controller() {
         },
         id: "f_title"
     });
-    $.__views.__alloyId19.add($.__views.f_title);
+    $.__views.__alloyId8.add($.__views.f_title);
     $.__views.f_date = Ti.UI.createLabel({
         font: {
             fontSize: 11,
@@ -118,19 +77,16 @@ function Controller() {
     exports.destroy = function() {};
     _.extend($, $.__views);
     var args = arguments[0] || {};
+    var APP = require("core");
     $.f_title.text = args.title;
     $.f_date.text = args.created;
     $.author_image.image = 0 == args.field_avatar.length ? "" : args.field_avatar;
     $.author.text = args.name;
     $.thumbnail.image = 0 == args.video_thumbnail.length ? "" : args.video_thumbnail;
-    $.author_image.addEventListener("touchend", function() {
-        var win = Alloy.createController("profilePage", args).getView();
-        win.title = $.author.text;
-        Titanium.API.fireEvent("openAsNavigation", {
-            window: win
-        });
+    $.author_image.addEventListener("singletap", function() {
+        APP.addChild("profilePage", args);
     });
-    $.thumbnail.addEventListener("touchend", function() {
+    $.thumbnail.addEventListener("singletap", function() {
         var node = {
             nid: args.nid,
             title: args.title,
@@ -140,11 +96,7 @@ function Controller() {
             video: 0 == args.field_event_video_final.length ? "" : args.field_event_video_final,
             uid: args.uid
         };
-        var win = Alloy.createController("eventPage", node).getView();
-        win.title = "Event";
-        Titanium.API.fireEvent("openAsNavigation", {
-            window: win
-        });
+        APP.addChild("eventPage", node);
     });
     _.extend($, exports);
 }

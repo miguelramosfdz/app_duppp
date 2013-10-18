@@ -1,6 +1,6 @@
 <Alloy>
   <TableViewRow id="row" class="row" layout="horizontal" >
-    <ImageView id="image" class="image" />
-    <Label id="name" class="title" />
+    <ImageView id="image" class="image" touchEnabled="false" />
+    <Label id="name" class="title" touchEnabled="false" />
   </TableViewRow>
 </Alloy>

@@ -37,6 +37,7 @@ function Controller() {
     $.__views.view = Ti.UI.createView({
         height: 200,
         bottom: -170,
+        zIndex: 10,
         id: "view",
         layout: "vertical"
     });
@@ -135,7 +136,7 @@ function Controller() {
     var eventsRaw, dupppUpload = require("dupppUpload"), drupalServices = require("drupalServices"), data = [], medias = Alloy.Collections.media;
     $.labelOpen.hide();
     $.activityIndicator.show();
-    Titanium.API.addEventListener("index:open", function() {
+    Titanium.API.addEventListener("app:open", function() {
         fetchEvents();
     });
     Titanium.App.addEventListener("resume", function() {

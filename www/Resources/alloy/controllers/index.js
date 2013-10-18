@@ -6,64 +6,56 @@ function Controller() {
     arguments[0] ? arguments[0]["__itemTemplate"] : null;
     var $ = this;
     var exports = {};
-    $.__views.indexView = Ti.UI.createTabGroup({
-        id: "indexView"
+    $.__views.MainWindow = Ti.UI.createWindow(function() {
+        var o = {};
+        _.extend(o, {
+            statusBarStyle: Ti.UI.iPhone.StatusBar.OPAQUE_BLACK,
+            backgroundColor: "#EEE"
+        });
+        Alloy.isHandheld && _.extend(o, {
+            orientationModes: [ Ti.UI.PORTRAIT ]
+        });
+        _.extend(o, {
+            id: "MainWindow"
+        });
+        return o;
+    }());
+    $.__views.MainWindow && $.addTopLevelView($.__views.MainWindow);
+    $.__views.SlideMenu = Alloy.createWidget("com.chariti.slideMenu", "widget", {
+        id: "SlideMenu",
+        __parentSymbol: $.__views.MainWindow
     });
-    $.__views.__alloyId21 = Alloy.createController("activity", {
-        id: "__alloyId21"
+    $.__views.SlideMenu.setParent($.__views.MainWindow);
+    $.__views.SlideMenuRight = Alloy.createWidget("com.chariti.slideMenuRight", "widget", {
+        id: "SlideMenuRight",
+        __parentSymbol: $.__views.MainWindow
     });
-    $.__views.indexView.addTab($.__views.__alloyId21.getViewEx({
-        recurse: true
-    }));
-    $.__views.__alloyId22 = Alloy.createController("myEvents", {
-        id: "__alloyId22"
+    $.__views.SlideMenuRight.setParent($.__views.MainWindow);
+    $.__views.GlobalWrapper = Ti.UI.createView({
+        width: "100%",
+        zIndex: 5,
+        id: "GlobalWrapper"
     });
-    $.__views.indexView.addTab($.__views.__alloyId22.getViewEx({
-        recurse: true
-    }));
-    $.__views.__alloyId23 = Alloy.createController("explore", {
-        id: "__alloyId23"
+    $.__views.MainWindow.add($.__views.GlobalWrapper);
+    $.__views.ContentWrapper = Ti.UI.createView({
+        id: "ContentWrapper"
     });
-    $.__views.indexView.addTab($.__views.__alloyId23.getViewEx({
-        recurse: true
-    }));
-    $.__views.__alloyId24 = Alloy.createController("configuration", {
-        id: "__alloyId24"
+    $.__views.GlobalWrapper.add($.__views.ContentWrapper);
+    $.__views.Tabs = Alloy.createWidget("com.chariti.tabs", "widget", {
+        id: "Tabs",
+        __parentSymbol: $.__views.GlobalWrapper
     });
-    $.__views.indexView.addTab($.__views.__alloyId24.getViewEx({
-        recurse: true
-    }));
-    $.__views.indexView && $.addTopLevelView($.__views.indexView);
+    $.__views.Tabs.setParent($.__views.GlobalWrapper);
     exports.destroy = function() {};
     _.extend($, $.__views);
-    var drupalServices = require("drupalServices"), userLoginWin = Alloy.createController("user").getView("userLogin"), eventsOpenWin = Alloy.createController("eventsOpen").getView();
-    $.indexView.add(eventsOpenWin);
-    Ti.API.addEventListener("app:registred", function() {
-        $.indexView.open();
-    });
-    Ti.API.addEventListener("app:anonymous", function() {
-        userLoginWin.open();
-    });
-    Ti.API.addEventListener("user:login", function() {
-        drupalServices.getToken({
-            success: function(token) {
-                Ti.App.Properties.setString("token", token);
-            },
-            error: function() {
-                alert("Error, contact the admin");
-            }
-        });
-        $.indexView.open({
-            transition: Ti.UI.iPhone.AnimationStyle.FLIP_FROM_LEFT
-        });
-        Ti.API.fireEvent("index:open");
-    });
-    Ti.API.addEventListener("clickMenuChild", function(data) {
-        $.indexView.tabs[data.tab_id].active = true;
-    });
-    Ti.API.addEventListener("openAsNavigation", function(data) {
-        $.indexView.activeTab.open(data.window);
-    });
+    var APP = require("core");
+    APP.MainWindow = $.MainWindow;
+    APP.GlobalWrapper = $.GlobalWrapper;
+    APP.ContentWrapper = $.ContentWrapper;
+    APP.Tabs = $.Tabs;
+    APP.SlideMenu = $.SlideMenu;
+    APP.SlideMenuRight = $.SlideMenuRight;
+    APP.init();
     _.extend($, exports);
 }
 

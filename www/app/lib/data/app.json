@@ -1,0 +1,53 @@
+{
+  "id": "Duppp.001",
+  "version": "2.3.0",
+  "minimumVersion": "1.2",
+  "configurationUrl": "",
+  "legal": {
+    "copyright": "Copyright ‌2013 Duppp",
+    "terms": "http://www.appcelerator.com/legal/terms-conditions/",
+    "privacy": ""
+  },
+  "settings": {
+    "share": "Check out this great ChariTi content",
+    "notifications": {
+      "enabled": false,
+      "provider": "UA",
+      "key": "AuKi5Qn3QKGTno3xX9ECYA",
+      "secret": "s-RDQejhRwmx-j4DCaXPMw"
+    },
+    "colors": {
+      "primary": "#E74C3C",
+      "secondary": "#569BBE",
+      "text": "#FFF"
+    },
+    "useSlideMenu": true
+  },
+  "manifest": [
+    "http://chariti.mobi/app/logo.png",
+    "http://chariti.mobi/app/logo@2x.png"
+  ],
+  "tabs": [
+    {
+      "title": "Activity",
+      "type": "activity",
+      "image": "home",
+      "cache": 1440,
+      "tabletSupport": false
+    },
+    {
+      "title": "My Events",
+      "type": "myevents",
+      "image": "event2",
+      "cache": 1440,
+      "tabletSupport": false
+    },
+    {
+      "title": "Explore",
+      "type": "explore",
+      "image": "photo2",
+      "cache": 1440,
+      "tabletSupport": false
+    }
+  ]
+}

@@ -1,1 +1,1 @@
-module.exports = [{"isClass":true,"priority":10000.0023,"key":"container","style":{barImage:"bgNavBar.png",barColor:"#000",backgroundColor:"#F3F3F3",}}];
+module.exports = [{"isClass":true,"priority":10000.0056,"key":"container","style":{barImage:"bgNavBar.png",barColor:"#000",backgroundColor:"#F3F3F3",}}];

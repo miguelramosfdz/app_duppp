@@ -35,23 +35,3 @@
 	height: 200,
 	width: Titanium.UI.FILL
 }
-".actionBtn": {
-	top: 20,
-	right: 20
-}
-".love": {
-	height: 30
-}
-
-".comment": {
-	width: 32.5
-}
-
-".share": {
-	height: 30
-}
-
-".extra": {
-	top: 30,
-	width: 36
-}

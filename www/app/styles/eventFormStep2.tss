@@ -1,0 +1,48 @@
+"#Wrapper": {
+  backgroundColor: "#F3F3F3",
+  layout: "vertical"
+}
+
+".labelLayout": {
+  backgroundColor: "#ecf0f1",
+  width: Titanium.UI.FILL,
+  height: Titanium.UI.SIZE
+}
+
+".label": {
+  color: "#2c3e50",
+  font: { fontSize: 17, fontFamily: 'Lato-Regular' },
+  left: 10,
+  height: 50,
+  width: "70%"
+}
+
+"#textArea": {
+  font: { fontSize: 15, fontFamily: 'Lato-Regular' },
+}
+
+".image": {
+  height: 106.5,
+  width: 106.5
+}
+
+"#search": {
+  barColor: "#16a085"
+}
+
+"#table_recent": {
+  height: 175
+}
+
+".label_header": {
+  backgroundColor: "#16a085",
+  height: 35,
+  width: "100%"
+}
+
+".label_header_text": {
+  color: "#fff",
+  backgroundColor: "#16a085",
+  font: { fontSize: 17, fontFamily: 'Lato-Regular' },
+  left: 10
+}

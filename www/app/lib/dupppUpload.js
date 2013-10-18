@@ -59,7 +59,9 @@ var uploadFile = function (media, contribution) {
             processUpload();
 
             // Add callback for upload finish.
-            Titanium.API.fireEvent('uploadFinish');
+            if (medias.length === 0) {
+              Titanium.API.fireEvent('uploadFinish');
+            }
           },
           error: function() {
             processed = false;

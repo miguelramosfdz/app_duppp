@@ -1,34 +1,30 @@
-var REST_PATH = Alloy.CFG.rest;
+var APP = require("core");
+var CONFIG = arguments[0] || {};
+var drupalServices = require('drupalServices');
+var commentFormWin = Alloy.createController('commentForm').getView();
 
-var data = [],
-  commentFormWin = Alloy.createController('commentForm').getView(),
-  args = arguments[0] || {},
-  drupalServices = require('drupalServices');
+$.init = function() {
+  APP.log("debug", "event_event.init | " + JSON.stringify(CONFIG));
 
-// Map field with correct values
-$.author.text = args.user_name;
-$.author_image.image = args.avatar;
-$.videoPlayer.url = args.video;
-$.f_title.text = args.title;
-$.f_date.text = args.created;
+  $.NavigationBar.setBackgroundColor(APP.Settings.colors.primary || "#000");
 
-$.videoPlayer.addEventListener('durationavailable', function() {
-
-  if (this.duration < 600000) {
-    $.videoPlayer.play();
+  if(APP.Device.isHandheld) {
+    $.NavigationBar.showBack({
+      callback: function(_event) {
+        APP.removeAllChildren();
+      }
+    });
   }
 
-});
+  $.retrieveData();
+};
 
-$.eventPage.addEventListener('open', function () {
-
+$.retrieveData = function() {
   drupalServices.nodeRetrieve({
-    nid: args.nid,
+    nid: CONFIG.nid,
     success: function(json) {
 
-      if (Titanium.App.Properties.getInt("userUid") == json.uid) {
-        
-      }
+      $.handleData(CONFIG);
 
       if (json.is_flagged) {
         $.like.title = 'Unlike';
@@ -50,8 +46,24 @@ $.eventPage.addEventListener('open', function () {
         $.commentsList.add(newsItem);
       }
     }
-  })
+  });
+};
 
+$.handleData = function(_data) {
+  APP.log("debug", "event_event.handleData");
+
+  $.author.text = _data.user_name;
+  $.author_image.image = _data.avatar;
+  $.videoPlayer.url = _data.video;
+  $.f_title.text = _data.title;
+  $.f_date.text = _data.created;
+
+};
+
+$.videoPlayer.addEventListener('durationavailable', function() {
+  if (this.duration < 600000) {
+    $.videoPlayer.play();
+  }
 });
 
 function like () {
@@ -73,12 +85,9 @@ function like () {
 
   drupalServices.likeNode({
     node: data,
-    nid: args.nid
-  })
-}
-
-function comment() {
-  commentFormWin.open({
-    modal: true
+    nid: CONFIG.nid
   });
 }
+
+// Kick off the init
+$.init();

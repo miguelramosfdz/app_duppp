@@ -1,41 +1,48 @@
-// Create another connection to get the user
-var drupalServices = require('drupalServices'),
-  args = arguments[0] || {};
+var APP = require("core");
+var CONFIG = arguments[0] || {};
+var drupalServices = require('drupalServices');
 
-function prepareData(data) {
-  dataEvents = [];
+$.init = function() {
+  APP.log("debug", "profile.init | " + JSON.stringify(CONFIG));
 
-  data.forEach(function(event){
-    // Add to the main view, only closed events
-    if (event.field_event_closed_value === "1") {
-      var newsItem = Alloy.createController('eventRow', event).getView();
-      dataEvents.push(newsItem);
-    }
-  });
+  $.NavigationBar.setBackgroundColor(APP.Settings.colors.primary || "#000");
 
-  $.table.setData(dataEvents);
+  $.authorImage.image = CONFIG.field_avatar;
+  $.followerCount.text = CONFIG.follower_count;
 
-  var height = dataEvents.length * 200;
-  $.table.setHeight(height);
-}
+  if(APP.Device.isHandheld) {
+    $.NavigationBar.showBack({
+      callback: function(_event) {
+        APP.removeAllChildren();
+      }
+    });
+  }
 
-$.profilePage.addEventListener('open', function() {
+  $.retrieveData();
+};
 
-  $.authorImage.image = args.field_avatar;
-  $.followerCount.text = args.follower_count;
-
-  $.profilePage.title = 'Profil';
+$.retrieveData = function() {
 
   drupalServices.userRetrieve({
-    uid: args.uid,
+    uid: CONFIG.uid,
     success: function(data) {
+
+      var value;
 
       // Check if user si flagged by the current user.
       if (data.user.is_flagged) {
-        $.follow.title = 'Unfollow';
+        value = 'Unfollow';
       } else {
-        $.follow.title = 'Follow';
+        value = 'Follow';
       }
+
+      $.NavigationBar.showFollow({
+        text: value,
+        callback: function(_event) {
+          $.follow(value);
+        }
+      });
+
       // map fields with correct values.
       $.followerCount.text = data.user.follow_count;
       $.eventCount.text = data.user.event_count;
@@ -47,22 +54,41 @@ $.profilePage.addEventListener('open', function() {
   });
 
   drupalServices.userNodesList({
-    uid: args.uid,
+    uid: CONFIG.uid,
     success: function(json) {
-      prepareData(json);
+      $.handleData(json);
     },
     error: function(data) {
       alert('error');
     }
-  })
+  });
+};
 
-});
+$.handleData = function(_data) {
+  APP.log("debug", "profile.handleData");
 
-function follow () {
+  var rows = [];
+
+  _data.forEach(function(event){
+    // Add to the main view, only closed events
+    if (event.field_event_closed_value === "1") {
+      var newsItem = Alloy.createController('eventRow', event).getView();
+      rows.push(newsItem);
+    }
+  });
+
+  $.table.setData(rows);
+
+  var height = rows.length * 200;
+  $.table.setHeight(height);
+
+};
+
+$.follow = function(value) {
 
   var data;
 
-  if ($.follow.title === 'Follow') {
+  if (value === 'Follow') {
     data = {
       'action': 'flag'
     };
@@ -74,12 +100,12 @@ function follow () {
 
   drupalServices.followUser({
     node: data,
-    uid: args.uid,
+    uid: CONFIG.uid,
     success: function(user) {
-      if ($.follow.title === 'Follow') {
-        $.follow.title = 'Unfollow';
+      if (value === 'Follow') {
+        $.NavigationBar.rightLabel.title = 'Unfollow';
       } else {
-        $.follow.title = 'Follow';
+        $.NavigationBar.rightLabel.title = 'Follow';
       }
     },
     error: function(data) {
@@ -88,3 +114,5 @@ function follow () {
   });
 }
 
+// Kick off the init
+$.init();

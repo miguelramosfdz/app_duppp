@@ -39,7 +39,7 @@ var uploadFile = function(media, contribution) {
                         model.destroy();
                         processed = false;
                         processUpload();
-                        Titanium.API.fireEvent("uploadFinish");
+                        0 === medias.length && Titanium.API.fireEvent("uploadFinish");
                     },
                     error: function() {
                         processed = false;

@@ -55,7 +55,7 @@ $.labelOpen.hide();
 $.activityIndicator.show();
 
 // Call the xhr.
-Titanium.API.addEventListener('index:open', function(data) {
+Titanium.API.addEventListener('app:open', function(data) {
   fetchEvents();
 });
 

@@ -20,7 +20,8 @@ function Controller() {
         bottom: 3,
         height: 45,
         borderRadius: 2,
-        id: "image"
+        id: "image",
+        touchEnabled: "false"
     });
     $.__views.row.add($.__views.image);
     $.__views.name = Ti.UI.createLabel({
@@ -29,7 +30,8 @@ function Controller() {
             fontSize: 18,
             fontFamily: "Lato-Regular"
         },
-        id: "name"
+        id: "name",
+        touchEnabled: "false"
     });
     $.__views.row.add($.__views.name);
     exports.destroy = function() {};

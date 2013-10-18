@@ -2,12 +2,10 @@
  *  Initialize variables
  */
 
-var data = [],
-  args = arguments[0] || {},
-  drupalServices = require('drupalServices');
-
-var uie = require('UiElements');
-var indicator = uie.createIndicatorWindow();
+var args = arguments[0] || {},
+  drupalServices = require('drupalServices'),
+  medias = Alloy.Collections.media;
+var APP = require("core");
 
 // Map field with correct values
 $.title.text = args.title;
@@ -16,22 +14,21 @@ if (args.uid != Titanium.App.Properties.getInt('userUid')) {
   $.button.hide();
 }
 
-
 function close() {
 
   // Doesn't allow to close if you still have event to close.
   if (medias.length === 0) {
 
-    indicator.openIndicator();
+    APP.openLoading();
 
     drupalServices.closeNode({
       nid: args.nid,
       success: function(data) {
-        indicator.closeIndicator();
+        APP.closeLoading();
         Titanium.API.fireEvent('eventCreated');
       },
       error: function(data) {
-        indicator.closeIndicator();
+        APP.closeLoading();
         alert('Sorry, your event cannot be closed.');
       }
     });

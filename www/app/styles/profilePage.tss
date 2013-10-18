@@ -1,8 +1,7 @@
-"#profilePage": {
-	barImage: "bgNavBar.png",
-	barColor: "#000",
-	backgroundColor: "#F3F3F3"
-}
+"#Wrapper": {
+  backgroundColor: "#F3F3F3",
+  layout: "vertical"
+},
 
 ".header": {
   backgroundColor: "#0679FF",

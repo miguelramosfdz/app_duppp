@@ -1,6 +1,7 @@
 ".container": {
   height: 200,
   bottom: -170,
+  zIndex: 10
 }
 
 "#provressView": {

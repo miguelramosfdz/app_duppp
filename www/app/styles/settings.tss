@@ -1,0 +1,20 @@
+"#Wrapper": {
+  backgroundColor: "#F3F3F3",
+  layout: "vertical"
+},
+
+"#table": {
+  style: Titanium.UI.iPhone.TableViewStyle.GROUPED,
+  backgroundColor: "#ecf0f1",
+}
+
+".table_view_row": {
+  color: "#2c3e50",
+  backgroundColor: "#fff",
+  font: { fontSize: 15, fontFamily: 'Lato-Regular' }
+}
+
+"#swWifi": {
+  right: 10,
+  value: false
+}

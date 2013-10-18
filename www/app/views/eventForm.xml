@@ -1,6 +1,6 @@
 <Alloy>
-
-	<Window id="eventFormWindow" title="New event" class="container" layout="vertical">
+  <View id="Wrapper">
+    <Require type="widget" src="com.chariti.navigationBar" id="NavigationBar" image="duppp.png" />
 
     <View class="labelLayout" >
       <Label class="label" text="Description" />
@@ -14,28 +14,5 @@
       <Label class="label" text="Private" />
       <Switch id="switchPrivate" title="Private" value="0" />
     </View>
-
-    <RightNavButton>
-      <Button title="Next" onClick="nextStep" />
-    </RightNavButton>
-  </Window>
-
-
-
-  <Window id="eventFormWindowStep2" title="Invite Contact" class="container" layout="vertical">
-
-    <View class="label_header">
-      <Label class="label_header_text" text="Recent Users" />
-    </View>
-    <TableView id="table_recent" class="container" allowsSelectionDuringEditing="true" />
-
-    <SearchBar id="search" hintText="Search a user" />
-    <TableView id="table" class="container" allowsSelectionDuringEditing="true" />
-
-
-    <RightNavButton>
-      <Button id="createBtn" title="OK" onClick="createEvent" />
-    </RightNavButton>
-  </Window>
-
+  </View>
 </Alloy>

@@ -1,7 +1,9 @@
 <Alloy>
-	<Tab id="tab1" title="Tab 1" icon="KS_nav_views.png">
-	   <Window id='child_window' title="Activity" class="container">
-			<TableView id="table" allowsSelection="false"/>
-		</Window>
-	</Tab>
+  <View id="Wrapper">
+    <Require type="widget" src="com.chariti.navigationBar" id="NavigationBar" image="duppp.png" />
+
+    <View id="tableWrapper">
+      <TableView id="container" allowsSelection="false" />
+    </View>
+  </View>
 </Alloy>

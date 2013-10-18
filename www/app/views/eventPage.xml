@@ -1,5 +1,7 @@
 <Alloy>
-	<Window id="eventPage" class="eventPage">
+  <View id="Wrapper">
+    <Require type="widget" src="com.chariti.navigationBar" id="NavigationBar" image="duppp.png" />
+
 		<ScrollView id="scrollView" class="container" layout='vertical'>
 			<VideoPlayer id="videoPlayer" ns="Ti.Media" top="0" height="300" width="320" backgroundColor="black" autoplay="false" />
 			<View id="caption" class="caption">
@@ -9,7 +11,7 @@
 				<Label id="f_date" class="date" />
 			</View>
       <View id="actionBtns" layout='horizontal' >
-        <Button title="Comments" onClick="comment" class="btn comments" />
+        <Button title="Comments" class="btn comments" />
         <Button id="like" title="Like" onClick="like" class="btn like" />
         <Button title="Extra" class="btn extra" />
       </View>
@@ -17,5 +19,5 @@
       <Label id="commentCount" />
       <View id="commentsList" layout='vertical' />
 		</ScrollView>
-	</Window>
+  </View>
 </Alloy>

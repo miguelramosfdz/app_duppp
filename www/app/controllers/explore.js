@@ -1,62 +1,97 @@
-var REST_PATH = Alloy.CFG.rest;
-
-/*
- *  Initialize variables
- */
-
-var data = [],
-  url = REST_PATH + "/event.json?type=activity",
-  nav = Alloy.createController('navActions'),
-  uie = require('UiElements'),
-  indicator = uie.createIndicatorWindow();
-
-// Add button and menu to current window.
-$.child_window.setLeftNavButton(nav.getView('menuBtn'));
-$.child_window.setRightNavButton(nav.getView('cameraBtn'));
-$.child_window.add(nav.getView("tooltipContainer"));
-$.child_window.add(nav.getView("menu"));
-
-var xhrUsers = Ti.Network.createHTTPClient({
-  // Success callback.
-  onload: function(e) {
-
-    data = [];
-
-    // Add events to views.
-    json = JSON.parse(this.responseText);
-    json.forEach(function(user){
-      if (parseInt(user.uid) !== Titanium.App.Properties.getInt("userUid")) {
-        // Keep only user different from current user.
-        var newsItem = Alloy.createController('userRow', user).getView();
-        data.push(newsItem);
-      }
-    });
-
-    // Update View.
-    $.table.setData(data);
-
-    indicator.closeIndicator();
-  },
-
-  // Error callback
-  onerror: function(e) {
-    // Do ...
-  },
-
-  timeout: 5000
-});
-
+var APP = require('core');
+var CONFIG = arguments[0];
+var data = [];
 var last_search = null;
+var drupalServices = require('drupalServices');
+
+$.init = function() {
+  APP.log("debug", "explore.init | " + JSON.stringify(CONFIG));
+
+  APP.openLoading();
+
+  $.retrieveData('public', '');
+
+  $.NavigationBar.setBackgroundColor(APP.Settings.colors.primary || "#000");
+
+  if(CONFIG.isChild === true) {
+    $.NavigationBar.showBack();
+  }
+
+  if(APP.Settings.useSlideMenu) {
+    $.NavigationBar.showMenu();
+    $.NavigationBar.showCamera();
+  } else {
+    $.NavigationBar.showSettings();
+  }
+};
+
+$.retrieveData = function(type, search) {
+  drupalServices.nodeList({
+    type: type,
+    title: search,
+    success: function(data) {
+      $.handleData(data);
+      APP.closeLoading();
+    },
+    error: function(data) {
+      APP.closeLoading();
+    }
+  });
+};
+
+$.handleData = function(_data) {
+  APP.log("debug", "event.handleData");
+
+  var rows = [];
+
+  _data.forEach(function(event){
+    // Add to the main view, only closed events
+    if (event.field_event_closed === "1") {
+      var newsItem = Alloy.createController('eventRow', event).getView();
+      rows.push(newsItem);
+    }
+  });
+
+  $.table.setData(rows);
+};
 
 $.search.addEventListener('return', function (e) {
   if (e.value !=  last_search) {
     last_search = e.value;
-    indicator.openIndicator();
 
-    var urlUsers = REST_PATH + '/duppp_user.json?username=' + e.value;
-    xhrUsers.open("GET", urlUsers);
-    xhrUsers.send();
+    if (e.value.indexOf('@') === 0) {
+      drupalServices.searchUser({
+        search: e.value.substring(1),
+        success: function(users) {
+
+          data = [];
+
+          var json = JSON.parse(users);
+
+          json.forEach(function(user){
+            if (parseInt(user.uid) !== Titanium.App.Properties.getInt("userUid")) {
+              // Keep only user different from current user.
+              var newsItem = Alloy.createController('userRow', user).getView();
+              data.push(newsItem);
+            }
+          });
+
+          // Update View.
+          $.table.setData(data);
+
+          APP.closeLoading();
+        }
+      });
+    } else {
+
+      $.retrieveData('public', e.value);
+
+    }
 
     $.search.blur();
   }
+
 });
+
+// Kick off the init
+$.init();
