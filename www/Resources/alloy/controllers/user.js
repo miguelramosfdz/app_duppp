@@ -14,7 +14,7 @@ function Controller() {
                         Ti.App.Properties.setString("token", token);
                         $.userLoginDuppp.close();
                         APP.MainWindow.open();
-                        APP.handleNavigation(0);
+                        APP.handleNavigation(2);
                         APP.eventsOpen.fetchEvents();
                     },
                     error: function() {

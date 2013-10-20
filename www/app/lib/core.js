@@ -125,7 +125,7 @@ var APP = {
         APP.eventsOpen.fetchEvents();
 
         // The initial screen to show
-        APP.handleNavigation(0);
+        APP.handleNavigation(2);
       },
       anonymous: function () {
         var win = Alloy.createController('user').getView('userLogin');

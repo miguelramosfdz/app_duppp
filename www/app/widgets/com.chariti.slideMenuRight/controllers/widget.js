@@ -118,7 +118,7 @@ $.addData = function(events) {
 
   for(var i = 0; i < events.data.length; i++) {
     var tab = Ti.UI.createTableViewRow({
-      height: "35dp",
+      height: "40dp",
       backgroundcolor: "#111",
       backgroundSelectedColor: "#222",
       selectedBackgroundColor: "#222",
@@ -130,9 +130,9 @@ $.addData = function(events) {
       top: "0dp",
       left: "10dp",
       right: "13dp",
-      height: "35dp",
+      height: "40dp",
       font: {
-        fontSize: "16dp",
+        fontSize: "17dp",
         fontFamily: "Lato-Regular"
       },
       color: "#FFF",

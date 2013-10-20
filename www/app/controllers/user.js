@@ -31,7 +31,7 @@ function login(e){
           APP.MainWindow.open();
 
           // The initial screen to show
-          APP.handleNavigation(0);
+          APP.handleNavigation(2);
           APP.eventsOpen.fetchEvents();
 
         },

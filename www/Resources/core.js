@@ -75,7 +75,7 @@ var APP = {
             registred: function() {
                 APP.MainWindow.open();
                 APP.eventsOpen.fetchEvents();
-                APP.handleNavigation(0);
+                APP.handleNavigation(2);
             },
             anonymous: function() {
                 var win = Alloy.createController("user").getView("userLogin");
