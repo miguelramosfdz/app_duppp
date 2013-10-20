@@ -1,5 +1,7 @@
 var APP = require("core");
 var dupppUpload = require('dupppUpload');
+var medias = Alloy.Collections.media;
+var drupalServices = require('drupalServices');
 
 $.init = function() {
 
@@ -26,6 +28,7 @@ $.openCamera = function(nid) {
 
     success: function(event) {
 
+      APP.closeMenuRight();
       dupppUpload.addFile(event.media, nid, new Date().getTime(), user.uid);
 
     },
@@ -54,6 +57,65 @@ $.openForm = function() {
   var win = Alloy.createController('eventForm').getView('eventFormWindow');
 
   APP.addChild('eventForm', {}, true);
+};
+
+$.confirmDialog = function(_data) {
+  var alert = Titanium.UI.createAlertDialog({
+      title: 'Close',
+      message: 'Are you sure you want to close this event and make the film ?',
+      buttonNames: ['Yes', 'No'],
+      cancel: 1
+  });
+
+  alert.addEventListener('click', function(e) {
+    //Clicked cancel, first check is for iphone, second for android
+    if (e.cancel === e.index || e.cancel === true) {
+      return;
+    }
+
+    //now you can use parameter e to switch/case
+
+    switch (e.index) {
+      case 0:
+        $.close(_data);
+      break;
+
+      //This will never be reached, if you specified cancel for index 1
+      case 1: Titanium.API.info('Clicked button 1 (NO)');
+      break;
+
+      default:
+      break;
+    }
+
+  });
+
+  alert.show();
+};
+
+$.close = function(_data) {
+
+  // Doesn't allow to close if you still have event to close.
+  if (medias.length === 0) {
+
+    APP.closeMenuRight();
+    APP.openLoading();
+
+    drupalServices.closeNode({
+      nid: _data.nid,
+      success: function(data) {
+        APP.closeLoading();
+        Ti.API.fireEvent('eventCreated');
+      },
+      error: function(data) {
+        APP.closeLoading();
+        alert('Sorry, your event cannot be closed.');
+      }
+    });
+
+  } else {
+    alert('Sorry, your cannot close your event, because some videos need to be uploaded.');
+  }
 };
 
 $.addData = function(events) {
@@ -86,6 +148,11 @@ $.addData = function(events) {
 
   viewCreate.add(createLabel);
   create.add(viewCreate);
+
+  create.addEventListener("click", function(_event) {
+    $.openForm();
+    APP.closeMenuRight();
+  });
 
   $.tabs.push(create);
 
@@ -121,8 +188,43 @@ $.addData = function(events) {
       height: "40dp",
       backgroundcolor: "#111",
       backgroundSelectedColor: "#222",
-      selectedBackgroundColor: "#222",
-      nid: events.data[i].nid
+      selectedBackgroundColor: "#222"
+    });
+
+    var take = Titanium.UI.createButton({
+       title: 'Rec',
+       backgroundColor: "#c0392b",
+       backgroundImage: 'none',
+       right: 60,
+       width: 60,
+       font: {
+         fontSize: "17dp",
+         fontFamily: "Lato-Regular"
+       },
+       height: "30dp",
+       nid: events.data[i].nid
+    });
+
+    var done = Titanium.UI.createButton({
+       title: 'Done',
+       backgroundColor: "#27ae60",
+       backgroundImage: 'none',
+       right: 5,
+       width: 50,
+       font: {
+         fontSize: "15dp",
+         fontFamily: "Lato-Regular"
+       },
+       height: "30dp",
+       nid: events.data[i].nid
+    });
+
+    take.addEventListener('click', function (_event) {
+      $.openCamera(_event.source.nid);
+    });
+
+    done.addEventListener('click', function (_event) {
+      $.confirmDialog(_event.source);
     });
 
     var label = Ti.UI.createLabel({
@@ -140,6 +242,8 @@ $.addData = function(events) {
     });
 
     tab.add(label);
+    tab.add(take);
+    tab.add(done);
 
     $.tabs.push(tab);
   }
@@ -149,15 +253,6 @@ $.addData = function(events) {
 
 Ti.API.addEventListener('myEvents:fetched', function (data) {
   $.addData(data);
-});
-
-$.Tabs.addEventListener("click", function(_event) {
-  if(typeof _event.source.nid !== "undefined") {
-    $.openCamera(_event.source.nid);
-  } else {
-    $.openForm();
-    APP.closeMenuRight();
-  }
 });
 
 // Move the UI down if iOS7+

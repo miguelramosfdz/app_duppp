@@ -10,9 +10,6 @@ $.fetchEvents = function() {
 
   if (APP.Network.online) {
 
-    $.labelOpen.hide();
-    $.activityIndicator.show();
-
     drupalServices.nodeList({
       type: 'my_events',
       success: function(json) {
@@ -34,15 +31,7 @@ $.fetchEvents = function() {
           data: eventsRaw
         };
 
-        Titanium.API.fireEvent('myEvents:fetched', events);
-
-        // Update View.
-        $.table.setData(data);
-        $.labelOpen.text = data.length + " events in progress";
-
-        // Display the label with correct value.
-        $.activityIndicator.hide();
-        $.labelOpen.show();
+        Ti.API.fireEvent('myEvents:fetched', events);
       },
       error: function(data) {
         $.fetchEvents();
@@ -61,7 +50,7 @@ Titanium.API.addEventListener('startUpload', function (data) {
   $.provressView.height = 20;
 
   $.view.animate({
-    bottom: -150,
+    bottom: 0,
     duration: 200
   });
 
@@ -80,7 +69,7 @@ Titanium.API.addEventListener('uploadInProgress', function (data) {
 Titanium.API.addEventListener('uploadFinish', function (data) {
 
   $.view.animate({
-    bottom: -170,
+    bottom: -20,
     duration: 200
   });
 
@@ -88,23 +77,5 @@ Titanium.API.addEventListener('uploadFinish', function (data) {
   $.pb.hide();
   $.provressView.height = 0;
   $.pb.setValue(0);
-
-});
-
-$.viewLabel.addEventListener('singletap', function (e) {
-  $.view.animate({
-    bottom: 0,
-    duration: 500
-  });
-});
-
-$.view.addEventListener('touchmove', function (e) {
-
-  if (e.y > 0) {
-    $.view.animate({
-      bottom: -170,
-      duration: 500
-    });
-  }
 
 });
