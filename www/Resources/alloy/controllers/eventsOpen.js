@@ -1,31 +1,34 @@
 function Controller() {
     function fetchEvents() {
-        drupalServices.nodeList({
-            type: "my_events",
-            success: function(json) {
-                data = [];
-                eventsRaw = [];
-                json.forEach(function(event) {
-                    if ("0" === event.field_event_closed) {
-                        var newsItem = Alloy.createController("eventOpenRow", event).getView();
-                        data.push(newsItem);
-                        eventsRaw.push(event);
-                    }
-                });
-                var events = {
-                    data: eventsRaw
-                };
-                Titanium.API.fireEvent("myEvents:fetched", events);
-                $.table.setData(data);
-                $.labelOpen.text = data.length + " events in progress";
-                $.activityIndicator.hide();
-                $.labelOpen.show();
-                Titanium.UI.iPhone.setAppBadge(data.length);
-            },
-            error: function() {
-                alert("error");
-            }
-        });
+        if (APP.Network.online) {
+            $.labelOpen.hide();
+            $.activityIndicator.show();
+            drupalServices.nodeList({
+                type: "my_events",
+                success: function(json) {
+                    data = [];
+                    eventsRaw = [];
+                    json.forEach(function(event) {
+                        if ("0" === event.field_event_closed) {
+                            var newsItem = Alloy.createController("eventOpenRow", event).getView();
+                            data.push(newsItem);
+                            eventsRaw.push(event);
+                        }
+                    });
+                    var events = {
+                        data: eventsRaw
+                    };
+                    Titanium.API.fireEvent("myEvents:fetched", events);
+                    $.table.setData(data);
+                    $.labelOpen.text = data.length + " events in progress";
+                    $.activityIndicator.hide();
+                    $.labelOpen.show();
+                },
+                error: function() {
+                    fetchEvents();
+                }
+            });
+        }
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     this.__controllerPath = "eventsOpen";
@@ -134,20 +137,15 @@ function Controller() {
     exports.destroy = function() {};
     _.extend($, $.__views);
     var eventsRaw, dupppUpload = require("dupppUpload"), drupalServices = require("drupalServices"), data = [], medias = Alloy.Collections.media;
-    $.labelOpen.hide();
-    $.activityIndicator.show();
+    var APP = require("core");
     Titanium.API.addEventListener("app:open", function() {
         fetchEvents();
     });
     Titanium.App.addEventListener("resume", function() {
-        $.labelOpen.hide();
-        $.activityIndicator.show();
         dupppUpload.processUpload();
         fetchEvents();
     });
     Titanium.API.addEventListener("eventCreated", function() {
-        $.labelOpen.hide();
-        $.activityIndicator.show();
         fetchEvents();
     });
     Titanium.API.addEventListener("startUpload", function() {

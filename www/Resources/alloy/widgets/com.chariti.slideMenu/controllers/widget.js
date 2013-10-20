@@ -18,14 +18,14 @@ function Controller() {
         width: "80%",
         top: "0dp",
         left: "-80%",
-        backgroundColor: "#000",
+        backgroundColor: "#2c3e50",
         id: "Wrapper"
     });
     $.__views.Wrapper && $.addTopLevelView($.__views.Wrapper);
     $.__views.Tabs = Ti.UI.createTableView({
         top: "0dp",
-        backgroundColor: "#111",
-        separatorColor: "#222",
+        backgroundColor: "#2c3e50",
+        separatorColor: "#34495e",
         separatorStyle: Ti.UI.iPhone.TableViewSeparatorStyle.SINGLE_LINE,
         id: "Tabs"
     });
@@ -45,8 +45,8 @@ function Controller() {
                 id: _params.tabs[i].id,
                 height: "47dp",
                 backgroundcolor: "#111",
-                backgroundSelectedColor: "#222",
-                selectedBackgroundColor: "#222"
+                backgroundSelectedColor: "#27ae60",
+                selectedBackgroundColor: "#27ae60"
             });
             var icon = Ti.UI.createImageView({
                 image: _params.tabs[i].image,
@@ -65,7 +65,7 @@ function Controller() {
                 height: "47dp",
                 font: {
                     fontSize: "16dp",
-                    fontFamily: "HelveticaNeue-Light"
+                    fontFamily: "Lato-Regular"
                 },
                 color: "#FFF",
                 touchEnabled: false

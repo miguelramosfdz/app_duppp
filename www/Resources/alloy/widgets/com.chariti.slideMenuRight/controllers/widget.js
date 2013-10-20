@@ -18,14 +18,14 @@ function Controller() {
         width: "80%",
         top: "0dp",
         right: "-80%",
-        backgroundColor: "#000",
+        backgroundColor: "#2c3e50",
         id: "Wrapper"
     });
     $.__views.Wrapper && $.addTopLevelView($.__views.Wrapper);
     $.__views.Tabs = Ti.UI.createTableView({
         top: "0dp",
-        backgroundColor: "#111",
-        separatorColor: "#222",
+        backgroundColor: "#2c3e50",
+        separatorColor: "#34495e",
         separatorStyle: Ti.UI.iPhone.TableViewSeparatorStyle.SINGLE_LINE,
         id: "Tabs"
     });
@@ -71,7 +71,7 @@ function Controller() {
     $.addData = function(events) {
         $.tabs = [];
         var create = Ti.UI.createTableViewRow({
-            height: "40dp",
+            height: "60dp",
             backgroundSelectedColor: "#27ae60",
             selectedBackgroundColor: "#27ae60"
         });
@@ -82,20 +82,38 @@ function Controller() {
         var createLabel = Ti.UI.createLabel({
             text: "Create an Event",
             top: "0dp",
-            height: "40dp",
+            height: "60dp",
             backgroundcolor: "#27ae60",
             font: {
                 fontSize: "18dp",
-                fontFamily: "Lato-Light"
+                fontFamily: "Lato-Regular"
             },
-            color: "#2c3e50",
+            color: "#FFF",
             touchEnabled: false
         });
         viewCreate.add(createLabel);
         create.add(viewCreate);
         $.tabs.push(create);
+        var viewHeader = Ti.UI.createView({
+            backgroundColor: "#2980b9",
+            height: "27dp",
+            width: Ti.UI.FILL
+        });
+        var header = Ti.UI.createLabel({
+            text: "Events in progress",
+            top: "0dp",
+            height: "25dp",
+            left: "10dp",
+            font: {
+                fontSize: "13dp",
+                fontFamily: "Lato-Regular"
+            },
+            color: "#FFF",
+            touchEnabled: false
+        });
+        viewHeader.add(header);
         var section1 = Ti.UI.createTableViewSection({
-            headerTitle: "Events in progress"
+            headerView: viewHeader
         });
         $.tabs.push(section1);
         for (var i = 0; events.data.length > i; i++) {
@@ -114,7 +132,7 @@ function Controller() {
                 height: "35dp",
                 font: {
                     fontSize: "16dp",
-                    fontFamily: "Lato-Light"
+                    fontFamily: "Lato-Regular"
                 },
                 color: "#FFF",
                 touchEnabled: false

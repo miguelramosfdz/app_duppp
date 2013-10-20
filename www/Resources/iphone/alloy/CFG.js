@@ -7,6 +7,6 @@ module.exports = {
         "com.chariti.slideMenu": "1.0",
         "com.chariti.slideMenuRight": "1.0"
     },
-    rest: "http://duppp.local/api/1.0",
-    base: "http://duppp.local"
+    rest: "http://develop.duppp.com/api/1.0",
+    base: "http://develop.duppp.com"
 };

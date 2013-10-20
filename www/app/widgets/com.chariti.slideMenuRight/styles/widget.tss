@@ -1,12 +1,12 @@
 "#Wrapper": {
-	width: "80%",
-	top: "0dp",
-	right: "-80%",
-	backgroundColor: "#000"
+  width: "80%",
+  top: "0dp",
+  right: "-80%",
+  backgroundColor: "#2c3e50"
 },
 "#Tabs": {
-	top: "0dp",
-	backgroundColor: "#111",
-	separatorColor: "#222",
-	separatorStyle: Ti.UI.iPhone.TableViewSeparatorStyle.SINGLE_LINE
+  top: "0dp",
+  backgroundColor: "#2c3e50",
+  separatorColor: "#34495e",
+  separatorStyle: Ti.UI.iPhone.TableViewSeparatorStyle.SINGLE_LINE
 }

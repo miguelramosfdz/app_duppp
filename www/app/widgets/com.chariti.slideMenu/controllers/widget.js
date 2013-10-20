@@ -15,8 +15,8 @@ $.init = function(_params) {
       id: _params.tabs[i].id,
       height: "47dp",
       backgroundcolor: "#111",
-      backgroundSelectedColor: "#222",
-      selectedBackgroundColor: "#222"
+      backgroundSelectedColor: "#27ae60",
+      selectedBackgroundColor: "#27ae60"
     });
 
     var icon = Ti.UI.createImageView({
@@ -37,7 +37,7 @@ $.init = function(_params) {
       height: "47dp",
       font: {
         fontSize: "16dp",
-        fontFamily: "HelveticaNeue-Light"
+        fontFamily: "Lato-Regular"
       },
       color: "#FFF",
       touchEnabled: false

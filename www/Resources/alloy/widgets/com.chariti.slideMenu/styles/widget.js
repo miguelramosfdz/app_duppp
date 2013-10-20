@@ -12,7 +12,7 @@ module.exports = [ {
         width: "80%",
         top: "0dp",
         left: "-80%",
-        backgroundColor: "#000"
+        backgroundColor: "#2c3e50"
     }
 }, {
     isId: true,
@@ -20,8 +20,8 @@ module.exports = [ {
     key: "Tabs",
     style: {
         top: "0dp",
-        backgroundColor: "#111",
-        separatorColor: "#222",
+        backgroundColor: "#2c3e50",
+        separatorColor: "#34495e",
         separatorStyle: Ti.UI.iPhone.TableViewSeparatorStyle.SINGLE_LINE
     }
 } ];

@@ -4,55 +4,53 @@ var dupppUpload = require('dupppUpload'),
     medias = Alloy.Collections.media,
     eventsRaw;
 
+var APP = require('core');
+
 
 function fetchEvents() {
-  drupalServices.nodeList({
-    type: 'my_events',
-    success: function(json) {
-      data = [];
-      eventsRaw = [];
 
-      // Add events to views.
-      json.forEach(function(event){
+  if (APP.Network.online) {
 
-        // Keep only events open.
-        if (event.field_event_closed === "0") {
-          var newsItem = Alloy.createController('eventOpenRow', event).getView();
-          data.push(newsItem);
-          eventsRaw.push(event);
-        }
-      });
+    $.labelOpen.hide();
+    $.activityIndicator.show();
 
-      var events = {
-        data: eventsRaw
-      };
+    drupalServices.nodeList({
+      type: 'my_events',
+      success: function(json) {
+        data = [];
+        eventsRaw = [];
 
-      Titanium.API.fireEvent('myEvents:fetched', events);
+        // Add events to views.
+        json.forEach(function(event){
 
-      // Update View.
-      $.table.setData(data);
-      $.labelOpen.text = data.length + " events in progress";
+          // Keep only events open.
+          if (event.field_event_closed === "0") {
+            var newsItem = Alloy.createController('eventOpenRow', event).getView();
+            data.push(newsItem);
+            eventsRaw.push(event);
+          }
+        });
 
-      // Display the label with correct value.
-      $.activityIndicator.hide();
-      $.labelOpen.show();
+        var events = {
+          data: eventsRaw
+        };
 
-      // Set a badge on application to see how many events still open.
-      Titanium.UI.iPhone.setAppBadge(data.length);
-    },
-    error: function(data) {
-      alert('error');
-    }
-  });
+        Titanium.API.fireEvent('myEvents:fetched', events);
+
+        // Update View.
+        $.table.setData(data);
+        $.labelOpen.text = data.length + " events in progress";
+
+        // Display the label with correct value.
+        $.activityIndicator.hide();
+        $.labelOpen.show();
+      },
+      error: function(data) {
+        fetchEvents();
+      }
+    });
+  }
 }
-
-
-/*
- * When the view is instantiate.
- */
-
-$.labelOpen.hide();
-$.activityIndicator.show();
 
 // Call the xhr.
 Titanium.API.addEventListener('app:open', function(data) {
@@ -65,16 +63,11 @@ Titanium.API.addEventListener('app:open', function(data) {
 
 Titanium.App.addEventListener('resume', function () {
 
-  $.labelOpen.hide();
-  $.activityIndicator.show();
   dupppUpload.processUpload();
   fetchEvents();
 });
 
 Titanium.API.addEventListener('eventCreated', function (data) {
-
-  $.labelOpen.hide();
-  $.activityIndicator.show();
   fetchEvents();
 });
 

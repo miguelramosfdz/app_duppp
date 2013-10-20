@@ -61,7 +61,7 @@ $.addData = function(events) {
   $.tabs = [];
 
   var create = Ti.UI.createTableViewRow({
-    height: "40dp",
+    height: "60dp",
     backgroundSelectedColor: "#27ae60",
     selectedBackgroundColor: "#27ae60"
   });
@@ -74,13 +74,13 @@ $.addData = function(events) {
   var createLabel = Ti.UI.createLabel({
     text: 'Create an Event',
     top: "0dp",
-    height: "40dp",
+    height: "60dp",
     backgroundcolor: "#27ae60",
     font: {
       fontSize: "18dp",
-      fontFamily: "Lato-Light"
+      fontFamily: "Lato-Regular"
     },
-    color: "#2c3e50",
+    color: "#FFF",
     touchEnabled: false
   });
 
@@ -89,8 +89,29 @@ $.addData = function(events) {
 
   $.tabs.push(create);
 
+  var viewHeader = Ti.UI.createView({
+    backgroundColor: '#2980b9',
+    height: "27dp",
+    width: Ti.UI.FILL
+  });
+
+  var header = Ti.UI.createLabel({
+    text: 'Events in progress',
+    top: "0dp",
+    height: "25dp",
+    left: '10dp',
+    font: {
+      fontSize: "13dp",
+      fontFamily: "Lato-Regular"
+    },
+    color: "#FFF",
+    touchEnabled: false
+  });
+
+  viewHeader.add(header);
+
   var section1 = Ti.UI.createTableViewSection({
-    headerTitle: 'Events in progress'
+    headerView: viewHeader
   });
 
   $.tabs.push(section1);
@@ -112,7 +133,7 @@ $.addData = function(events) {
       height: "35dp",
       font: {
         fontSize: "16dp",
-        fontFamily: "Lato-Light"
+        fontFamily: "Lato-Regular"
       },
       color: "#FFF",
       touchEnabled: false
