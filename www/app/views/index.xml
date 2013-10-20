@@ -2,6 +2,7 @@
   <Window id="MainWindow">
     <Require type="widget" src="com.chariti.slideMenu" id="SlideMenu" />
     <Require type="widget" src="com.chariti.slideMenuRight" id="SlideMenuRight" />
+    <Require type="view" src="eventsOpen" id="eventsOpen"/>
 
     <View id="GlobalWrapper">
       <View id="ContentWrapper" />

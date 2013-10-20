@@ -31,6 +31,11 @@ function Controller() {
         __parentSymbol: $.__views.MainWindow
     });
     $.__views.SlideMenuRight.setParent($.__views.MainWindow);
+    $.__views.eventsOpen = Alloy.createController("eventsOpen", {
+        id: "eventsOpen",
+        __parentSymbol: $.__views.MainWindow
+    });
+    $.__views.eventsOpen.setParent($.__views.MainWindow);
     $.__views.GlobalWrapper = Ti.UI.createView({
         width: "100%",
         zIndex: 5,
@@ -55,6 +60,7 @@ function Controller() {
     APP.Tabs = $.Tabs;
     APP.SlideMenu = $.SlideMenu;
     APP.SlideMenuRight = $.SlideMenuRight;
+    APP.eventsOpen = $.eventsOpen;
     APP.init();
     _.extend($, exports);
 }

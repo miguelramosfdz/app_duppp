@@ -8,6 +8,7 @@ APP.ContentWrapper = $.ContentWrapper;
 APP.Tabs = $.Tabs;
 APP.SlideMenu = $.SlideMenu;
 APP.SlideMenuRight = $.SlideMenuRight;
+APP.eventsOpen = $.eventsOpen;
 
 // Start the APP
 APP.init();

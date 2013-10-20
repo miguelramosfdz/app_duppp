@@ -28,16 +28,11 @@ function login(e){
           // Close the window.
           $.userLoginDuppp.close();
 
-          var openedEvent = Alloy.createController('eventsOpen').getView();
-          APP.MainWindow.add(openedEvent);
-
           APP.MainWindow.open();
 
           // The initial screen to show
           APP.handleNavigation(0);
-
-
-          Ti.API.fireEvent('app:open');
+          APP.eventsOpen.fetchEvents();
 
         },
         error: function(data) {

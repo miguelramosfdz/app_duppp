@@ -1,35 +1,4 @@
 function Controller() {
-    function fetchEvents() {
-        if (APP.Network.online) {
-            $.labelOpen.hide();
-            $.activityIndicator.show();
-            drupalServices.nodeList({
-                type: "my_events",
-                success: function(json) {
-                    data = [];
-                    eventsRaw = [];
-                    json.forEach(function(event) {
-                        if ("0" === event.field_event_closed) {
-                            var newsItem = Alloy.createController("eventOpenRow", event).getView();
-                            data.push(newsItem);
-                            eventsRaw.push(event);
-                        }
-                    });
-                    var events = {
-                        data: eventsRaw
-                    };
-                    Titanium.API.fireEvent("myEvents:fetched", events);
-                    $.table.setData(data);
-                    $.labelOpen.text = data.length + " events in progress";
-                    $.activityIndicator.hide();
-                    $.labelOpen.show();
-                },
-                error: function() {
-                    fetchEvents();
-                }
-            });
-        }
-    }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     this.__controllerPath = "eventsOpen";
     arguments[0] ? arguments[0]["__parentSymbol"] : null;
@@ -136,17 +105,41 @@ function Controller() {
     $.__views.view2.add($.__views.table);
     exports.destroy = function() {};
     _.extend($, $.__views);
-    var eventsRaw, dupppUpload = require("dupppUpload"), drupalServices = require("drupalServices"), data = [], medias = Alloy.Collections.media;
+    var data, eventsRaw, drupalServices = require("drupalServices"), medias = Alloy.Collections.media;
     var APP = require("core");
-    Titanium.API.addEventListener("app:open", function() {
-        fetchEvents();
-    });
-    Titanium.App.addEventListener("resume", function() {
-        dupppUpload.processUpload();
-        fetchEvents();
-    });
+    $.fetchEvents = function() {
+        if (APP.Network.online) {
+            $.labelOpen.hide();
+            $.activityIndicator.show();
+            drupalServices.nodeList({
+                type: "my_events",
+                success: function(json) {
+                    data = [];
+                    eventsRaw = [];
+                    json.forEach(function(event) {
+                        if ("0" === event.field_event_closed) {
+                            var newsItem = Alloy.createController("eventOpenRow", event).getView();
+                            data.push(newsItem);
+                            eventsRaw.push(event);
+                        }
+                    });
+                    var events = {
+                        data: eventsRaw
+                    };
+                    Titanium.API.fireEvent("myEvents:fetched", events);
+                    $.table.setData(data);
+                    $.labelOpen.text = data.length + " events in progress";
+                    $.activityIndicator.hide();
+                    $.labelOpen.show();
+                },
+                error: function() {
+                    $.fetchEvents();
+                }
+            });
+        }
+    };
     Titanium.API.addEventListener("eventCreated", function() {
-        fetchEvents();
+        $.fetchEvents();
     });
     Titanium.API.addEventListener("startUpload", function() {
         $.provressView.height = 20;

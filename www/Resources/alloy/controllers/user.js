@@ -13,11 +13,9 @@ function Controller() {
                     success: function(token) {
                         Ti.App.Properties.setString("token", token);
                         $.userLoginDuppp.close();
-                        var openedEvent = Alloy.createController("eventsOpen").getView();
-                        APP.MainWindow.add(openedEvent);
                         APP.MainWindow.open();
                         APP.handleNavigation(0);
-                        Ti.API.fireEvent("app:open");
+                        APP.eventsOpen.fetchEvents();
                     },
                     error: function() {
                         alert("Error, contact the admin");

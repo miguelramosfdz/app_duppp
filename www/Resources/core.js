@@ -4,6 +4,8 @@ var UTIL = require("utilities");
 
 var drupalServices = require("drupalServices");
 
+var dupppUpload = require("dupppUpload");
+
 var APP = {
     ID: null,
     VERSION: null,
@@ -71,10 +73,8 @@ var APP = {
         APP.build();
         APP.loadSystemInfo({
             registred: function() {
-                var openedEvent = Alloy.createController("eventsOpen").getView();
-                APP.MainWindow.add(openedEvent);
                 APP.MainWindow.open();
-                Ti.API.fireEvent("app:open");
+                APP.eventsOpen.fetchEvents();
                 APP.handleNavigation(0);
             },
             anonymous: function() {
@@ -453,6 +453,8 @@ var APP = {
     },
     resumeObserver: function() {
         APP.log("debug", "APP.resumeObserver");
+        dupppUpload.processUpload();
+        APP.eventsOpen.fetchEvents();
     },
     backButtonObserver: function() {
         APP.log("debug", "APP.backButtonObserver");

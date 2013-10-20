@@ -1,6 +1,7 @@
 var Alloy = require("alloy");
 var UTIL = require("utilities");
 var drupalServices = require('drupalServices');
+var dupppUpload = require('dupppUpload');
 
 var APP = {
   /**
@@ -119,12 +120,9 @@ var APP = {
     APP.loadSystemInfo({
       registred: function () {
 
-        var openedEvent = Alloy.createController('eventsOpen').getView();
-        APP.MainWindow.add(openedEvent);
-
         // Open the main window
         APP.MainWindow.open();
-        Ti.API.fireEvent('app:open');
+        APP.eventsOpen.fetchEvents();
 
         // The initial screen to show
         APP.handleNavigation(0);
@@ -894,6 +892,9 @@ var APP = {
    */
   resumeObserver: function(_event) {
     APP.log("debug", "APP.resumeObserver");
+
+    dupppUpload.processUpload();
+    APP.eventsOpen.fetchEvents();
   },
   /**
    * Back button observer

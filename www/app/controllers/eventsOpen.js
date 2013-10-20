@@ -1,13 +1,12 @@
-var dupppUpload = require('dupppUpload'),
-    drupalServices = require('drupalServices'),
-    data = [],
+var drupalServices = require('drupalServices'),
     medias = Alloy.Collections.media,
+    data,
     eventsRaw;
 
 var APP = require('core');
 
 
-function fetchEvents() {
+$.fetchEvents = function() {
 
   if (APP.Network.online) {
 
@@ -46,29 +45,14 @@ function fetchEvents() {
         $.labelOpen.show();
       },
       error: function(data) {
-        fetchEvents();
+        $.fetchEvents();
       }
     });
   }
 }
 
-// Call the xhr.
-Titanium.API.addEventListener('app:open', function(data) {
-  fetchEvents();
-});
-
-/*
- * Event callback.
- */
-
-Titanium.App.addEventListener('resume', function () {
-
-  dupppUpload.processUpload();
-  fetchEvents();
-});
-
 Titanium.API.addEventListener('eventCreated', function (data) {
-  fetchEvents();
+  $.fetchEvents();
 });
 
 
