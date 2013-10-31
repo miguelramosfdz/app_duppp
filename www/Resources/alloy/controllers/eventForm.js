@@ -18,14 +18,14 @@ function Controller() {
         __parentSymbol: $.__views.Wrapper
     });
     $.__views.NavigationBar.setParent($.__views.Wrapper);
-    $.__views.__alloyId2 = Ti.UI.createView({
+    $.__views.__alloyId1 = Ti.UI.createView({
         backgroundColor: "#ecf0f1",
         width: Titanium.UI.FILL,
         height: Titanium.UI.SIZE,
-        id: "__alloyId2"
+        id: "__alloyId1"
     });
-    $.__views.Wrapper.add($.__views.__alloyId2);
-    $.__views.__alloyId3 = Ti.UI.createLabel({
+    $.__views.Wrapper.add($.__views.__alloyId1);
+    $.__views.__alloyId2 = Ti.UI.createLabel({
         color: "#2c3e50",
         font: {
             fontSize: 17,
@@ -35,9 +35,9 @@ function Controller() {
         height: 50,
         width: "70%",
         text: "Description",
-        id: "__alloyId3"
+        id: "__alloyId2"
     });
-    $.__views.__alloyId2.add($.__views.__alloyId3);
+    $.__views.__alloyId1.add($.__views.__alloyId2);
     $.__views.textArea = Ti.UI.createTextArea({
         font: {
             fontSize: 15,
@@ -51,15 +51,15 @@ function Controller() {
         height: "150"
     });
     $.__views.Wrapper.add($.__views.textArea);
-    $.__views.__alloyId4 = Ti.UI.createView({
+    $.__views.__alloyId3 = Ti.UI.createView({
         backgroundColor: "#ecf0f1",
         width: Titanium.UI.FILL,
         height: Titanium.UI.SIZE,
         layout: "horizontal",
-        id: "__alloyId4"
+        id: "__alloyId3"
     });
-    $.__views.Wrapper.add($.__views.__alloyId4);
-    $.__views.__alloyId5 = Ti.UI.createLabel({
+    $.__views.Wrapper.add($.__views.__alloyId3);
+    $.__views.__alloyId4 = Ti.UI.createLabel({
         color: "#2c3e50",
         font: {
             fontSize: 17,
@@ -69,15 +69,15 @@ function Controller() {
         height: 50,
         width: "70%",
         text: "Private",
-        id: "__alloyId5"
+        id: "__alloyId4"
     });
-    $.__views.__alloyId4.add($.__views.__alloyId5);
+    $.__views.__alloyId3.add($.__views.__alloyId4);
     $.__views.switchPrivate = Ti.UI.createSwitch({
         id: "switchPrivate",
         title: "Private",
         value: "0"
     });
-    $.__views.__alloyId4.add($.__views.switchPrivate);
+    $.__views.__alloyId3.add($.__views.switchPrivate);
     exports.destroy = function() {};
     _.extend($, $.__views);
     var APP = require("core");

@@ -73,15 +73,18 @@ var APP = {
         APP.build();
         APP.loadSystemInfo({
             registred: function() {
-                APP.MainWindow.open();
-                APP.eventsOpen.fetchEvents();
-                APP.handleNavigation(2);
+                APP.startApp();
             },
             anonymous: function() {
                 var win = Alloy.createController("user").getView("userLogin");
                 win.open();
             }
         });
+    },
+    startApp: function() {
+        APP.MainWindow.open();
+        APP.eventsOpen.fetchEvents();
+        APP.handleNavigation(2);
     },
     determineDevice: function() {
         APP.Device.os = "IOS";
@@ -95,14 +98,8 @@ var APP = {
                 drupalServices.systemInfo({
                     success: function(data) {
                         0 !== data.user.uid ? callback.registred && callback.registred(data) : callback.anonymous && callback.anonymous(data);
-                    },
-                    error: function() {
-                        alert("Error, contact the admin");
                     }
                 });
-            },
-            error: function() {
-                alert("Error, contact the admin");
             }
         });
     },

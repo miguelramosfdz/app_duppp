@@ -1,0 +1,8 @@
+<Alloy>
+  <View id="Wrapper">
+    <Require type="widget" src="com.chariti.navigationBar" id="NavigationBar" image="duppp.png" />
+
+    <SearchBar id="search" hintText="Search a user" />
+    <TableView id="table" class="container" />
+  </View>
+</Alloy>

@@ -1,6 +1,7 @@
-var args = arguments[0] || {};
+var CONFIG = arguments[0] || {};
+var moment = require('alloy/moment');
 
 // Map field with correct values
-$.name.text = args.name;
-$.commentBody.text = args.comment_body.und[0].value;
-$.created.text = moment.unix(args.created).fromNow();
+$.name.text = CONFIG.name;
+$.commentBody.text = CONFIG.comment_body.und[0].value;
+$.created.text = moment.unix(CONFIG.created).fromNow();

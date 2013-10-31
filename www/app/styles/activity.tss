@@ -58,3 +58,7 @@
   width:30,
   height:30
 }
+
+"#container": {
+  separatorStyle: Titanium.UI.iPhone.TableViewSeparatorStyle.NONE
+}

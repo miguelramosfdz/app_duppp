@@ -1,8 +1,19 @@
 <Alloy>
-  <Window id="win" class="container">
+  <View id="Wrapper">
+    <Require type="widget" src="com.chariti.navigationBar" id="NavigationBar" text="Comments" />
 
-    <RightNavButton>
-      <Button class="close" onClick="close" title="Close" />
-    </RightNavButton>
-  </Window>
+    <View>
+      <View id="tableWrapper">
+        <TableView id="table" allowsSelection="false" />
+      </View>
+
+      <View id="textWrapper">
+        <View id="textContent" layout="horizontal">
+          <TextArea id="textArea" />
+          <Button id="button" title="Send" />
+        </View>
+      </View>
+    </View>
+
+  </View>
 </Alloy>

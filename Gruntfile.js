@@ -9,7 +9,6 @@ module.exports = function(grunt) {
       ios_sim: {
         platform : 'ios',
         project_dir : './www/',
-        log_level: 'info',
         options: {
           device_family: 'iphone',
           retina: true,
@@ -33,7 +32,7 @@ module.exports = function(grunt) {
         log_level: 'info',
         options: {
           distribution_name: 'Arthur Itey (628272242K)',
-          pp_uuid: 'F2F065DA-B393-4705-91EF-4CCF07BE15DE',
+          pp_uuid: '9695590E-33E4-4850-8837-8C1FBE209687',
           output_dir: '/Users/Atu/Sites/distrib',
           target: 'dist-adhoc',
           retina: true,
@@ -46,7 +45,7 @@ module.exports = function(grunt) {
         log_level: 'info',
         options: {
           distribution_name: 'Arthur Itey (628272242K)',
-          pp_uuid: 'F2F065DA-B393-4705-91EF-4CCF07BE15DE',
+          pp_uuid: '9695590E-33E4-4850-8837-8C1FBE209687',
           output_dir: '/Users/Atu/Sites/distrib',
           target: 'dist-appstore',
           retina: true,

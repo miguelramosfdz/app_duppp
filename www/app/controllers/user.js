@@ -28,15 +28,7 @@ function login(e){
           // Close the window.
           $.userLoginDuppp.close();
 
-          APP.MainWindow.open();
-
-          // The initial screen to show
-          APP.handleNavigation(2);
-          APP.eventsOpen.fetchEvents();
-
-        },
-        error: function(data) {
-          alert('Error, contact the admin');
+          APP.startApp();
         }
       });
 

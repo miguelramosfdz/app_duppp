@@ -14,24 +14,26 @@ function Controller() {
     $.__views.Wrapper && $.addTopLevelView($.__views.Wrapper);
     $.__views.NavigationBar = Alloy.createWidget("com.chariti.navigationBar", "widget", {
         id: "NavigationBar",
-        image: "duppp.png",
+        text: "Explore",
         __parentSymbol: $.__views.Wrapper
     });
     $.__views.NavigationBar.setParent($.__views.Wrapper);
-    $.__views.__alloyId9 = Ti.UI.createView({
+    $.__views.__alloyId8 = Ti.UI.createView({
         layout: "vertical",
-        id: "__alloyId9"
+        id: "__alloyId8"
     });
-    $.__views.Wrapper.add($.__views.__alloyId9);
+    $.__views.Wrapper.add($.__views.__alloyId8);
     $.__views.search = Ti.UI.createSearchBar({
         id: "search",
         hintText: "Search a @user or #hashtag"
     });
-    $.__views.__alloyId9.add($.__views.search);
+    $.__views.__alloyId8.add($.__views.search);
     $.__views.table = Ti.UI.createTableView({
-        id: "table"
+        separatorStyle: Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
+        id: "table",
+        allowsSelection: "false"
     });
-    $.__views.__alloyId9.add($.__views.table);
+    $.__views.__alloyId8.add($.__views.table);
     exports.destroy = function() {};
     _.extend($, $.__views);
     var APP = require("core");
@@ -41,8 +43,7 @@ function Controller() {
     var drupalServices = require("drupalServices");
     $.init = function() {
         APP.log("debug", "explore.init | " + JSON.stringify(CONFIG));
-        APP.openLoading();
-        $.retrieveData("public", "");
+        $.retrieveData("public_event", "");
         $.NavigationBar.setBackgroundColor(APP.Settings.colors.primary || "#000");
         true === CONFIG.isChild && $.NavigationBar.showBack();
         if (APP.Settings.useSlideMenu) {
@@ -51,6 +52,7 @@ function Controller() {
         } else $.NavigationBar.showSettings();
     };
     $.retrieveData = function(type, search) {
+        APP.openLoading();
         drupalServices.nodeList({
             type: type,
             title: search,
@@ -77,21 +79,24 @@ function Controller() {
     $.search.addEventListener("return", function(e) {
         if (e.value != last_search) {
             last_search = e.value;
-            0 === e.value.indexOf("@") ? drupalServices.searchUser({
-                search: e.value.substring(1),
-                success: function(users) {
-                    data = [];
-                    var json = JSON.parse(users);
-                    json.forEach(function(user) {
-                        if (parseInt(user.uid) !== Titanium.App.Properties.getInt("userUid")) {
-                            var newsItem = Alloy.createController("userRow", user).getView();
-                            data.push(newsItem);
-                        }
-                    });
-                    $.table.setData(data);
-                    APP.closeLoading();
-                }
-            }) : $.retrieveData("public", e.value);
+            if (0 === e.value.indexOf("@")) {
+                APP.openLoading();
+                drupalServices.searchUser({
+                    search: e.value.substring(1),
+                    success: function(users) {
+                        data = [];
+                        var json = JSON.parse(users);
+                        json.forEach(function(user) {
+                            if (parseInt(user.uid) !== Titanium.App.Properties.getInt("userUid")) {
+                                var newsItem = Alloy.createController("userRow", user).getView();
+                                data.push(newsItem);
+                            }
+                        });
+                        $.table.setData(data);
+                        APP.closeLoading();
+                    }
+                });
+            } else $.retrieveData("public_event", e.value);
             $.search.blur();
         }
     });

@@ -17,8 +17,48 @@ var nodeRetrieve = function(opts) {
     };
 };
 
+var nodeRetrieveComments = function(opts) {
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/events/" + opts.nid + "/comments";
+    xhr.open("GET", url);
+    xhr.send();
+    xhr.onload = function() {
+        var jsonObject = JSON.parse(this.responseText);
+        opts.success && opts.success(jsonObject);
+    };
+    xhr.onerror = function() {
+        console.info("nodeRetrieve error: " + JSON.stringify(this));
+        opts.error && opts.error({
+            status: xhr.status,
+            statusText: xhr.statusText
+        });
+    };
+};
+
+var createComment = function(opts) {
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/comment", token = Ti.App.Properties.getString("token");
+    Ti.API.info("creating comment, url: " + url);
+    xhr.open("POST", url);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("X-CSRF-Token", token);
+    var obj = JSON.stringify(opts.node);
+    Ti.API.info("comment object: " + obj);
+    xhr.send(obj);
+    xhr.onload = function(e) {
+        Ti.API.info("commentObject: " + JSON.stringify(e));
+        var jsonObject = JSON.parse(this.responseText);
+        opts.success && opts.success(jsonObject);
+    };
+    xhr.onerror = function() {
+        Titanium.API.info("createComment error: " + xhr.statusText);
+        opts.error && opts.error({
+            status: xhr.status,
+            statusText: xhr.statusText
+        });
+    };
+};
+
 var nodeList = function(opts) {
-    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/events?type=" + opts.type + "&search=" + opts.title;
+    var xhr = Titanium.Network.createHTTPClient(), url = REST_PATH + "/events?type=" + opts.type + "&title=" + opts.title;
     xhr.open("GET", url);
     xhr.send();
     Ti.API.info("nodeList info, url: " + url);
@@ -287,6 +327,7 @@ var systemInfo = function(opts) {
     };
     xhr.onerror = function() {
         console.info("systemInfo error: " + JSON.stringify(this));
+        xhr.send();
         opts.error && opts.error({
             status: xhr.status,
             statusText: xhr.statusText
@@ -305,6 +346,7 @@ var getToken = function(opts) {
     };
     xhr.onerror = function() {
         console.info("getToken error: " + JSON.stringify(this));
+        xhr.send();
         opts.error && opts.error({
             status: xhr.status,
             statusText: xhr.statusText
@@ -361,3 +403,7 @@ exports.systemInfo = systemInfo;
 exports.getToken = getToken;
 
 exports.searchUser = searchUser;
+
+exports.nodeRetrieveComments = nodeRetrieveComments;
+
+exports.createComment = createComment;

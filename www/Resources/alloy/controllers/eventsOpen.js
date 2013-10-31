@@ -57,11 +57,7 @@ function Controller() {
                 data = [];
                 eventsRaw = [];
                 json.forEach(function(event) {
-                    if ("0" === event.field_event_closed) {
-                        var newsItem = Alloy.createController("eventOpenRow", event).getView();
-                        data.push(newsItem);
-                        eventsRaw.push(event);
-                    }
+                    "0" === event.field_event_closed && eventsRaw.push(event);
                 });
                 var events = {
                     data: eventsRaw

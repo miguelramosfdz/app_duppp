@@ -216,7 +216,7 @@ function Controller() {
             });
             tab.add(label);
             tab.add(take);
-            tab.add(done);
+            Ti.App.Properties.getInt("userUid") == events.data[i].uid && tab.add(done);
             $.tabs.push(tab);
         }
         $.Tabs.setData($.tabs);

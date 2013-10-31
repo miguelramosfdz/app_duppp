@@ -1,4 +1,4 @@
-".caption": {
+".rowComment": {
   bottom: 10,
   height: Titanium.UI.SIZE,
   textAlign: Titanium.UI.TEXT_ALIGNMENT_LEFT,
@@ -6,15 +6,15 @@
   width: Titanium.UI.FILL
 }
 ".author": {
-  font: { fontSize: 14, font: "HelveticaNeue", fontWeight: "semibold" },
-  left: 0
+  font: { fontSize: 14, font: "Lato-Regular" },
+  left: 10
 }
 ".title": {
-  font: { fontSize: 12, font: "HelveticaNeue" },
-  left: 0,
-  width: 250,
+  font: { fontSize: 12, font: "Lato-Regular" },
+  left: 10,
+  right: 10
 }
 ".date": {
-  font: { fontSize: 11, font: "HelveticaNeue" },
+  font: { fontSize: 11, font: "Lato-Regular" },
   right: 10
 }

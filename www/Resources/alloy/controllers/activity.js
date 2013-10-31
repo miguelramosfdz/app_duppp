@@ -35,6 +35,7 @@ function Controller() {
     });
     $.__views.Wrapper.add($.__views.tableWrapper);
     $.__views.container = Ti.UI.createTableView({
+        separatorStyle: Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
         id: "container",
         allowsSelection: "false"
     });

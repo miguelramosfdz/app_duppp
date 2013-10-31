@@ -26,7 +26,7 @@ function Controller() {
     $.__views.Wrapper && $.addTopLevelView($.__views.Wrapper);
     $.__views.NavigationBar = Alloy.createWidget("com.chariti.navigationBar", "widget", {
         id: "NavigationBar",
-        image: "duppp.png",
+        text: "My Events",
         __parentSymbol: $.__views.Wrapper
     });
     $.__views.NavigationBar.setParent($.__views.Wrapper);
@@ -35,6 +35,7 @@ function Controller() {
     });
     $.__views.Wrapper.add($.__views.tableWrapper);
     $.__views.container = Ti.UI.createTableView({
+        separatorStyle: Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
         id: "container",
         allowsSelection: "false"
     });

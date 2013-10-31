@@ -1,10 +1,10 @@
 <Alloy>
   <View id="Wrapper">
-    <Require type="widget" src="com.chariti.navigationBar" id="NavigationBar" image="duppp.png" />
+    <Require type="widget" src="com.chariti.navigationBar" id="NavigationBar" text="Explore" />
 
     <View layout="vertical">
       <SearchBar id="search" hintText="Search a @user or #hashtag" />
-      <TableView id="table" />
+      <TableView id="table" allowsSelection="false" />
     </View>
   </View>
 </Alloy>

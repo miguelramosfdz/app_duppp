@@ -26,6 +26,70 @@ var nodeRetrieve = function(opts) {
   };
 };
 
+/*
+ *  @desc Retrieve comments of node
+ *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
+ *
+ */
+var nodeRetrieveComments = function(opts) {
+  var xhr = Titanium.Network.createHTTPClient(),
+    url = REST_PATH + '/events/'+opts.nid+'/comments';
+
+  xhr.open('GET', url);
+  xhr.send();
+
+  xhr.onload = function() {
+    var jsonObject = JSON.parse(this.responseText);
+    opts.success && opts.success(jsonObject);
+  };
+  xhr.onerror = function(e) {
+    console.info("nodeRetrieve error: "+JSON.stringify(this));
+    opts.error && opts.error({
+      "status":xhr.status,
+      "statusText":xhr.statusText
+    });
+  };
+};
+
+/*
+ *  @desc Retrieve comments of node
+ *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
+ *
+ */
+var createComment = function(opts) {
+  var xhr = Titanium.Network.createHTTPClient(),
+    url = REST_PATH + '/comment',
+    token = Ti.App.Properties.getString("token");
+
+  Ti.API.info('creating comment, url: '+url);
+
+  xhr.open('POST', url);
+
+  xhr.setRequestHeader('Content-Type','application/json');
+  xhr.setRequestHeader('X-CSRF-Token', token);
+
+  var obj = JSON.stringify(opts.node);
+  Ti.API.info('comment object: '+ obj);
+
+  xhr.send(obj);
+
+  xhr.onload = function(e) {
+    //var nodeObject = JSON.parse(this.responseText);
+    Ti.API.info('commentObject: '+JSON.stringify(e));
+    var jsonObject = JSON.parse(this.responseText);
+    opts.success && opts.success(jsonObject);
+  };
+
+  xhr.onerror = function(e) {
+    // should do something more robust
+    Titanium.API.info('createComment error: '+xhr.statusText);
+    opts.error && opts.error({
+      "status":xhr.status,
+      "statusText":xhr.statusText
+    });
+  };
+};
+
 
 /*
  *  @desc Retrieve list of nodes
@@ -34,7 +98,7 @@ var nodeRetrieve = function(opts) {
  */
 var nodeList = function(opts) {
   var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + '/events?type='+opts.type+'&search='+opts.title;
+    url = REST_PATH + '/events?type='+opts.type+'&title='+opts.title;
 
   xhr.open('GET', url);
   xhr.send();
@@ -454,6 +518,7 @@ var systemInfo = function(opts) {
   };
   xhr.onerror = function(e) {
     console.info("systemInfo error: "+JSON.stringify(this));
+    xhr.send();
     opts.error && opts.error({
       "status":xhr.status,
       "statusText":xhr.statusText
@@ -481,6 +546,7 @@ var getToken = function(opts) {
   };
   xhr.onerror = function(e) {
     console.info("getToken error: "+JSON.stringify(this));
+    xhr.send();
     opts.error && opts.error({
       "status":xhr.status,
       "statusText":xhr.statusText
@@ -531,3 +597,5 @@ exports.userRegister = userRegister;
 exports.systemInfo = systemInfo;
 exports.getToken = getToken;
 exports.searchUser = searchUser;
+exports.nodeRetrieveComments = nodeRetrieveComments;
+exports.createComment = createComment;

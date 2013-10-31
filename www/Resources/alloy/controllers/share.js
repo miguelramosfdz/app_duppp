@@ -46,10 +46,11 @@ function Controller() {
                 data.push(newsItem);
             }
         });
+        console.log(data);
         return data;
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
-    this.__controllerPath = "eventFormStep2";
+    this.__controllerPath = "share";
     arguments[0] ? arguments[0]["__parentSymbol"] : null;
     arguments[0] ? arguments[0]["$model"] : null;
     arguments[0] ? arguments[0]["__itemTemplate"] : null;
@@ -94,7 +95,7 @@ function Controller() {
             $.NavigationBar.showBack();
             $.NavigationBar.showDone({
                 callback: function() {
-                    $.createEvent();
+                    $.addPeople();
                 }
             });
         } else $.NavigationBar.showSettings();
@@ -116,49 +117,22 @@ function Controller() {
         }
     });
     $.table.addEventListener("click", storeUsers);
-    $.createEvent = function() {
+    $.addPeople = function() {
         APP.openLoading();
-        Ti.App.Properties.getInt("userUid") ? drupalServices.createNode({
-            node: {
-                type: CONFIG.type,
-                title: CONFIG.title,
-                language: CONFIG.language,
-                group_access: {
-                    und: CONFIG.group_access.und
-                },
-                field_event_date: {
-                    und: [ {
-                        show_todate: CONFIG.field_event_date.und[0].show_todate,
-                        value: {
-                            month: CONFIG.field_event_date.und[0].value.month,
-                            day: CONFIG.field_event_date.und[0].value.day,
-                            year: CONFIG.field_event_date.und[0].value.year,
-                            hour: CONFIG.field_event_date.und[0].value.hour,
-                            minute: CONFIG.field_event_date.und[0].value.minute
-                        }
-                    } ]
-                },
-                uid: CONFIG.uid,
-                status: CONFIG.status
-            },
-            success: function(data) {
-                APP.closeLoading();
-                APP.closeMenuRight();
-                APP.removeChild();
-                Ti.API.fireEvent("eventCreated");
-                var join = {
-                    uid: clickedRows
-                };
-                recentUsers(usersSelected);
-                drupalServices.joinNode({
-                    node: join,
-                    nid: data.nid
-                });
-            },
-            error: function() {
-                alert("There was an error, try again.");
-            }
-        }) : alert("You need to login first");
+        if (Ti.App.Properties.getInt("userUid")) {
+            var join = {
+                uid: clickedRows
+            };
+            recentUsers(usersSelected);
+            drupalServices.joinNode({
+                node: join,
+                nid: CONFIG.nid,
+                success: function() {
+                    APP.closeLoading();
+                    APP.removeChild();
+                }
+            });
+        } else alert("You need to login first");
     };
     $.init();
     _.extend($, exports);

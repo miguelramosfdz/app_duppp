@@ -21,8 +21,6 @@ $.fetchEvents = function() {
 
           // Keep only events open.
           if (event.field_event_closed === "0") {
-            var newsItem = Alloy.createController('eventOpenRow', event).getView();
-            data.push(newsItem);
             eventsRaw.push(event);
           }
         });

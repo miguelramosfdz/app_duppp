@@ -199,7 +199,7 @@ function Controller() {
     };
     $.showDone = function(_params) {
         $.showRight({
-            image: WPATH("images/action.png"),
+            image: WPATH("images/done.png"),
             callback: _params.callback
         });
     };

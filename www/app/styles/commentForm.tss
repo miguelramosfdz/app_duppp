@@ -1,5 +1,48 @@
-".container": {
-  barImage: "bgNavBar.png",
-  barColor: "#000",
-  backgroundColor: "#F3F3F3"
+"#Wrapper": {
+  backgroundColor: "#F3F3F3",
+  layout: "vertical"
+}
+
+"#tableWrapper": {
+  height: "92%",
+  top: 0
+}
+
+"#textArea": {
+  color: "#888",
+  textAlign: "left",
+  value: "Your comment",
+  height: Ti.UI.SIZE,
+  width: "80%",
+  top: 5,
+  bottom: 5
+}
+
+"#textContent": {
+  height: Ti.UI.SIZE
+}
+
+"#textWrapper": {
+  height: Ti.UI.SIZE,
+  backgroundColor: "#F3F3F3",
+  bottom: 0
+}
+
+"#button": {
+  width: Ti.UI.FILL,
+  bottom: 5,
+  height: 30,
+  backgroundColor: "#27ae60",
+  backgroundImage: 'none',
+  font: {
+    fontSize: "14dp",
+    fontFamily: "Lato-Regular"
+  }
+}
+
+"#table": {
+  top: 0,
+  height: Titanium.UI.FILL,
+  separatorStyle: Titanium.UI.iPhone.TableViewSeparatorStyle.NONE,
+  position: Ti.UI.iPhone.TableViewScrollPosition.BOTTOM
 }

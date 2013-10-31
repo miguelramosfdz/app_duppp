@@ -2,14 +2,14 @@
   <View id="Wrapper">
     <Require type="widget" src="com.chariti.navigationBar" id="NavigationBar" image="duppp.png" />
 
-		<ScrollView id="scrollView" class="container" layout='vertical'>
-			<VideoPlayer id="videoPlayer" ns="Ti.Media" top="0" height="300" width="320" backgroundColor="black" autoplay="false" />
-			<View id="caption" class="caption">
-				<ImageView id="author_image" class="author_image" />
-				<Label id="author" class="author" />
-				<Label id="f_title" class="title" />
-				<Label id="f_date" class="date" />
-			</View>
+    <ScrollView id="scrollView" class="container" layout='vertical'>
+      <VideoPlayer id="videoPlayer" ns="Ti.Media" top="0" height="300" width="320" backgroundColor="black" autoplay="false" />
+      <View id="caption" class="caption">
+        <ImageView id="author_image" class="author_image" />
+        <Label id="author" class="author" />
+        <Label id="f_title" class="title" />
+        <Label id="f_date" class="date" />
+      </View>
       <View id="actionBtns" layout='horizontal' >
         <Button title="Comments" class="btn comments" />
         <Button id="like" title="Like" onClick="like" class="btn like" />
@@ -18,6 +18,6 @@
       <Label id="likeCount" />
       <Label id="commentCount" />
       <View id="commentsList" layout='vertical' />
-		</ScrollView>
+    </ScrollView>
   </View>
 </Alloy>

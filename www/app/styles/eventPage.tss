@@ -36,7 +36,7 @@
 
 // Buttons actions.
 "#actionBtns": {
-  top: 10,
+  top: 5,
   height: 30,
 }
 ".btn": {

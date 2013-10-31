@@ -1,13 +1,20 @@
 <Alloy>
-  <TableViewRow id="row" class="row">
-    <ImageView id="thumbnail" class="image" />
+  <TableViewRow id="row" class="row" layout="vertical">
     <View id="caption" class="caption">
       <ImageView id="author_image" class="author_image" />
       <Label id="author" class="author" />
-      <View class="title" layout="horizontal">
-        <Label id="f_title" class="labelTitle" />
-      </View>
       <Label id="f_date" class="date" />
+    </View>
+    <View id="media">
+      <ImageView id="thumbnail" class="image" />
+    </View>
+    <View class="under_caption" layout="horizontal">
+      <Label id="f_title" class="labelTitle" />
+    </View>
+    <View id="actionBtns" layout='horizontal' >
+      <Button id="comment" title="Comment" class="btn comments" />
+      <Button id="like" title="Like" class="btn like" />
+      <Button id="extra" title="Extra" class="btn extra" />
     </View>
   </TableViewRow>
 </Alloy>

@@ -7,9 +7,7 @@ var drupalServices = require('drupalServices');
 $.init = function() {
   APP.log("debug", "explore.init | " + JSON.stringify(CONFIG));
 
-  APP.openLoading();
-
-  $.retrieveData('public', '');
+  $.retrieveData('public_event', '');
 
   $.NavigationBar.setBackgroundColor(APP.Settings.colors.primary || "#000");
 
@@ -26,6 +24,7 @@ $.init = function() {
 };
 
 $.retrieveData = function(type, search) {
+  APP.openLoading();
   drupalServices.nodeList({
     type: type,
     title: search,
@@ -60,6 +59,8 @@ $.search.addEventListener('return', function (e) {
     last_search = e.value;
 
     if (e.value.indexOf('@') === 0) {
+      APP.openLoading();
+
       drupalServices.searchUser({
         search: e.value.substring(1),
         success: function(users) {
@@ -84,7 +85,7 @@ $.search.addEventListener('return', function (e) {
       });
     } else {
 
-      $.retrieveData('public', e.value);
+      $.retrieveData('public_event', e.value);
 
     }
 

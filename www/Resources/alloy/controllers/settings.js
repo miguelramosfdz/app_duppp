@@ -26,9 +26,9 @@ function Controller() {
         id: "sectionFish",
         headerTitle: "Preferences"
     });
-    var __alloyId16 = [];
-    __alloyId16.push($.__views.sectionFish);
-    $.__views.__alloyId17 = Ti.UI.createTableViewRow({
+    var __alloyId15 = [];
+    __alloyId15.push($.__views.sectionFish);
+    $.__views.__alloyId16 = Ti.UI.createTableViewRow({
         color: "#2c3e50",
         backgroundColor: "#fff",
         font: {
@@ -37,19 +37,19 @@ function Controller() {
         },
         height: "50",
         title: "Send only in wifi",
-        id: "__alloyId17"
+        id: "__alloyId16"
     });
-    $.__views.sectionFish.add($.__views.__alloyId17);
+    $.__views.sectionFish.add($.__views.__alloyId16);
     $.__views.swWifi = Ti.UI.createSwitch({
         right: 10,
         value: false,
         id: "swWifi"
     });
-    $.__views.__alloyId17.add($.__views.swWifi);
+    $.__views.__alloyId16.add($.__views.swWifi);
     $.__views.table = Ti.UI.createTableView({
         style: Titanium.UI.iPhone.TableViewStyle.GROUPED,
         backgroundColor: "#ecf0f1",
-        data: __alloyId16,
+        data: __alloyId15,
         id: "table"
     });
     $.__views.tableWrapper.add($.__views.table);

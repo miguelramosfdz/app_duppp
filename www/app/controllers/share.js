@@ -28,7 +28,7 @@ $.init = function() {
     $.NavigationBar.showBack();
     $.NavigationBar.showDone({
       callback: function() {
-        $.createEvent();
+        $.addPeople();
       }
     });
   } else {
@@ -139,57 +139,25 @@ $.table.addEventListener('click', storeUsers);
 ///////////////
 
 // Function to create an event
-$.createEvent = function() {
+$.addPeople = function() {
 
   APP.openLoading();
 
   if (Ti.App.Properties.getInt("userUid")) {
     // Create a user variable to hold some information about the user
+    var join = {
+      uid: clickedRows
+    };
 
-    drupalServices.createNode({
-      node: {
-        'type': CONFIG.type,
-        'title': CONFIG.title,
-        'language': CONFIG.language,
-        'group_access': {
-          'und': CONFIG.group_access.und
-        },
-        'field_event_date': {
-          'und':[{
-            'show_todate': CONFIG.field_event_date.und[0].show_todate,
-            'value': {
-              'month': CONFIG.field_event_date.und[0].value.month,
-              'day': CONFIG.field_event_date.und[0].value.day,
-              'year': CONFIG.field_event_date.und[0].value.year,
-              'hour': CONFIG.field_event_date.und[0].value.hour,
-              'minute': CONFIG.field_event_date.und[0].value.minute
-            }
-          }]
-        },
-        'uid': CONFIG.uid,
-        'status': CONFIG.status
-      },
-      success: function (data) {
+    recentUsers(usersSelected);
+
+    drupalServices.joinNode({
+      node: join,
+      nid: CONFIG.nid,
+      success: function() {
 
         APP.closeLoading();
-        APP.closeMenuRight();
         APP.removeChild();
-
-        Ti.API.fireEvent('eventCreated');
-
-        var join = {
-          uid: clickedRows
-        };
-
-        recentUsers(usersSelected);
-
-        drupalServices.joinNode({
-          node: join,
-          nid: data.nid
-        });
-      },
-      error: function(data) {
-        alert('There was an error, try again.');
       }
     });
 

@@ -119,13 +119,7 @@ var APP = {
 
     APP.loadSystemInfo({
       registred: function () {
-
-        // Open the main window
-        APP.MainWindow.open();
-        APP.eventsOpen.fetchEvents();
-
-        // The initial screen to show
-        APP.handleNavigation(2);
+        APP.startApp();
       },
       anonymous: function () {
         var win = Alloy.createController('user').getView('userLogin');
@@ -133,6 +127,17 @@ var APP = {
       }
     });
 
+  },
+  /**
+   * Launch basic start.
+   */
+  startApp: function() {
+    // Open the main window
+    APP.MainWindow.open();
+    APP.eventsOpen.fetchEvents();
+
+    // The initial screen to show
+    APP.handleNavigation(2);
   },
   /**
    * Determines the device characteristics
@@ -177,14 +182,8 @@ var APP = {
               callback.anonymous && callback.anonymous(data);
             }
 
-          },
-          error: function(data) {
-            alert('Error, contact the admin');
           }
         });
-      },
-      error: function(data) {
-        alert('Error, contact the admin');
       }
     });
   },

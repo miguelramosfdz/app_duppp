@@ -1,24 +1,4 @@
 function Controller() {
-    function like() {
-        var data;
-        if ("Like" === $.like.title) {
-            $.like.title = "Unlike";
-            data = {
-                action: "flag",
-                flag_name: "like"
-            };
-        } else {
-            $.like.title = "Like";
-            data = {
-                action: "unflag",
-                flag_name: "like"
-            };
-        }
-        drupalServices.likeNode({
-            node: data,
-            nid: CONFIG.nid
-        });
-    }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
     this.__controllerPath = "eventPage";
     arguments[0] ? arguments[0]["__parentSymbol"] : null;
@@ -104,13 +84,13 @@ function Controller() {
     });
     $.__views.caption.add($.__views.f_date);
     $.__views.actionBtns = Ti.UI.createView({
-        top: 10,
+        top: 5,
         height: 30,
         id: "actionBtns",
         layout: "horizontal"
     });
     $.__views.scrollView.add($.__views.actionBtns);
-    $.__views.__alloyId6 = Ti.UI.createButton({
+    $.__views.__alloyId5 = Ti.UI.createButton({
         backgroundImage: "none",
         borderRadius: 0,
         color: "white",
@@ -124,9 +104,9 @@ function Controller() {
         width: 100,
         backgroundColor: "#1193FC",
         title: "Comments",
-        id: "__alloyId6"
+        id: "__alloyId5"
     });
-    $.__views.actionBtns.add($.__views.__alloyId6);
+    $.__views.actionBtns.add($.__views.__alloyId5);
     $.__views.like = Ti.UI.createButton({
         backgroundImage: "none",
         borderRadius: 0,
@@ -145,7 +125,7 @@ function Controller() {
     });
     $.__views.actionBtns.add($.__views.like);
     like ? $.__views.like.addEventListener("click", like) : __defers["$.__views.like!click!like"] = true;
-    $.__views.__alloyId7 = Ti.UI.createButton({
+    $.__views.__alloyId6 = Ti.UI.createButton({
         backgroundImage: "none",
         borderRadius: 0,
         color: "white",
@@ -159,9 +139,9 @@ function Controller() {
         width: 100,
         backgroundColor: "#7CCD2F",
         title: "Extra",
-        id: "__alloyId7"
+        id: "__alloyId6"
     });
-    $.__views.actionBtns.add($.__views.__alloyId7);
+    $.__views.actionBtns.add($.__views.__alloyId6);
     $.__views.likeCount = Ti.UI.createLabel({
         bottom: 10,
         color: "#EF5250",
@@ -224,18 +204,6 @@ function Controller() {
             }
         });
     };
-    $.handleData = function(_data) {
-        APP.log("debug", "event_event.handleData");
-        $.author.text = _data.user_name;
-        $.author_image.image = _data.avatar;
-        $.videoPlayer.url = _data.video;
-        $.f_title.text = _data.title;
-        $.f_date.text = _data.created;
-    };
-    $.videoPlayer.addEventListener("durationavailable", function() {
-        6e5 > this.duration && $.videoPlayer.play();
-    });
-    $.init();
     __defers["$.__views.like!click!like"] && $.__views.like.addEventListener("click", like);
     _.extend($, exports);
 }

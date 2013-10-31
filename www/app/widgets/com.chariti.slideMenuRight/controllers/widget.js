@@ -243,7 +243,10 @@ $.addData = function(events) {
 
     tab.add(label);
     tab.add(take);
-    tab.add(done);
+
+    if (Ti.App.Properties.getInt("userUid") == events.data[i].uid) {
+      tab.add(done);
+    }
 
     $.tabs.push(tab);
   }
