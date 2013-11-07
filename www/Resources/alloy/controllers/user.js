@@ -10,8 +10,8 @@ function Controller() {
                 Titanium.App.Properties.setInt("userSessionId", data.sessid);
                 Titanium.App.Properties.setInt("userSessionName", data.sesion_name);
                 drupalServices.getToken({
-                    success: function(token) {
-                        Ti.App.Properties.setString("token", token);
+                    success: function(_data) {
+                        Ti.App.Properties.setString("token", _data.token);
                         $.userLoginDuppp.close();
                         APP.startApp();
                     }

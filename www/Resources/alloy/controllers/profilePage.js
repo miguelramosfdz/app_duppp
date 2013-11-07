@@ -179,7 +179,7 @@ function Controller() {
             }
         });
         $.table.setData(rows);
-        var height = 200 * rows.length;
+        var height = 380 * rows.length;
         $.table.setHeight(height);
     };
     $.follow = function(value) {

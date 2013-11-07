@@ -201,8 +201,10 @@ function Controller() {
     $.initDialog = function() {
         var options = [];
         var mapping = [];
-        options.push("Share with users");
-        mapping.push("share_users");
+        if (args.uid == Ti.App.Properties.getInt("userUid")) {
+            options.push("Share with users");
+            mapping.push("share_users");
+        }
         options.push("Cancel");
         mapping.push("cancel");
         dialog = Ti.UI.createOptionDialog({

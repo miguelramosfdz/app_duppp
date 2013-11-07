@@ -46,7 +46,6 @@ function Controller() {
                 data.push(newsItem);
             }
         });
-        console.log(data);
         return data;
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));

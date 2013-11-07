@@ -79,6 +79,7 @@ $.search.addEventListener('return', function (e) {
 
           // Update View.
           $.table.setData(data);
+          $.table.setAllowsSelection(true);
 
           APP.closeLoading();
         }

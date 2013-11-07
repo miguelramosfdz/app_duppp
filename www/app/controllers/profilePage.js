@@ -79,7 +79,7 @@ $.handleData = function(_data) {
 
   $.table.setData(rows);
 
-  var height = rows.length * 200;
+  var height = rows.length * 380;
   $.table.setHeight(height);
 
 };

@@ -168,10 +168,10 @@ var APP = {
     APP.log("debug", "APP.loadContent");
 
     drupalServices.getToken({
-      success: function(token) {
+      success: function(_data) {
 
         // Stock Token in a property.
-        Ti.App.Properties.setString('token', token);
+        Ti.App.Properties.setString('token', _data.token);
 
         drupalServices.systemInfo({
           success: function(data) {

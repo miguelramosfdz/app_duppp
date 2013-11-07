@@ -533,15 +533,15 @@ var systemInfo = function(opts) {
  */
 var getToken = function(opts) {
   var xhr = Titanium.Network.createHTTPClient(),
-    url = BASE_PATH + '/services/session/token';
+    url = REST_PATH + '/user/token';
 
   Ti.API.info('getToken info, url: '+url);
 
-  xhr.open('GET', url);
+  xhr.open('POST', url);
   xhr.send();
 
   xhr.onload = function() {
-    var jsonObject = this.responseText;
+    var jsonObject = JSON.parse(this.responseText);
     opts.success && opts.success(jsonObject);
   };
   xhr.onerror = function(e) {

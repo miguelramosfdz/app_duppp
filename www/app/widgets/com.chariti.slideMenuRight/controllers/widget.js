@@ -95,6 +95,8 @@ $.confirmDialog = function(_data) {
 
 $.close = function(_data) {
 
+  medias.fetch();
+
   // Doesn't allow to close if you still have event to close.
   if (medias.length === 0) {
 

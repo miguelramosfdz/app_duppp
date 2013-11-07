@@ -93,6 +93,7 @@ function Controller() {
                             }
                         });
                         $.table.setData(data);
+                        $.table.setAllowsSelection(true);
                         APP.closeLoading();
                     }
                 });

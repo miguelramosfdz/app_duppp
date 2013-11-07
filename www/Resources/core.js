@@ -93,8 +93,8 @@ var APP = {
     loadSystemInfo: function(callback) {
         APP.log("debug", "APP.loadContent");
         drupalServices.getToken({
-            success: function(token) {
-                Ti.App.Properties.setString("token", token);
+            success: function(_data) {
+                Ti.App.Properties.setString("token", _data.token);
                 drupalServices.systemInfo({
                     success: function(data) {
                         0 !== data.user.uid ? callback.registred && callback.registred(data) : callback.anonymous && callback.anonymous(data);

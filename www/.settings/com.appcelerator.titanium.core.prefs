@@ -1,4 +1,7 @@
 eclipse.preferences.version=1
+provisioning_profiles/adhoc/38F29085-A795-472E-A1A3-8409E80FD7A3/appid=com.duppp.duppp-v1
+provisioning_profiles/adhoc/38F29085-A795-472E-A1A3-8409E80FD7A3/name=Duppp-dist-store
+provisioning_profiles/adhoc/38F29085-A795-472E-A1A3-8409E80FD7A3/uuid=38F29085-A795-472E-A1A3-8409E80FD7A3
 provisioning_profiles/adhoc/9695590E-33E4-4850-8837-8C1FBE209687/appid=com.duppp.duppp-v1
 provisioning_profiles/adhoc/9695590E-33E4-4850-8837-8C1FBE209687/name=Duppp-dist-adhoc
 provisioning_profiles/adhoc/9695590E-33E4-4850-8837-8C1FBE209687/uuid=9695590E-33E4-4850-8837-8C1FBE209687

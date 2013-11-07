@@ -94,6 +94,7 @@ function Controller() {
         alert.show();
     };
     $.close = function(_data) {
+        medias.fetch();
         if (0 === medias.length) {
             APP.closeMenuRight();
             APP.openLoading();
