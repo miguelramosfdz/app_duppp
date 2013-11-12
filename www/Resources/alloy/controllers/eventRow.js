@@ -193,10 +193,7 @@ function Controller() {
                 flag_name: "like"
             };
         }
-        drupalServices.likeNode({
-            node: data,
-            nid: args.nid
-        });
+        drupalServices.likeNode(data, args.nid);
     };
     $.initDialog = function() {
         var options = [];

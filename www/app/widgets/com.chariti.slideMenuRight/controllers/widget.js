@@ -1,6 +1,6 @@
 var APP = require("core");
 var dupppUpload = require('dupppUpload');
-var medias = Alloy.Collections.media;
+var medias = APP.media;
 var drupalServices = require('drupalServices');
 
 $.init = function() {
@@ -103,17 +103,17 @@ $.close = function(_data) {
     APP.closeMenuRight();
     APP.openLoading();
 
-    drupalServices.closeNode({
-      nid: _data.nid,
-      success: function(data) {
+    drupalServices.closeNode(
+      _data.nid,
+      function(data) {
         APP.closeLoading();
         Ti.API.fireEvent('eventCreated');
       },
-      error: function(data) {
+      function(data) {
         APP.closeLoading();
         alert('Sorry, your event cannot be closed.');
       }
-    });
+    );
 
   } else {
     alert('Sorry, your cannot close your event, because some videos need to be uploaded.');

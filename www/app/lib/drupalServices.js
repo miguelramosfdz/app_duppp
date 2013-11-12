@@ -2,28 +2,31 @@ var REST_PATH = Alloy.CFG.rest,
   BASE_PATH = Alloy.CFG.base;
 
 /*
- *  @desc Retrieve one node
+ *  @desc Retrieve comments of node
  *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
  *
  */
-var nodeRetrieve = function(opts) {
-  var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + '/events/'+opts.nid;
+var nodeRetrieveComments = function(nid, success, failure, headers) {
 
-  xhr.open('GET', url);
-  xhr.send();
+  Ti.API.info('Retrieve comments: '+nid+" with cookie "+Ti.App.Properties.getString("Drupal-Cookie"));
 
-  xhr.onload = function() {
-    var jsonObject = JSON.parse(this.responseText);
-    opts.success && opts.success(jsonObject);
-  };
-  xhr.onerror = function(e) {
-    console.info("nodeRetrieve error: "+JSON.stringify(this));
-    opts.error && opts.error({
-      "status":xhr.status,
-      "statusText":xhr.statusText
-    });
-  };
+  makeAuthenticatedRequest({
+      httpMethod : 'GET',
+      servicePath : '/events/'+nid+'/comments',
+      contentType: 'application/json'
+    },
+    //success
+    function(responseData){
+      Ti.API.info('nodeRetrieveComments SUCCESS');
+      success && success(responseData);
+    },
+    //fail
+    function(err){
+      Ti.API.error('nodeRetrieveComments FAIL');
+      failure && failure(err);
+    },
+    headers
+  );
 };
 
 /*
@@ -31,63 +34,26 @@ var nodeRetrieve = function(opts) {
  *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
  *
  */
-var nodeRetrieveComments = function(opts) {
-  var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + '/events/'+opts.nid+'/comments';
+var createComment = function(object, success, failure, headers) {
 
-  xhr.open('GET', url);
-  xhr.send();
-
-  xhr.onload = function() {
-    var jsonObject = JSON.parse(this.responseText);
-    opts.success && opts.success(jsonObject);
-  };
-  xhr.onerror = function(e) {
-    console.info("nodeRetrieve error: "+JSON.stringify(this));
-    opts.error && opts.error({
-      "status":xhr.status,
-      "statusText":xhr.statusText
-    });
-  };
-};
-
-/*
- *  @desc Retrieve comments of node
- *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
- *
- */
-var createComment = function(opts) {
-  var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + '/comment',
-    token = Ti.App.Properties.getString("token");
-
-  Ti.API.info('creating comment, url: '+url);
-
-  xhr.open('POST', url);
-
-  xhr.setRequestHeader('Content-Type','application/json');
-  xhr.setRequestHeader('X-CSRF-Token', token);
-
-  var obj = JSON.stringify(opts.node);
-  Ti.API.info('comment object: '+ obj);
-
-  xhr.send(obj);
-
-  xhr.onload = function(e) {
-    //var nodeObject = JSON.parse(this.responseText);
-    Ti.API.info('commentObject: '+JSON.stringify(e));
-    var jsonObject = JSON.parse(this.responseText);
-    opts.success && opts.success(jsonObject);
-  };
-
-  xhr.onerror = function(e) {
-    // should do something more robust
-    Titanium.API.info('createComment error: '+xhr.statusText);
-    opts.error && opts.error({
-      "status":xhr.status,
-      "statusText":xhr.statusText
-    });
-  };
+  makeAuthenticatedRequest({
+      httpMethod : 'POST',
+      servicePath : '/comment',
+      contentType: "application/json",
+      params: JSON.stringify(object)
+    },
+    //success
+    function(responseData){
+      Ti.API.info('createComment SUCCESS');
+      success && success(responseData);
+    },
+    //fail
+    function(err){
+      Ti.API.error('createComment FAIL');
+      failure && failure(err);
+    },
+    headers
+  );
 };
 
 
@@ -96,26 +62,31 @@ var createComment = function(opts) {
  *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
  *
  */
-var nodeList = function(opts) {
-  var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + '/events?type='+opts.type+'&title='+opts.title;
+var nodeList = function(type, title, success, failure, headers) {
 
-  xhr.open('GET', url);
-  xhr.send();
+  Ti.API.info('Node list with cookie '+Ti.App.Properties.getString("Drupal-Cookie"));
 
-  Ti.API.info('nodeList info, url: '+url);
+  if (!title) {
+    title = '';
+  }
 
-  xhr.onload = function() {
-    var jsonObject = JSON.parse(this.responseText);
-    opts.success && opts.success(jsonObject);
-  };
-  xhr.onerror = function(e) {
-    console.info("nodeList error: "+JSON.stringify(this));
-    opts.error && opts.error({
-      "status":xhr.status,
-      "statusText":xhr.statusText
-    });
-  };
+  makeAuthenticatedRequest({
+      httpMethod : 'GET',
+      servicePath : '/events?type='+type+'&title='+title,
+      contentType: 'application/json'
+    },
+    //success
+    function(responseData){
+      Ti.API.info('nodeList SUCCESS');
+      success && success(responseData);
+    },
+    //fail
+    function(err){
+      Ti.API.error('nodeList FAIL');
+      failure && failure(err);
+    },
+    headers
+  );
 };
 
 /*
@@ -123,24 +94,27 @@ var nodeList = function(opts) {
  *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
  *
  */
-var userNodesList = function(opts) {
-  var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + '/duppp_user/'+opts.uid+'/events';
+var userNodesList = function(uid, success, failure, headers) {
 
-  xhr.open('GET', url);
-  xhr.send();
+  Ti.API.info('Node list with cookie '+Ti.App.Properties.getString("Drupal-Cookie"));
 
-  xhr.onload = function() {
-    var jsonObject = JSON.parse(this.responseText);
-    opts.success && opts.success(jsonObject);
-  };
-  xhr.onerror = function(e) {
-    console.info("userNodesList error: "+JSON.stringify(this));
-    opts.error && opts.error({
-      "status":xhr.status,
-      "statusText":xhr.statusText
-    });
-  };
+  makeAuthenticatedRequest({
+      httpMethod : 'GET',
+      servicePath : '/duppp_user/'+uid+'/events',
+      contentType: 'application/json'
+    },
+    //success
+    function(responseData){
+      Ti.API.info('userNodesList SUCCESS');
+      success && success(responseData);
+    },
+    //fail
+    function(err){
+      Ti.API.error('userNodesList FAIL');
+      failure && failure(err);
+    },
+    headers
+  );
 };
 
 /**
@@ -148,38 +122,28 @@ var userNodesList = function(opts) {
  * @param  {Object} opts Utility payload, should have properties: node property (JSON object), success() and error() callback functions
  * @return {Object}      Return object with callback.
  */
-var createNode = function(opts) {
-  var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + '/events',
-    token = Ti.App.Properties.getString("token");
+var createNode = function(object, success, failure, headers) {
 
-  Ti.API.info('creating node, url: '+url);
-
-  xhr.open('POST', url);
-
-  xhr.setRequestHeader('Content-Type','application/json');
-  xhr.setRequestHeader('X-CSRF-Token', token);
-
-  var obj = JSON.stringify(opts.node);
-  Ti.API.info('node object: '+ obj);
-
-  xhr.send(obj);
-
-  xhr.onload = function(e) {
-    //var nodeObject = JSON.parse(this.responseText);
-    Ti.API.info('nodeObject: '+JSON.stringify(e));
-    var jsonObject = JSON.parse(this.responseText);
-    opts.success && opts.success(jsonObject);
-  };
-
-  xhr.onerror = function(e) {
-    // should do something more robust
-    Titanium.API.info('createNode error: '+xhr.statusText);
-    opts.error && opts.error({
-      "status":xhr.status,
-      "statusText":xhr.statusText
-    });
-  };
+  makeAuthenticatedRequest({
+      httpMethod : 'POST',
+      servicePath : '/events',
+      contentType: "application/json",
+      params: JSON.stringify({
+        node: object
+      })
+    },
+    //success
+    function(responseData){
+      Ti.API.info('createNode SUCCESS');
+      success && success(responseData);
+    },
+    //fail
+    function(err){
+      Ti.API.error('createNode FAIL');
+      failure && failure(err);
+    },
+    headers
+  );
 };
 
 /**
@@ -187,38 +151,28 @@ var createNode = function(opts) {
  * @param  {Object} opts Utility payload, should have properties: node property (JSON object), success() and error() callback functions
  * @return {Object}      Return object with callback.
  */
-var createNodeContribution = function(opts) {
-  var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + '/node',
-    token = Ti.App.Properties.getString("token");
+var createNodeContribution = function(object, success, failure, headers) {
 
-  Ti.API.info('creating node, url: '+url);
-
-  xhr.open('POST', url);
-
-  xhr.setRequestHeader('Content-Type','application/json');
-  xhr.setRequestHeader('X-CSRF-Token', token);
-
-  var obj = JSON.stringify(opts.node);
-  Ti.API.info('node object: '+ obj);
-
-  xhr.send(obj);
-
-  xhr.onload = function(e) {
-    //var nodeObject = JSON.parse(this.responseText);
-    Ti.API.info('nodeObject: '+JSON.stringify(e));
-    var jsonObject = JSON.parse(this.responseText);
-    opts.success && opts.success(jsonObject);
-  };
-
-  xhr.onerror = function(e) {
-    // should do something more robust
-    Titanium.API.info('createNodeContribution error: '+xhr.statusText);
-    opts.error && opts.error({
-      "status":xhr.status,
-      "statusText":xhr.statusText
-    });
-  };
+  makeAuthenticatedRequest({
+      httpMethod : 'POST',
+      servicePath : '/node',
+      contentType: "application/json",
+      params: JSON.stringify({
+        node: object
+      })
+    },
+    //success
+    function(responseData){
+      Ti.API.info('createNodeContribution SUCCESS');
+      success && success(responseData);
+    },
+    //fail
+    function(err){
+      Ti.API.error('createNodeContribution FAIL');
+      failure && failure(err);
+    },
+    headers
+  );
 };
 
 
@@ -227,29 +181,25 @@ var createNodeContribution = function(opts) {
  *  @param {Object} opts Utility payload, should have properties: node property (JSON object), success() and error() callback functions
  *
  */
-var closeNode = function(opts) {
-  var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + "/events/" + opts.nid + "/close",
-    token = Ti.App.Properties.getString("token");
+var closeNode = function(nid, success, failure, headers) {
 
-  Ti.API.info('closing node, url: '+url);
-
-  xhr.open('POST', url);
-  xhr.setRequestHeader('Content-Type','application/json');
-  xhr.setRequestHeader('X-CSRF-Token', token);
-  xhr.send();
-
-  xhr.onload = function() {
-    var jsonObject = JSON.parse(this.responseText);
-    opts.success && opts.success(jsonObject);
-  };
-  xhr.onerror = function(e) {
-    console.info("closeNode error: "+JSON.stringify(this));
-    opts.error && opts.error({
-      "status":xhr.status,
-      "statusText":xhr.statusText
-    });
-  };
+  makeAuthenticatedRequest({
+      httpMethod : 'POST',
+      servicePath : '/events/'+nid+'/close',
+      contentType: "application/json"
+    },
+    //success
+    function(responseData){
+      Ti.API.info('closeNode SUCCESS');
+      success && success(responseData);
+    },
+    //fail
+    function(err){
+      Ti.API.error('closeNode FAIL');
+      failure && failure(err);
+    },
+    headers
+  );
 };
 
 
@@ -258,68 +208,53 @@ var closeNode = function(opts) {
  *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
  *
  */
-var likeNode = function(opts) {
-  var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + "/events/" + opts.nid + "/flag",
-    token = Ti.App.Properties.getString("token");
+var likeNode = function(object, nid, success, failure, headers) {
 
-  Ti.API.info('liking node, url: '+url);
-
-  xhr.open('POST', url);
-  xhr.setRequestHeader('Content-Type','application/json');
-  xhr.setRequestHeader('X-CSRF-Token', token);
-
-  var obj = JSON.stringify(opts.node);
-  Ti.API.info('node object: '+ obj);
-
-  xhr.send(obj);
-
-  xhr.onload = function() {
-    var jsonObject = JSON.parse(this.responseText);
-    opts.success && opts.success(jsonObject);
-  };
-  xhr.onerror = function(e) {
-    console.info("likeNode error: "+JSON.stringify(this));
-    opts.error && opts.error({
-      "status":xhr.status,
-      "statusText":xhr.statusText
-    });
-  };
+  makeAuthenticatedRequest({
+      httpMethod : 'POST',
+      servicePath : '/events/'+nid+'/flag',
+      contentType: "application/json",
+      params: object
+    },
+    //success
+    function(responseData){
+      Ti.API.info('likeNode SUCCESS');
+      success && success(responseData);
+    },
+    //fail
+    function(err){
+      Ti.API.error('likeNode FAIL');
+      failure && failure(err);
+    },
+    headers
+  );
 };
-
 
 /*
  *  @desc Add users to an event.
  *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
  *
  */
-var joinNode = function(opts) {
-  var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + "/events/" + opts.nid + "/join",
-    token = Ti.App.Properties.getString("token");
+var joinNode = function(object, nid, success, failure, headers) {
 
-  Ti.API.info('joining node, url: '+url);
-
-  xhr.open('POST', url);
-  xhr.setRequestHeader('Content-Type','application/json');
-  xhr.setRequestHeader('X-CSRF-Token', token);
-
-  var obj = JSON.stringify(opts.node);
-  Ti.API.info('node object: '+ obj);
-
-  xhr.send(obj);
-
-  xhr.onload = function() {
-    var jsonObject = JSON.parse(this.responseText);
-    opts.success && opts.success(jsonObject);
-  };
-  xhr.onerror = function(e) {
-    console.info("joinNode error: "+JSON.stringify(this));
-    opts.error && opts.error({
-      "status":xhr.status,
-      "statusText":xhr.statusText
-    });
-  };
+  makeAuthenticatedRequest({
+      httpMethod : 'POST',
+      servicePath : '/events/'+nid+'/join',
+      contentType: "application/json",
+      params: JSON.stringify(object)
+    },
+    //success
+    function(responseData){
+      Ti.API.info('joinNode SUCCESS');
+      success && success(responseData);
+    },
+    //fail
+    function(err){
+      Ti.API.error('joinNode FAIL');
+      failure && failure(err);
+    },
+    headers
+  );
 };
 
 /*
@@ -327,64 +262,57 @@ var joinNode = function(opts) {
  *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
  *
  */
-var attachFile = function(opts) {
-  var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + '/node/' + opts.nid + '/attach_file',
-    token = Ti.App.Properties.getString("token");
+var attachFile = function(object, nid, success, failure, headers, sending) {
 
-  Ti.API.info('Attach file, url: '+url);
-
-  xhr.onsendstream = function(e){
+  makeAuthenticatedRequest({
+    servicePath: '/node/'+nid+'/attach_file',
+    httpMethod: 'POST',
+    contentType: "multipart/form-data",
+    params: object
+  },
+  //success
+  function(responseData){
+    Ti.API.info('attachFile SUCCESS');
+    success && success(responseData);
+  },
+  //fail
+  function(err){
+    Ti.API.error('attachFile FAIL');
+    failure && failure(err);
+  },
+  headers,
+  function(e) {
     var data = { progressValue: e.progress };
-    opts.sending && opts.sending(data);
-  };
-
-  xhr.open('POST', url);
-  xhr.setRequestHeader('Content-Type', "multipart/form-data");
-  xhr.setRequestHeader('X-CSRF-Token', token);
-
-  var obj = opts.node;
-  Ti.API.info('node object: '+ obj);
-
-  xhr.send(obj);
-
-  xhr.onload = function() {
-    var jsonObject = JSON.parse(this.responseText);
-    opts.success && opts.success(jsonObject);
-  };
-  xhr.onerror = function(e) {
-    console.info("attachFile error: "+JSON.stringify(this));
-    opts.error && opts.error({
-      "status":xhr.status,
-      "statusText":xhr.statusText
-    });
-  };
+    sending && sending(data);
+  });
 };
-
 
 /*
  *  @desc Retrieve a user
  *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
  *
  */
-var userRetrieve = function(opts) {
-  var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + '/duppp_user/' + opts.uid;
+var userRetrieve = function(uid, success, failure, headers) {
 
-  xhr.open('GET', url);
-  xhr.send();
+  Ti.API.info('Retrieve user: '+uid+" with cookie "+Ti.App.Properties.getString("Drupal-Cookie"));
 
-  xhr.onload = function() {
-    var jsonObject = JSON.parse(this.responseText);
-    opts.success && opts.success(jsonObject);
-  };
-  xhr.onerror = function(e) {
-    console.info("userRetrieve error: "+JSON.stringify(this));
-    opts.error && opts.error({
-      "status":xhr.status,
-      "statusText":xhr.statusText
-    });
-  };
+  makeAuthenticatedRequest({
+      httpMethod : 'GET',
+      servicePath : '/duppp_user/'+uid,
+      contentType: 'application/json'
+    },
+    //success
+    function(responseData){
+      Ti.API.info('userRetrieve SUCCESS');
+      success && success(responseData);
+    },
+    //fail
+    function(err){
+      Ti.API.error('userRetrieve FAIL');
+      failure && failure(err);
+    },
+    headers
+  );
 };
 
 
@@ -393,137 +321,171 @@ var userRetrieve = function(opts) {
  *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
  *
  */
-var followUser = function(opts) {
-  var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + '/duppp_user/'+opts.uid+'/flag',
-    token = Ti.App.Properties.getString("token");
+var followUser = function(object, uid, success, failure, headers) {
 
-  Ti.API.info('following user, url: '+url);
-
-  xhr.open('POST', url);
-  xhr.setRequestHeader('Content-Type','application/json');
-  xhr.setRequestHeader('X-CSRF-Token', token);
-
-  var obj = JSON.stringify(opts.node);
-  Ti.API.info('node object: '+ obj);
-
-  xhr.send(obj);
-
-  xhr.onload = function() {
-    var jsonObject = JSON.parse(this.responseText);
-    opts.success && opts.success(jsonObject);
-  };
-  xhr.onerror = function(e) {
-    console.info("followUser error: "+JSON.stringify(this));
-    opts.error && opts.error({
-      "status":xhr.status,
-      "statusText":xhr.statusText
-    });
-  };
+  makeAuthenticatedRequest({
+    servicePath: '/duppp_user/'+uid+'/flag',
+    httpMethod: 'POST',
+    params: object
+  },
+  //success
+  function(responseData){
+    Ti.API.info('followUser SUCCESS');
+    success && success(responseData);
+  },
+  //fail
+  function(err){
+    Ti.API.error('followUser FAIL');
+    failure && failure(err);
+  }, headers);
 };
 
+/**
+ * Construct and send the proper login request.
+ */
+var userLogin = function(username, password, success, failure, headers) {
+
+  var user = {
+    username : username,
+    password : password
+  };
+
+  makeAuthenticatedRequest({
+      httpMethod : 'POST',
+      servicePath : '/user/login',
+      contentType: "application/json",
+      params: JSON.stringify(user)
+    },
+    function(responseData) {
+
+      var cookie = responseData.session_name+'='+responseData.sessid;
+      Ti.App.Properties.setString("Drupal-Cookie", cookie);
+      Ti.API.debug('login saving new cookie '+cookie);
+
+      // stock variables
+      Ti.App.Properties.setInt("userUid", responseData.user.uid);
+
+      // clear old token and get a new one for this session
+      Ti.App.Properties.setString("X-CSRF-Token", null);
+      getCsrfToken(function(token){
+        success && success(responseData.user);
+      },
+      function(err){
+        failure && failure(err);
+      });
+    },
+    failure,
+    headers
+  );
+};
+
+/**
+ * Attempt to register a new account. user object must include name, pass, mail properties.
+ */
+var userRegister = function(user, success, failure, headers) {
+
+  Ti.API.info('Registering new user: '+JSON.stringify(user)+" with cookie "+Ti.App.Properties.getString("Drupal-Cookie"));
+
+  makeAuthenticatedRequest({
+      httpMethod : 'POST',
+      servicePath : '/user/register',
+      contentType: 'application/json',
+      params: JSON.stringify(user)
+    },
+    //success
+    function(responseData){
+      Ti.API.info('userRegister SUCCESS');
+      success && success(responseData);
+    },
+    //fail
+    function(err){
+      Ti.API.error('userRegister FAIL');
+      failure && failure(err);
+    },
+    headers
+  );
+}
 
 /*
- *  @desc Login
+ *  @desc Get list of user with search
  *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
  *
  */
-var userLogin = function(opts) {
-  var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + '/user/login',
-    token = Ti.App.Properties.getString("token");
+var searchUser = function(search, success, failure, headers) {
 
-  Ti.API.info('login user, url: '+url);
+  Ti.API.info('Node list with cookie '+Ti.App.Properties.getString("Drupal-Cookie"));
 
-  xhr.open('POST', url);
-  xhr.setRequestHeader('Content-Type','application/json');
-  xhr.setRequestHeader('X-CSRF-Token', token);
-
-  var obj = JSON.stringify(opts.node);
-  Ti.API.info('user object: '+ obj);
-
-  xhr.send(obj);
-
-  xhr.onload = function() {
-    var jsonObject = JSON.parse(this.responseText);
-    opts.success && opts.success(jsonObject);
-  };
-  xhr.onerror = function(e) {
-    console.info("userLogin error: "+JSON.stringify(this));
-    opts.error && opts.error({
-      "status":xhr.status,
-      "statusText":xhr.statusText
-    });
-  };
+  makeAuthenticatedRequest({
+      httpMethod : 'GET',
+      servicePath : '/duppp_user.json?username='+search,
+      contentType: 'application/json'
+    },
+    //success
+    function(responseData){
+      Ti.API.info('searchUser SUCCESS');
+      success && success(responseData);
+    },
+    //fail
+    function(err){
+      Ti.API.error('searchUser FAIL');
+      failure && failure(err);
+    },
+    headers
+  );
 };
-
-
-/*
- *  @desc Register a User
- *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
- *
- */
-var userRegister = function(opts) {
-  var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + '/user/register',
-    token = Ti.App.Properties.getString("token");
-
-  Ti.API.info('Register user, url: '+url);
-
-  xhr.open('POST', url);
-  xhr.setRequestHeader('Content-Type','application/json');
-  xhr.setRequestHeader('X-CSRF-Token', token);
-
-  var obj = JSON.stringify(opts.node);
-  Ti.API.info('user object: '+ obj);
-
-  xhr.send(obj);
-
-  xhr.onload = function() {
-    var jsonObject = JSON.parse(this.responseText);
-    opts.success && opts.success(jsonObject);
-  };
-  xhr.onerror = function(e) {
-    console.info("userRegister error: "+JSON.stringify(this));
-    opts.error && opts.error({
-      "status":xhr.status,
-      "responseText":JSON.parse(xhr.responseText),
-      "statusText":xhr.statusText
-    });
-  };
-};
-
 
 /*
  *  @desc Connect info.
  *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
  *
  */
-var systemInfo = function(opts) {
-  var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + '/system/connect',
-    token = Ti.App.Properties.getString("token");
+var systemInfo = function(success, failure) {
 
-  Ti.API.info('System info, url: '+url);
+  var xhr = Ti.Network.createHTTPClient();
+  var url = REST_PATH + '/system/connect';
 
-  xhr.open('POST', url);
-  xhr.setRequestHeader('Content-Type','application/json');
-  xhr.setRequestHeader('X-CSRF-Token', token);
+  Ti.API.debug("POSTing to url "+url);
+  xhr.open("POST", url);
 
-  xhr.send();
+  xhr.onload = function(e) {
 
-  xhr.onload = function() {
-    var jsonObject = JSON.parse(this.responseText);
-    opts.success && opts.success(jsonObject);
+    if (xhr.status == 200) {
+      var response = xhr.responseText;
+      var responseData = JSON.parse(response);
+
+      Ti.API.debug("system.connect session "+responseData.sessid);
+      Ti.API.debug('system.connect user '+responseData.user.uid);
+
+      var cookie = responseData.session_name+'='+responseData.sessid;
+      Ti.App.Properties.setString("Drupal-Cookie", cookie);
+
+      getCsrfToken(
+        function(token){
+          success && success(responseData);
+        },
+        function(err){
+          failure && failure(err);
+        }
+      );
+    }
+    else {
+      failure && failure(xhr.responseText);
+    }
   };
+
   xhr.onerror = function(e) {
-    console.info("systemInfo error: "+JSON.stringify(this));
-    xhr.send();
-    opts.error && opts.error({
-      "status":xhr.status,
-      "statusText":xhr.statusText
-    });
+    Ti.API.error("There was an error calling systemConnect: ");
+    Ti.API.error(e);
+
+    // since systemConnect failed, will need a new csrf and session
+    Ti.App.Properties.setString("X-CSRF-Token", null);
+    Ti.App.Properties.setString("Drupal-Cookie", null);
+
+    failure && failure(e);
   };
+
+  xhr.clearCookies(BASE_PATH);
+  xhr.send();
 };
 
 /*
@@ -531,60 +493,129 @@ var systemInfo = function(opts) {
  *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
  *
  */
-var getToken = function(opts) {
-  var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + '/user/token';
+var getCsrfToken = function (success, failure) {
+  var existingToken = Ti.App.Properties.getString("X-CSRF-Token");
+  if (existingToken) {
+    success(existingToken);
+    return;
+  }
 
-  Ti.API.info('getToken info, url: '+url);
-
-  xhr.open('POST', url);
-  xhr.send();
+  var xhr = Ti.Network.createHTTPClient();
 
   xhr.onload = function() {
-    var jsonObject = JSON.parse(this.responseText);
-    opts.success && opts.success(jsonObject);
+    Ti.App.Properties.setString("X-CSRF-Token", xhr.responseText);
+    Ti.API.info('got new CSRF token ' + xhr.responseText);
+    success(xhr.responseText);
   };
-  xhr.onerror = function(e) {
-    console.info("getToken error: "+JSON.stringify(this));
-    xhr.send();
-    opts.error && opts.error({
-      "status":xhr.status,
-      "statusText":xhr.statusText
-    });
+  xhr.onerror = function(err) {
+    Ti.API.error("error getting CSRF token:");
+    Ti.API.error(err);
+
+    failure(err);
   };
+
+  var tokenPath = BASE_PATH + '/services/session/token';
+  xhr.open("GET", tokenPath);
+
+  var cookie = Ti.App.Properties.getString("Drupal-Cookie");
+  xhr.setRequestHeader("Cookie", cookie);
+
+  xhr.send();
 };
 
-/*
- *  @desc Get list of user with search
- *  @param {Object} opts Utility payload, should have opts.success() and opts.error() callback functions
+/**
+ * Construct and fire arbitrary requests to the connected Drupal server.
+ * @TODO: encode and append url params here for GET requests.
+ * Config properties:
  *
+ *       httpMethod: GET, POST, PUT, DELETE, etc.
+ *
+ *       params: An object to be sent to the server
+ *
+ *       servicePath: Path to the resource including any url parameters like resource id
+ *
+ *       contentType: String to send as "Content-Type" HTTP header
+ *
+ *       trace (boolean): If true, echo the request summary with Ti.API.trace()
  */
-var searchUser = function(opts) {
-  var xhr = Titanium.Network.createHTTPClient(),
-    url = REST_PATH + '/duppp_user.json?username=' + opts.search;
+var makeAuthenticatedRequest = function (config, success, failure, headers, sending) {
+  var trace = "makeAuthenticatedRequest()\n";
 
-  Ti.API.info('searchUser info, url: '+url);
+  var url = REST_PATH + config.servicePath;
 
-  xhr.open('GET', url);
-  xhr.send();
+  var xhr = Titanium.Network.createHTTPClient();
+
+  trace += config.httpMethod+' '+url+"\n";
+
+  // optionally override timeout
+  if (config.timeout) {
+    xhr.timeout = config.timeout;
+  }
+
+  xhr.open(config.httpMethod, url);
+
+  xhr.onerror = function(e) {
+    Ti.API.error(JSON.stringify(e));
+
+    Ti.API.error('FAILED REQUEST:');
+    Ti.API.error(trace);
+    Ti.API.error(config.params);
+
+    failure(e);
+  };
+
+  xhr.onsendstream = function(e) {
+    sending && sending(e);
+  };
 
   xhr.onload = function() {
-    var jsonObject = this.responseText;
-    opts.success && opts.success(jsonObject);
+    if (xhr.status == 200) {
+      var responseData = JSON.parse(xhr.responseText);
+      success(responseData);
+    } else {
+      Ti.API.trace('makeAuthReq returned with status '+xhr.status);
+      failure(xhr.responseText);
+    }
   };
-  xhr.onerror = function(e) {
-    console.info("searchUser error: "+JSON.stringify(this));
-    opts.error && opts.error({
-      "status":xhr.status,
-      "statusText":xhr.statusText
-    });
-  };
-};
+
+  if (!config.skipCookie) {
+    var cookie = Ti.App.Properties.getString("Drupal-Cookie");
+    xhr.setRequestHeader("Cookie", cookie);
+    trace += "Cookie: " + cookie + "\n";
+  }
+
+  if (!config.skipCsrfToken) {
+    var token = Ti.App.Properties.getString("X-CSRF-Token");
+    xhr.setRequestHeader("X-CSRF-Token", token);
+    trace += "X-CSRF-Token: " + token + "\n";
+  }
+
+  xhr.setRequestHeader("Accept", "application/json");
+
+  if (config.contentType) {
+    xhr.setRequestHeader("Content-Type", config.contentType);
+    trace += "Content-Type: " + config.contentType+"\n";
+  }
+
+  // add optional headers
+  if (headers) {
+    for (var key in headers) {
+      xhr.setRequestHeader(key, headers[key]);
+    }
+  }
+
+  // optionally output a summary of the request
+  if (config.trace) {
+    Ti.API.trace(trace);
+    Ti.API.trace(config.params);
+  }
+
+  xhr.send(config.params);
+}
 
 exports.nodeList = nodeList;
 exports.userNodesList = userNodesList;
 exports.userRetrieve = userRetrieve;
-exports.nodeRetrieve = nodeRetrieve;
 exports.createNode = createNode;
 exports.createNodeContribution = createNodeContribution;
 exports.closeNode = closeNode;
@@ -595,7 +626,7 @@ exports.followUser = followUser;
 exports.userLogin = userLogin;
 exports.userRegister = userRegister;
 exports.systemInfo = systemInfo;
-exports.getToken = getToken;
+exports.getToken = getCsrfToken;
 exports.searchUser = searchUser;
 exports.nodeRetrieveComments = nodeRetrieveComments;
 exports.createComment = createComment;

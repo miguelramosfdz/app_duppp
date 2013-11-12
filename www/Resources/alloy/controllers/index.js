@@ -55,6 +55,7 @@ function Controller() {
     _.extend($, $.__views);
     var APP = require("core");
     APP.MainWindow = $.MainWindow;
+    APP.LoginWindow = Alloy.createController("user").getView("userLogin");
     APP.GlobalWrapper = $.GlobalWrapper;
     APP.ContentWrapper = $.ContentWrapper;
     APP.Tabs = $.Tabs;

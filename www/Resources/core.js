@@ -4,12 +4,10 @@ var UTIL = require("utilities");
 
 var drupalServices = require("drupalServices");
 
-var dupppUpload = require("dupppUpload");
-
 var APP = {
     ID: null,
     VERSION: null,
-    CVERSION: "2.3.0",
+    CVERSION: "2.3.1",
     LEGAL: {
         COPYRIGHT: null,
         TOS: null,
@@ -51,6 +49,7 @@ var APP = {
     MainWindow: null,
     GlobalWrapper: null,
     ContentWrapper: null,
+    LoginWindow: null,
     Loading: Alloy.createWidget("com.chariti.loading").getView(),
     cancelLoading: false,
     loadingOpen: false,
@@ -62,6 +61,9 @@ var APP = {
     SlideMenuRight: null,
     SlideMenuRightOpen: false,
     SlideMenuRightEngaged: true,
+    media: Alloy.createCollection("media"),
+    recent: Alloy.createCollection("recent"),
+    sendConnection: "3G",
     init: function() {
         Ti.API.debug("APP.init");
         Ti.Network.addEventListener("change", APP.networkObserver);
@@ -71,14 +73,17 @@ var APP = {
         APP.determineDevice();
         APP.loadContent();
         APP.build();
-        APP.loadSystemInfo({
-            registred: function() {
+        APP.LoginWindow.addEventListener("open", APP.postBuild);
+        APP.LoginWindow.open();
+    },
+    postBuild: function() {
+        drupalServices.systemInfo(function(sessionData) {
+            if (0 !== sessionData.user.uid) {
+                APP.LoginWindow.close();
                 APP.startApp();
-            },
-            anonymous: function() {
-                var win = Alloy.createController("user").getView("userLogin");
-                win.open();
             }
+        }, function() {
+            Ti.API.error("boo :(");
         });
     },
     startApp: function() {
@@ -89,19 +94,6 @@ var APP = {
     determineDevice: function() {
         APP.Device.os = "IOS";
         "IPHONE" == Ti.Platform.osname.toUpperCase() ? APP.Device.name = "IPHONE" : "IPAD" == Ti.Platform.osname.toUpperCase() && (APP.Device.name = "IPAD");
-    },
-    loadSystemInfo: function(callback) {
-        APP.log("debug", "APP.loadContent");
-        drupalServices.getToken({
-            success: function(_data) {
-                Ti.App.Properties.setString("token", _data.token);
-                drupalServices.systemInfo({
-                    success: function(data) {
-                        0 !== data.user.uid ? callback.registred && callback.registred(data) : callback.anonymous && callback.anonymous(data);
-                    }
-                });
-            }
-        });
     },
     loadContent: function() {
         APP.log("debug", "APP.loadContent");
@@ -450,7 +442,6 @@ var APP = {
     },
     resumeObserver: function() {
         APP.log("debug", "APP.resumeObserver");
-        dupppUpload.processUpload();
         APP.eventsOpen.fetchEvents();
     },
     backButtonObserver: function() {

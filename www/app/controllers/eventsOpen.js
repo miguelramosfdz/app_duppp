@@ -1,18 +1,17 @@
+var APP = require('core');
 var drupalServices = require('drupalServices'),
-    medias = Alloy.Collections.media,
+    medias = APP.media,
     data,
     eventsRaw;
-
-var APP = require('core');
-
 
 $.fetchEvents = function() {
 
   if (APP.Network.online) {
 
-    drupalServices.nodeList({
-      type: 'my_events',
-      success: function(json) {
+    drupalServices.nodeList(
+      'my_events',
+      '',
+      function(json) {
         data = [];
         eventsRaw = [];
 
@@ -31,10 +30,10 @@ $.fetchEvents = function() {
 
         Ti.API.fireEvent('myEvents:fetched', events);
       },
-      error: function(data) {
+      function(data) {
         $.fetchEvents();
       }
-    });
+    );
   }
 }
 

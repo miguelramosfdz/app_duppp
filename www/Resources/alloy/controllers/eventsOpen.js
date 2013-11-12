@@ -48,25 +48,21 @@ function Controller() {
     $.__views.provressView.add($.__views.pb);
     exports.destroy = function() {};
     _.extend($, $.__views);
-    var data, eventsRaw, drupalServices = require("drupalServices"), medias = Alloy.Collections.media;
     var APP = require("core");
+    var data, eventsRaw, drupalServices = require("drupalServices"), medias = APP.media;
     $.fetchEvents = function() {
-        APP.Network.online && drupalServices.nodeList({
-            type: "my_events",
-            success: function(json) {
-                data = [];
-                eventsRaw = [];
-                json.forEach(function(event) {
-                    "0" === event.field_event_closed && eventsRaw.push(event);
-                });
-                var events = {
-                    data: eventsRaw
-                };
-                Ti.API.fireEvent("myEvents:fetched", events);
-            },
-            error: function() {
-                $.fetchEvents();
-            }
+        APP.Network.online && drupalServices.nodeList("my_events", "", function(json) {
+            data = [];
+            eventsRaw = [];
+            json.forEach(function(event) {
+                "0" === event.field_event_closed && eventsRaw.push(event);
+            });
+            var events = {
+                data: eventsRaw
+            };
+            Ti.API.fireEvent("myEvents:fetched", events);
+        }, function() {
+            $.fetchEvents();
         });
     };
     Titanium.API.addEventListener("eventCreated", function() {

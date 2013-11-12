@@ -81,7 +81,7 @@ function Controller() {
     _.extend($, $.__views);
     var APP = require("core");
     var CONFIG = arguments[0] || {};
-    var clickedRows = [], usersSelected = [], recents = Alloy.Collections.recent, drupalServices = require("drupalServices");
+    var clickedRows = [], usersSelected = [], recents = APP.recent, drupalServices = require("drupalServices");
     $.init = function() {
         APP.log("debug", "eventForm.init | " + JSON.stringify(CONFIG));
         recents.fetch();
@@ -104,22 +104,19 @@ function Controller() {
         if (e.value != last_search) {
             last_search = e.value;
             APP.openLoading();
-            drupalServices.searchUser({
-                search: e.value,
-                success: function(users) {
-                    var data = prepareData(JSON.parse(users));
-                    $.table.setData(data);
-                    APP.closeLoading();
-                }
+            drupalServices.searchUser(e.value, function(users) {
+                var data = prepareData(JSON.parse(users));
+                $.table.setData(data);
+                APP.closeLoading();
             });
             $.search.blur();
         }
     });
     $.table.addEventListener("click", storeUsers);
     $.createEvent = function() {
-        APP.openLoading();
-        Ti.App.Properties.getInt("userUid") ? drupalServices.createNode({
-            node: {
+        if (Ti.App.Properties.getInt("userUid")) {
+            APP.openLoading();
+            drupalServices.createNode({
                 type: CONFIG.type,
                 title: CONFIG.title,
                 language: CONFIG.language,
@@ -140,8 +137,7 @@ function Controller() {
                 },
                 uid: CONFIG.uid,
                 status: CONFIG.status
-            },
-            success: function(data) {
+            }, function(data) {
                 APP.closeLoading();
                 APP.closeMenuRight();
                 APP.removeChild();
@@ -150,15 +146,11 @@ function Controller() {
                     uid: clickedRows
                 };
                 recentUsers(usersSelected);
-                drupalServices.joinNode({
-                    node: join,
-                    nid: data.nid
-                });
-            },
-            error: function() {
+                drupalServices.joinNode(join, data.nid);
+            }, function() {
                 alert("There was an error, try again.");
-            }
-        }) : alert("You need to login first");
+            });
+        } else alert("You need to login first");
     };
     $.init();
     _.extend($, exports);

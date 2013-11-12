@@ -4,15 +4,15 @@ var CONFIG = arguments[0];
 $.init = function() {
   APP.log("debug", "settings.init | " + JSON.stringify(CONFIG));
 
-  if (Ti.App.Properties.getString('sendConnection') == 'WIFI') {
+  if (APP.sendConnection == 'WIFI') {
     $.swWifi.setValue(true);
   }
 
   $.swWifi.addEventListener('change', function(e) {
     if (e.value == 1) {
-      Ti.App.Properties.setString('sendConnection', 'WIFI');
+      APP.sendConnection = 'WIFI';
     } else {
-      Ti.App.Properties.setString('sendConnection', '3G');
+      APP.sendConnection = '3G';
     }
   });
 

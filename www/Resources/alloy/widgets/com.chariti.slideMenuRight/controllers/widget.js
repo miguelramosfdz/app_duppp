@@ -34,7 +34,7 @@ function Controller() {
     _.extend($, $.__views);
     var APP = require("core");
     var dupppUpload = require("dupppUpload");
-    var medias = Alloy.Collections.media;
+    var medias = APP.media;
     var drupalServices = require("drupalServices");
     $.init = function() {};
     $.clear = function() {
@@ -98,16 +98,12 @@ function Controller() {
         if (0 === medias.length) {
             APP.closeMenuRight();
             APP.openLoading();
-            drupalServices.closeNode({
-                nid: _data.nid,
-                success: function() {
-                    APP.closeLoading();
-                    Ti.API.fireEvent("eventCreated");
-                },
-                error: function() {
-                    APP.closeLoading();
-                    alert("Sorry, your event cannot be closed.");
-                }
+            drupalServices.closeNode(_data.nid, function() {
+                APP.closeLoading();
+                Ti.API.fireEvent("eventCreated");
+            }, function() {
+                APP.closeLoading();
+                alert("Sorry, your event cannot be closed.");
             });
         } else alert("Sorry, your cannot close your event, because some videos need to be uploaded.");
     };

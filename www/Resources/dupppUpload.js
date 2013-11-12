@@ -12,7 +12,7 @@ function saveFile(_args) {
     return file.nativePath;
 }
 
-var drupalServices = require("drupalServices"), processed = false, medias = Alloy.Collections.media;
+var drupalServices = require("drupalServices"), APP = require("core"), processed = false, medias = APP.media;
 
 if ("iPhone" === Ti.Platform.osname || "iPad" === Ti.Platform.osname) var ios = true;
 
@@ -20,36 +20,26 @@ var uploadFile = function(media, contribution) {
     "use strict";
     if (Titanium.Network.online && !processed) {
         processed = true;
-        drupalServices.createNodeContribution({
-            node: contribution,
-            success: function(data) {
-                Titanium.API.fireEvent("startUpload");
-                var node = {
-                    "files[video]": media,
-                    field_name: "field_contribution_video"
-                };
-                drupalServices.attachFile({
-                    node: node,
-                    nid: data.nid,
-                    sending: function(json) {
-                        Titanium.API.fireEvent("uploadInProgress", json);
-                    },
-                    success: function() {
-                        var model = medias.shift();
-                        model.destroy();
-                        processed = false;
-                        processUpload();
-                        0 === medias.length && Titanium.API.fireEvent("uploadFinish");
-                    },
-                    error: function() {
-                        processed = false;
-                        processUpload();
-                    }
-                });
-            },
-            error: function() {
-                alert("There was an error, try again.");
-            }
+        drupalServices.createNodeContribution(contribution, function(data) {
+            Titanium.API.fireEvent("startUpload");
+            var node = {
+                "files[video]": media,
+                field_name: "field_contribution_video"
+            };
+            drupalServices.attachFile(node, data.nid, function() {
+                var model = medias.shift();
+                model.destroy();
+                processed = false;
+                processUpload();
+                0 === medias.length && Titanium.API.fireEvent("uploadFinish");
+            }, function() {
+                processed = false;
+                processUpload();
+            }, "", function(json) {
+                Titanium.API.fireEvent("uploadInProgress", json);
+            });
+        }, function() {
+            alert("There was an error, try again.");
         });
     }
 };
@@ -87,7 +77,7 @@ var addFile = function(media, gid, date, uid) {
 
 var processUpload = function() {
     "use strict";
-    if (Titanium.Network.online && (Titanium.Network.networkTypeName == Ti.App.Properties.getString("sendConnection") || "3G" == Ti.App.Properties.getString("sendConnection"))) {
+    if (Titanium.Network.online && (APP.Network.type == APP.sendConnection || "3G" == APP.sendConnection)) {
         medias.fetch();
         if (0 === medias.length) return Ti.API.info("No video need to be upload");
         var contributions = medias.toJSON();

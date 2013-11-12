@@ -3,7 +3,7 @@ var CONFIG = arguments[0] || {};
 var data = [],
   clickedRows = [],
   usersSelected = [],
-  recents = Alloy.Collections.recent,
+  recents = APP.recent,
   drupalServices = require('drupalServices');
 
 $.init = function() {
@@ -117,18 +117,18 @@ $.search.addEventListener('return', function (e) {
     last_search = e.value;
     APP.openLoading();
 
-    drupalServices.searchUser({
-      search: e.value,
-      success: function(users) {
+    drupalServices.searchUser(
+      e.value,
+      function(users) {
 
-        var data = prepareData(JSON.parse(users));
+        var data = prepareData(users);
 
         // Update View.
         $.table.setData(data);
 
         APP.closeLoading();
       }
-    });
+    );
 
     $.search.blur();
   }
@@ -151,15 +151,14 @@ $.addPeople = function() {
 
     recentUsers(usersSelected);
 
-    drupalServices.joinNode({
-      node: join,
-      nid: CONFIG.nid,
-      success: function() {
-
+    drupalServices.joinNode(
+      join,
+      CONFIG.nid,
+      function() {
         APP.closeLoading();
         APP.removeChild();
       }
-    });
+    );
 
   }
   else {

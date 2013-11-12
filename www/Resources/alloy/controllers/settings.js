@@ -59,9 +59,9 @@ function Controller() {
     var CONFIG = arguments[0];
     $.init = function() {
         APP.log("debug", "settings.init | " + JSON.stringify(CONFIG));
-        "WIFI" == Ti.App.Properties.getString("sendConnection") && $.swWifi.setValue(true);
+        "WIFI" == APP.sendConnection && $.swWifi.setValue(true);
         $.swWifi.addEventListener("change", function(e) {
-            1 == e.value ? Ti.App.Properties.setString("sendConnection", "WIFI") : Ti.App.Properties.setString("sendConnection", "3G");
+            APP.sendConnection = 1 == e.value ? "WIFI" : "3G";
         });
         $.NavigationBar.setBackgroundColor(APP.Settings.colors.primary || "#000");
         true === CONFIG.isChild && $.NavigationBar.showBack();

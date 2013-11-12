@@ -95,15 +95,11 @@ function Controller() {
     };
     $.retrieveData = function() {
         APP.openLoading();
-        drupalServices.nodeRetrieveComments({
-            nid: CONFIG.nid,
-            success: function(json) {
-                $.handleData(json);
-                APP.closeLoading();
-            },
-            error: function() {
-                APP.closeLoading();
-            }
+        drupalServices.nodeRetrieveComments(CONFIG.nid, function(json) {
+            $.handleData(json);
+            APP.closeLoading();
+        }, function() {
+            APP.closeLoading();
         });
     };
     $.handleData = function(_data) {
@@ -118,25 +114,21 @@ function Controller() {
     };
     $.addComment = function(_data) {
         "" !== _data && "Your comment" !== _data && drupalServices.createComment({
-            node: {
-                nid: CONFIG.nid,
-                subject: CONFIG.nid,
-                comment_body: {
-                    und: [ {
-                        value: _data
-                    } ]
-                }
-            },
-            success: function() {
-                $.textArea.blur();
-                $.textArea.value = "Your comment";
-                $.button.backgroundColor = "#27ae60";
-                $.textWrapper.bottom = 0;
-                $.retrieveData();
-            },
-            error: function() {
-                alert("There was an error, try again.");
+            nid: CONFIG.nid,
+            subject: CONFIG.nid,
+            comment_body: {
+                und: [ {
+                    value: _data
+                } ]
             }
+        }, function() {
+            $.textArea.blur();
+            $.textArea.value = "Your comment";
+            $.button.backgroundColor = "#27ae60";
+            $.textWrapper.bottom = 0;
+            $.retrieveData();
+        }, function() {
+            alert("There was an error, try again.");
         });
     };
     $.textArea.addEventListener("focus", function() {

@@ -81,7 +81,7 @@ function Controller() {
     _.extend($, $.__views);
     var APP = require("core");
     var CONFIG = arguments[0] || {};
-    var clickedRows = [], usersSelected = [], recents = Alloy.Collections.recent, drupalServices = require("drupalServices");
+    var clickedRows = [], usersSelected = [], recents = APP.recent, drupalServices = require("drupalServices");
     $.init = function() {
         APP.log("debug", "eventForm.init | " + JSON.stringify(CONFIG));
         recents.fetch();
@@ -104,13 +104,10 @@ function Controller() {
         if (e.value != last_search) {
             last_search = e.value;
             APP.openLoading();
-            drupalServices.searchUser({
-                search: e.value,
-                success: function(users) {
-                    var data = prepareData(JSON.parse(users));
-                    $.table.setData(data);
-                    APP.closeLoading();
-                }
+            drupalServices.searchUser(e.value, function(users) {
+                var data = prepareData(users);
+                $.table.setData(data);
+                APP.closeLoading();
             });
             $.search.blur();
         }
@@ -123,13 +120,9 @@ function Controller() {
                 uid: clickedRows
             };
             recentUsers(usersSelected);
-            drupalServices.joinNode({
-                node: join,
-                nid: CONFIG.nid,
-                success: function() {
-                    APP.closeLoading();
-                    APP.removeChild();
-                }
+            drupalServices.joinNode(join, CONFIG.nid, function() {
+                APP.closeLoading();
+                APP.removeChild();
             });
         } else alert("You need to login first");
     };

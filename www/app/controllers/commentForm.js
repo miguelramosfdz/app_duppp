@@ -24,16 +24,16 @@ $.init = function() {
 
 $.retrieveData = function() {
   APP.openLoading();
-  drupalServices.nodeRetrieveComments({
-    nid: CONFIG.nid,
-    success: function(json) {
+  drupalServices.nodeRetrieveComments(
+    CONFIG.nid,
+    function(json) {
       $.handleData(json);
       APP.closeLoading();
     },
-    error: function() {
+    function() {
       APP.closeLoading();
     }
-  });
+  );
 };
 
 $.handleData = function(_data) {
@@ -54,8 +54,8 @@ $.handleData = function(_data) {
 $.addComment = function(_data) {
 
   if (_data !== '' && _data !== 'Your comment') {
-    drupalServices.createComment({
-      node: {
+    drupalServices.createComment(
+      {
         'nid': CONFIG.nid,
         'subject': CONFIG.nid,
         'comment_body': {
@@ -64,17 +64,17 @@ $.addComment = function(_data) {
           }]
         }
       },
-      success: function () {
+      function () {
         $.textArea.blur();
         $.textArea.value = 'Your comment';
         $.button.backgroundColor = '#27ae60';
         $.textWrapper.bottom = 0;
         $.retrieveData();
       },
-      error: function() {
+      function() {
         alert('There was an error, try again.');
       }
-    });
+    );
   }
 
 };

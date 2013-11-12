@@ -1,7 +1,6 @@
 var Alloy = require("alloy");
 var UTIL = require("utilities");
 var drupalServices = require('drupalServices');
-var dupppUpload = require('dupppUpload');
 
 var APP = {
   /**
@@ -9,7 +8,7 @@ var APP = {
    */
   ID: null,
   VERSION: null,
-  CVERSION: "2.3.0",
+  CVERSION: "2.3.1",
   LEGAL: {
     COPYRIGHT: null,
     TOS: null,
@@ -71,6 +70,10 @@ var APP = {
    */
   ContentWrapper: null,
   /**
+   * The login window
+   */
+  LoginWindow: null,
+  /**
    * The loading view
    */
   Loading: Alloy.createWidget("com.chariti.loading").getView(),
@@ -92,6 +95,11 @@ var APP = {
   SlideMenuRight: null,
   SlideMenuRightOpen: false,
   SlideMenuRightEngaged: true,
+
+  media: Alloy.createCollection('media'),
+  recent: Alloy.createCollection('recent'),
+
+  sendConnection: "3G",
   /**
    * Initializes the application
    */
@@ -103,6 +111,7 @@ var APP = {
     Ti.App.addEventListener("pause", APP.exitObserver);
     Ti.App.addEventListener("close", APP.exitObserver);
     Ti.App.addEventListener("resumed", APP.resumeObserver);
+
 
     if(OS_ANDROID) {
       APP.MainWindow.addEventListener("androidback", APP.backButtonObserver);
@@ -117,16 +126,27 @@ var APP = {
     // Builds out the tab group
     APP.build();
 
-    APP.loadSystemInfo({
-      registred: function () {
-        APP.startApp();
+    // Open main window.
+    APP.LoginWindow.addEventListener("open", APP.postBuild);
+    APP.LoginWindow.open();
+  },
+  /**
+   * Step after build.
+   */
+  postBuild: function() {
+    drupalServices.systemInfo(
+      //success
+      function(sessionData) {
+        if (sessionData.user.uid !== 0) {
+          APP.LoginWindow.close();
+          APP.startApp();
+        }
       },
-      anonymous: function () {
-        var win = Alloy.createController('user').getView('userLogin');
-        win.open();
+      //failure
+      function(error) {
+        Ti.API.error('boo :(');
       }
-    });
-
+    );
   },
   /**
    * Launch basic start.
@@ -160,32 +180,6 @@ var APP = {
       APP.Device.width = (APP.Device.width / (APP.Device.dpi / 160));
       APP.Device.height = (APP.Device.height / (APP.Device.dpi / 160));
     }
-  },
-  /**
-   * Loads system remote info
-   */
-  loadSystemInfo: function(callback) {
-    APP.log("debug", "APP.loadContent");
-
-    drupalServices.getToken({
-      success: function(_data) {
-
-        // Stock Token in a property.
-        Ti.App.Properties.setString('token', _data.token);
-
-        drupalServices.systemInfo({
-          success: function(data) {
-            // send login event.
-            if (data.user.uid !== 0) {
-              callback.registred && callback.registred(data);
-            } else {
-              callback.anonymous && callback.anonymous(data);
-            }
-
-          }
-        });
-      }
-    });
   },
   /**
    * Loads in the appropriate controller and config data
@@ -349,7 +343,7 @@ var APP = {
     });
   },
   buildMenuRight: function(_tabs, _rebuild) {
-    APP.log("debug", "APP.buildMenu");
+    APP.log("debug", "APP.buildMenuRight");
 
     APP.SlideMenuRight.init();
   },
@@ -892,7 +886,7 @@ var APP = {
   resumeObserver: function(_event) {
     APP.log("debug", "APP.resumeObserver");
 
-    dupppUpload.processUpload();
+    //dupppUpload.processUpload();
     APP.eventsOpen.fetchEvents();
   },
   /**

@@ -9,47 +9,38 @@ var APP = require('core');
 function login(e){
 
   // Create an object to hold the data entered in the form
-  drupalServices.userLogin({
-    node: {
-      username: $.loginUsr.value,
-      password: $.loginPwd.value
-    },
-    success: function(data) {
+  drupalServices.userLogin(
+    $.loginUsr.value,
+    $.loginPwd.value,
+    function(data) {
 
-      // Set a global variable
-      Titanium.App.Properties.setInt("userUid", data.user.uid);
-      Titanium.App.Properties.setInt("userSessionId", data.sessid);
-      Titanium.App.Properties.setInt("userSessionName", data.sesion_name);
-
-      drupalServices.getToken({
-        success: function(_data) {
-          Ti.App.Properties.setString('token', _data.token);
-
+      drupalServices.getToken(
+        function(_data) {
           // Close the window.
           $.userLoginDuppp.close();
 
           APP.startApp();
         }
-      });
+      );
 
     },
-    error: function(data) {
+    function(data) {
       alert('Error, contact the admin');
     }
-  });
+  );
 }
 
 function register() {
 
 	// Create an object to hold the data entered in the form
-  drupalServices.userRegister({
-    node: {
+  drupalServices.userRegister(
+    {
       name: $.usernameField.value,
       mail: $.emailField.value,
       pass: $.passwordRegisterField.value,
       status: 1
     },
-    success: function(data) {
+    function(data) {
 
       // Close the window.
       $.userRegisterDuppp.close();
@@ -76,10 +67,10 @@ function register() {
 
       $.userLoginDuppp.open(a);
     },
-    error: function(data) {
+    function(data) {
       alert(data.responseText.form_errors);
     }
-  });
+  );
 }
 
 function openLoginDuppp() {

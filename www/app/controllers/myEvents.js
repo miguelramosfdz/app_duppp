@@ -24,16 +24,17 @@ $.init = function() {
 };
 
 $.retrieveData = function() {
-  drupalServices.nodeList({
-    type: 'my_events',
-    success: function(data) {
+  drupalServices.nodeList(
+    'my_events',
+    '',
+    function(data) {
       $.handleData(data);
       APP.closeLoading();
     },
-    error: function(data) {
+    function(data) {
       APP.closeLoading();
     }
-  });
+  );
 };
 
 $.handleData = function(_data) {
@@ -58,16 +59,17 @@ var ptrCtrl = Alloy.createWidget('nl.fokkezb.pullToRefresh', null, {
 });
 
 function myLoaderCallback(widgetCallback) {
-  drupalServices.nodeList({
-    type: 'my_events',
-    success: function(data) {
+  drupalServices.nodeList(
+    'my_events',
+    '',
+    function(data) {
       $.handleData(data);
       widgetCallback(true);
     },
-    error: function(data) {
+    function(data) {
       widgetCallback(true);
     }
-  });
+  );
 }
 
 // Kick off the init

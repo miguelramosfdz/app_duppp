@@ -1,14 +1,10 @@
 function Controller() {
     function myLoaderCallback(widgetCallback) {
-        drupalServices.nodeList({
-            type: "activity",
-            success: function(data) {
-                $.handleData(data);
-                widgetCallback(true);
-            },
-            error: function() {
-                widgetCallback(true);
-            }
+        drupalServices.nodeList("activity", "", function(data) {
+            $.handleData(data);
+            widgetCallback(true);
+        }, function() {
+            widgetCallback(true);
         });
     }
     require("alloy/controllers/BaseController").apply(this, Array.prototype.slice.call(arguments));
@@ -57,15 +53,11 @@ function Controller() {
         } else $.NavigationBar.showSettings();
     };
     $.retrieveData = function() {
-        drupalServices.nodeList({
-            type: "activity",
-            success: function(data) {
-                $.handleData(data);
-                APP.closeLoading();
-            },
-            error: function() {
-                APP.closeLoading();
-            }
+        drupalServices.nodeList("activity", "", function(data) {
+            $.handleData(data);
+            APP.closeLoading();
+        }, function() {
+            APP.closeLoading();
         });
     };
     $.handleData = function(_data) {

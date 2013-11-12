@@ -53,16 +53,11 @@ function Controller() {
     };
     $.retrieveData = function(type, search) {
         APP.openLoading();
-        drupalServices.nodeList({
-            type: type,
-            title: search,
-            success: function(data) {
-                $.handleData(data);
-                APP.closeLoading();
-            },
-            error: function() {
-                APP.closeLoading();
-            }
+        drupalServices.nodeList(type, search, function(data) {
+            $.handleData(data);
+            APP.closeLoading();
+        }, function() {
+            APP.closeLoading();
         });
     };
     $.handleData = function(_data) {
@@ -81,21 +76,15 @@ function Controller() {
             last_search = e.value;
             if (0 === e.value.indexOf("@")) {
                 APP.openLoading();
-                drupalServices.searchUser({
-                    search: e.value.substring(1),
-                    success: function(users) {
-                        data = [];
-                        var json = JSON.parse(users);
-                        json.forEach(function(user) {
-                            if (parseInt(user.uid) !== Titanium.App.Properties.getInt("userUid")) {
-                                var newsItem = Alloy.createController("userRow", user).getView();
-                                data.push(newsItem);
-                            }
-                        });
-                        $.table.setData(data);
-                        $.table.setAllowsSelection(true);
-                        APP.closeLoading();
-                    }
+                drupalServices.searchUser(e.value.substring(1), function(users) {
+                    data = [];
+                    users.forEach(function(user) {
+                        var newsItem = Alloy.createController("userRow", user).getView();
+                        data.push(newsItem);
+                    });
+                    $.table.setData(data);
+                    $.table.setAllowsSelection(true);
+                    APP.closeLoading();
                 });
             } else $.retrieveData("public_event", e.value);
             $.search.blur();

@@ -25,17 +25,17 @@ $.init = function() {
 
 $.retrieveData = function(type, search) {
   APP.openLoading();
-  drupalServices.nodeList({
-    type: type,
-    title: search,
-    success: function(data) {
+  drupalServices.nodeList(
+    type,
+    search,
+    function(data) {
       $.handleData(data);
       APP.closeLoading();
     },
-    error: function(data) {
+    function(data) {
       APP.closeLoading();
     }
-  });
+  );
 };
 
 $.handleData = function(_data) {
@@ -61,20 +61,16 @@ $.search.addEventListener('return', function (e) {
     if (e.value.indexOf('@') === 0) {
       APP.openLoading();
 
-      drupalServices.searchUser({
-        search: e.value.substring(1),
-        success: function(users) {
+      drupalServices.searchUser(
+        e.value.substring(1),
+        function(users) {
 
           data = [];
 
-          var json = JSON.parse(users);
-
-          json.forEach(function(user){
-            if (parseInt(user.uid) !== Titanium.App.Properties.getInt("userUid")) {
-              // Keep only user different from current user.
-              var newsItem = Alloy.createController('userRow', user).getView();
-              data.push(newsItem);
-            }
+          users.forEach(function(user){
+            // Keep only user different from current user.
+            var newsItem = Alloy.createController('userRow', user).getView();
+            data.push(newsItem);
           });
 
           // Update View.
@@ -83,7 +79,7 @@ $.search.addEventListener('return', function (e) {
 
           APP.closeLoading();
         }
-      });
+      );
     } else {
 
       $.retrieveData('public_event', e.value);

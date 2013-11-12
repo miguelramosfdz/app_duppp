@@ -140,33 +140,25 @@ function Controller() {
         $.retrieveData();
     };
     $.retrieveData = function() {
-        drupalServices.userRetrieve({
-            uid: CONFIG.uid,
-            success: function(data) {
-                var value;
-                value = data.user.is_flagged ? "Unfollow" : "Follow";
-                $.NavigationBar.showFollow({
-                    text: value,
-                    callback: function() {
-                        $.follow(value);
-                    }
-                });
-                $.followerCount.text = data.user.follow_count;
-                $.eventCount.text = data.user.event_count;
-                $.author.text = data.user.name;
-            },
-            error: function() {
-                alert("error");
-            }
+        drupalServices.userRetrieve(CONFIG.uid, function(data) {
+            var value;
+            value = data.user.is_flagged ? "Unfollow" : "Follow";
+            $.NavigationBar.showFollow({
+                text: value,
+                callback: function() {
+                    $.follow(value);
+                }
+            });
+            $.followerCount.text = data.user.follow_count;
+            $.eventCount.text = data.user.event_count;
+            $.author.text = data.user.name;
+        }, function() {
+            alert("error");
         });
-        drupalServices.userNodesList({
-            uid: CONFIG.uid,
-            success: function(json) {
-                $.handleData(json);
-            },
-            error: function() {
-                alert("error");
-            }
+        drupalServices.userNodesList(CONFIG.uid, function(json) {
+            $.handleData(json);
+        }, function() {
+            alert("error");
         });
     };
     $.handleData = function(_data) {
@@ -183,21 +175,12 @@ function Controller() {
         $.table.setHeight(height);
     };
     $.follow = function(value) {
-        var data;
-        data = "Follow" === value ? {
-            action: "flag"
-        } : {
-            action: "unflag"
-        };
-        drupalServices.followUser({
-            node: data,
-            uid: CONFIG.uid,
-            success: function() {
-                $.NavigationBar.rightLabel.title = "Follow" === value ? "Unfollow" : "Follow";
-            },
-            error: function() {
-                alert("error");
-            }
+        var data = {};
+        data.action = "Follow" === value ? "flag" : "unflag";
+        drupalServices.followUser(data, CONFIG.uid, function() {
+            $.NavigationBar.rightLabel.title = "Follow" === value ? "Unfollow" : "Follow";
+        }, function() {
+            alert("error");
         });
     };
     $.init();

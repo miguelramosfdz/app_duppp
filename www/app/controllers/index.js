@@ -3,6 +3,7 @@ var APP = require("core");
 
 // Make sure we always have a reference to global elements throughout the APP singleton
 APP.MainWindow = $.MainWindow;
+APP.LoginWindow = Alloy.createController('user').getView('userLogin');
 APP.GlobalWrapper = $.GlobalWrapper;
 APP.ContentWrapper = $.ContentWrapper;
 APP.Tabs = $.Tabs;

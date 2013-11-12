@@ -3,7 +3,7 @@ var CONFIG = arguments[0] || {};
 var data = [],
   clickedRows = [],
   usersSelected = [],
-  recents = Alloy.Collections.recent,
+  recents = APP.recent,
   drupalServices = require('drupalServices');
 
 $.init = function() {
@@ -117,9 +117,9 @@ $.search.addEventListener('return', function (e) {
     last_search = e.value;
     APP.openLoading();
 
-    drupalServices.searchUser({
-      search: e.value,
-      success: function(users) {
+    drupalServices.searchUser(
+      e.value,
+      function(users) {
 
         var data = prepareData(JSON.parse(users));
 
@@ -128,7 +128,7 @@ $.search.addEventListener('return', function (e) {
 
         APP.closeLoading();
       }
-    });
+    );
 
     $.search.blur();
   }
@@ -141,13 +141,13 @@ $.table.addEventListener('click', storeUsers);
 // Function to create an event
 $.createEvent = function() {
 
-  APP.openLoading();
-
   if (Ti.App.Properties.getInt("userUid")) {
-    // Create a user variable to hold some information about the user
 
-    drupalServices.createNode({
-      node: {
+    APP.openLoading();
+
+    // Create a user variable to hold some information about the user
+    drupalServices.createNode(
+      {
         'type': CONFIG.type,
         'title': CONFIG.title,
         'language': CONFIG.language,
@@ -169,7 +169,7 @@ $.createEvent = function() {
         'uid': CONFIG.uid,
         'status': CONFIG.status
       },
-      success: function (data) {
+      function (data) {
 
         APP.closeLoading();
         APP.closeMenuRight();
@@ -183,15 +183,15 @@ $.createEvent = function() {
 
         recentUsers(usersSelected);
 
-        drupalServices.joinNode({
-          node: join,
-          nid: data.nid
-        });
+        drupalServices.joinNode(
+          join,
+          data.nid
+        );
       },
-      error: function(data) {
+      function(data) {
         alert('There was an error, try again.');
       }
-    });
+    );
 
   }
   else {

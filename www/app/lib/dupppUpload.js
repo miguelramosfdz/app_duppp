@@ -5,8 +5,9 @@
 /* global Ti, Alloy, Titanium, alert */
 
 var drupalServices = require('drupalServices'),
+  APP = require("core"),
   processed = false,
-  medias = Alloy.Collections.media;
+  medias = APP.media;
 
 // OS
 if(Ti.Platform.osname === 'iPhone' || Ti.Platform.osname === 'iPad') {
@@ -30,9 +31,9 @@ var uploadFile = function (media, contribution) {
     // Pass to true to avoid parallel upload.
     processed = true;
 
-    drupalServices.createNodeContribution({
-      node: contribution,
-      success: function (data) {
+    drupalServices.createNodeContribution(
+      contribution,
+      function (data) {
         // Add callback events when the contribution is created.
         Titanium.API.fireEvent('startUpload');
 
@@ -41,13 +42,10 @@ var uploadFile = function (media, contribution) {
           'field_name': 'field_contribution_video' // Field name in API
         };
 
-        drupalServices.attachFile({
-          node: node,
-          nid: data.nid,
-          sending: function(json) {
-            Titanium.API.fireEvent('uploadInProgress', json);
-          },
-          success: function() {
+        drupalServices.attachFile(
+          node,
+          data.nid,
+          function() {
             // Delete current row, if the video is uploaded.
             var model = medias.shift();
 
@@ -63,19 +61,23 @@ var uploadFile = function (media, contribution) {
               Titanium.API.fireEvent('uploadFinish');
             }
           },
-          error: function() {
+          function() {
             processed = false;
 
             // If the attach file get an error, try again.
             processUpload();
+          },
+          '',
+          function(json) {
+            Titanium.API.fireEvent('uploadInProgress', json);
           }
-        });
+        );
 
       },
-      error: function() {
+      function() {
         alert('There was an error, try again.');
       }
-    });
+    );
   }
 
 };
@@ -141,7 +143,7 @@ var processUpload = function () {
 
   if (Titanium.Network.online) {
 
-    if (Titanium.Network.networkTypeName == Ti.App.Properties.getString('sendConnection') || Ti.App.Properties.getString('sendConnection') == '3G') {
+    if (APP.Network.type == APP.sendConnection || APP.sendConnection == '3G') {
 
       medias.fetch();
 

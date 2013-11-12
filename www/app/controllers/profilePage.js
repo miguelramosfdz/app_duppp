@@ -23,9 +23,9 @@ $.init = function() {
 
 $.retrieveData = function() {
 
-  drupalServices.userRetrieve({
-    uid: CONFIG.uid,
-    success: function(data) {
+  drupalServices.userRetrieve(
+    CONFIG.uid,
+    function(data) {
 
       var value;
 
@@ -48,20 +48,22 @@ $.retrieveData = function() {
       $.eventCount.text = data.user.event_count;
       $.author.text = data.user.name;
     },
-    error: function(data) {
+    function(data) {
       alert('error');
     }
-  });
+  );
 
-  drupalServices.userNodesList({
-    uid: CONFIG.uid,
-    success: function(json) {
+  drupalServices.userNodesList(
+    CONFIG.uid,
+    // Success
+    function(json) {
       $.handleData(json);
     },
-    error: function(data) {
+    // Fail
+    function(data) {
       alert('error');
     }
-  });
+  );
 };
 
 $.handleData = function(_data) {
@@ -86,32 +88,28 @@ $.handleData = function(_data) {
 
 $.follow = function(value) {
 
-  var data;
+  var data = {};
 
   if (value === 'Follow') {
-    data = {
-      'action': 'flag'
-    };
+    data.action = 'flag';
   } else {
-    data = {
-      'action': 'unflag'
-    };
+    data.action = 'unflag';
   }
 
-  drupalServices.followUser({
-    node: data,
-    uid: CONFIG.uid,
-    success: function(user) {
+  drupalServices.followUser(
+    data,
+    CONFIG.uid,
+    function(user) {
       if (value === 'Follow') {
         $.NavigationBar.rightLabel.title = 'Unfollow';
       } else {
         $.NavigationBar.rightLabel.title = 'Follow';
       }
     },
-    error: function(data) {
+    function(data) {
       alert('error');
     }
-  });
+  );
 }
 
 // Kick off the init
