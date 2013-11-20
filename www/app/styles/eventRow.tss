@@ -12,11 +12,12 @@
 }
 ".under_caption": {
   top: 5,
+  bottom: 5,
   width: Titanium.UI.FILL,
   height: Titanium.UI.SIZE
 }
 ".labelTitle": {
-  font: { fontSize: 12, font: "Lato-Light" },
+  font: { fontSize: 14, font: "Lato-Light" },
   left: 5
 }
 ".date": {
@@ -50,11 +51,20 @@
   backgroundImage: "none",
   borderRadius: 0,
   color: "white",
-  font:{fontSize:15, fontFamily:'Helvetica Neue'},
+  font:{fontSize:15, fontFamily: "Lato-Regular"},
   height: 25,
   left: 3,
   right: 3,
-  width: 100,
+  width: 100
+}
+"#counts": {
+  height: Titanium.UI.SIZE,
+  left: 5,
+  right: 5
+}
+".counterLabel": {
+  width: Titanium.UI.FILL,
+  font: { fontSize: 12, font: "Lato-Regular" }
 }
 ".comments": {
   backgroundColor: "#1193FC",

@@ -83,7 +83,7 @@ var APP = {
                 APP.startApp();
             }
         }, function() {
-            Ti.API.error("boo :(");
+            Ti.API.error("Fail");
         });
     },
     startApp: function() {
@@ -175,7 +175,7 @@ var APP = {
         });
     },
     buildMenuRight: function() {
-        APP.log("debug", "APP.buildMenu");
+        APP.log("debug", "APP.buildMenuRight");
         APP.SlideMenuRight.init();
     },
     rebuild: function() {

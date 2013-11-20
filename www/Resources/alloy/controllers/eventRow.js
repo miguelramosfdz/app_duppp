@@ -62,6 +62,7 @@ function Controller() {
     $.__views.media.add($.__views.thumbnail);
     $.__views.__alloyId7 = Ti.UI.createView({
         top: 5,
+        bottom: 5,
         width: Titanium.UI.FILL,
         height: Titanium.UI.SIZE,
         layout: "horizontal",
@@ -70,13 +71,48 @@ function Controller() {
     $.__views.row.add($.__views.__alloyId7);
     $.__views.f_title = Ti.UI.createLabel({
         font: {
-            fontSize: 12,
+            fontSize: 14,
             font: "Lato-Light"
         },
         left: 5,
         id: "f_title"
     });
     $.__views.__alloyId7.add($.__views.f_title);
+    $.__views.counts = Ti.UI.createView({
+        height: Titanium.UI.SIZE,
+        left: 5,
+        right: 5,
+        id: "counts",
+        layout: "horizontal"
+    });
+    $.__views.row.add($.__views.counts);
+    $.__views.counterComment = Ti.UI.createLabel({
+        width: Titanium.UI.FILL,
+        font: {
+            fontSize: 12,
+            font: "Lato-Regular"
+        },
+        id: "counterComment"
+    });
+    $.__views.counts.add($.__views.counterComment);
+    $.__views.counterLike = Ti.UI.createLabel({
+        width: Titanium.UI.FILL,
+        font: {
+            fontSize: 12,
+            font: "Lato-Regular"
+        },
+        id: "counterLike"
+    });
+    $.__views.counts.add($.__views.counterLike);
+    $.__views.counterDuppper = Ti.UI.createLabel({
+        width: Titanium.UI.FILL,
+        font: {
+            fontSize: 12,
+            font: "Lato-Regular"
+        },
+        id: "counterDuppper"
+    });
+    $.__views.counts.add($.__views.counterDuppper);
     $.__views.actionBtns = Ti.UI.createView({
         top: 5,
         height: 30,
@@ -91,7 +127,7 @@ function Controller() {
         color: "white",
         font: {
             fontSize: 15,
-            fontFamily: "Helvetica Neue"
+            fontFamily: "Lato-Regular"
         },
         height: 25,
         left: 3,
@@ -108,7 +144,7 @@ function Controller() {
         color: "white",
         font: {
             fontSize: 15,
-            fontFamily: "Helvetica Neue"
+            fontFamily: "Lato-Regular"
         },
         height: 25,
         left: 3,
@@ -125,7 +161,7 @@ function Controller() {
         color: "white",
         font: {
             fontSize: 15,
-            fontFamily: "Helvetica Neue"
+            fontFamily: "Lato-Regular"
         },
         height: 25,
         left: 3,
@@ -148,6 +184,9 @@ function Controller() {
     $.author_image.image = 0 == args.field_avatar.length ? "" : args.field_avatar;
     $.author.text = args.name;
     $.thumbnail.image = 0 == args.video_thumbnail.length ? "" : args.video_thumbnail;
+    $.counterComment.text = args.comment_count ? args.comment_count + " comments" : "0 comments";
+    $.counterLike.text = args.like_count ? args.like_count + " likes" : "0 likes";
+    $.counterDuppper.text = args.duppper_count ? args.duppper_count + " dupppers" : "0 dupppers";
     $.init = function() {
         $.initDialog();
     };

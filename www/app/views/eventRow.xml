@@ -11,6 +11,11 @@
     <View class="under_caption" layout="horizontal">
       <Label id="f_title" class="labelTitle" />
     </View>
+    <View id="counts" layout='horizontal' >
+      <Label id="counterComment" class="counterLabel" />
+      <Label id="counterLike" class="counterLabel" />
+      <Label id="counterDuppper" class="counterLabel" />
+    </View>
     <View id="actionBtns" layout='horizontal' >
       <Button id="comment" title="Comment" class="btn comments" />
       <Button id="like" title="Like" class="btn like" />

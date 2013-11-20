@@ -144,7 +144,7 @@ var APP = {
       },
       //failure
       function(error) {
-        Ti.API.error('boo :(');
+        Ti.API.error('Fail');
       }
     );
   },

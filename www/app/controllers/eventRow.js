@@ -10,13 +10,13 @@ $.f_date.text = args.created;
 $.author_image.image = (args.field_avatar.length == 0) ? '' : args.field_avatar;
 $.author.text = args.name;
 $.thumbnail.image = (args.video_thumbnail.length == 0) ? '' : args.video_thumbnail;
-
+$.counterComment.text = args.comment_count ? args.comment_count + ' comments' : '0 comments';
+$.counterLike.text = args.like_count ? args.like_count + ' likes' : '0 likes';
+$.counterDuppper.text = args.duppper_count ? args.duppper_count + ' dupppers' : '0 dupppers';
 
 $.init = function() {
-
   $.initDialog();
 }
-
 
 // Open profile page when you click on the avatar image.
 $.author_image.addEventListener('singletap', function(e){

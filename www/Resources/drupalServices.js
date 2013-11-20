@@ -203,8 +203,6 @@ var userLogin = function(username, password, success, failure, headers) {
         Ti.App.Properties.setString("Drupal-Cookie", cookie);
         Ti.API.debug("login saving new cookie " + cookie);
         Ti.App.Properties.setInt("userUid", responseData.user.uid);
-        Ti.App.Properties.setInt("userSessionId", responseData.sessid);
-        Ti.App.Properties.setInt("userSessionName", responseData.sesion_name);
         Ti.App.Properties.setString("X-CSRF-Token", null);
         getCsrfToken(function() {
             success && success(responseData.user);
