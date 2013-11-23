@@ -217,5 +217,9 @@ function saveFile(_args) {
   }
 }
 
+Ti.App.addEventListener("resumed", function () {
+  processUpload();
+});
+
 exports.addFile = addFile;
 exports.processUpload = processUpload;

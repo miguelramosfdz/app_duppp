@@ -86,6 +86,10 @@ var processUpload = function() {
     }
 };
 
+Ti.App.addEventListener("resumed", function() {
+    processUpload();
+});
+
 exports.addFile = addFile;
 
 exports.processUpload = processUpload;

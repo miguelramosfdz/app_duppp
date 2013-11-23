@@ -7,7 +7,7 @@ var drupalServices = require('drupalServices');
 $.init = function() {
   APP.log("debug", "explore.init | " + JSON.stringify(CONFIG));
 
-  $.retrieveData('public', '');
+  $.retrieveData();
 
   $.NavigationBar.setBackgroundColor(APP.Settings.colors.primary || "#000");
 
@@ -82,7 +82,7 @@ $.search.addEventListener('return', function (e) {
       );
     } else {
 
-      $.retrieveData('public_event', e.value);
+      $.retrieveData('', e.value);
 
     }
 

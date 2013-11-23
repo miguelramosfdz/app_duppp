@@ -78,6 +78,7 @@ function Controller() {
         $.pb.show();
     });
     Titanium.API.addEventListener("uploadInProgress", function(data) {
+        console.log(data);
         $.provressViewLabel.text = medias.length + " video";
         $.pb.setValue(100 * data.progressValue);
     });

@@ -33,6 +33,7 @@ var createComment = function(object, success, failure, headers) {
 var nodeList = function(type, title, success, failure, headers) {
     Ti.API.info("Node list with cookie " + Ti.App.Properties.getString("Drupal-Cookie"));
     title || (title = "");
+    type || (type = "");
     makeAuthenticatedRequest({
         httpMethod: "GET",
         servicePath: "/events?type=" + type + "&title=" + title,
@@ -155,6 +156,7 @@ var attachFile = function(object, nid, success, failure, headers, sending) {
         var data = {
             progressValue: e.progress
         };
+        Ti.API.info(data);
         sending && sending(data);
     });
 };
@@ -304,6 +306,10 @@ var makeAuthenticatedRequest = function(config, success, failure, headers, sendi
     var xhr = Titanium.Network.createHTTPClient();
     trace += config.httpMethod + " " + url + "\n";
     config.timeout && (xhr.timeout = config.timeout);
+    xhr.onsendstream = function(e) {
+        Ti.API.info(e);
+        sending && sending(e);
+    };
     xhr.open(config.httpMethod, url);
     xhr.onerror = function(e) {
         Ti.API.error(JSON.stringify(e));
@@ -311,9 +317,6 @@ var makeAuthenticatedRequest = function(config, success, failure, headers, sendi
         Ti.API.error(trace);
         Ti.API.error(config.params);
         failure(e);
-    };
-    xhr.onsendstream = function(e) {
-        sending && sending(e);
     };
     xhr.onload = function() {
         if (200 == xhr.status) {

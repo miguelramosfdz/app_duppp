@@ -70,6 +70,10 @@ var nodeList = function(type, title, success, failure, headers) {
     title = '';
   }
 
+  if (!type) {
+    type = '';
+  }
+
   makeAuthenticatedRequest({
       httpMethod : 'GET',
       servicePath : '/events?type='+type+'&title='+title,
@@ -281,8 +285,10 @@ var attachFile = function(object, nid, success, failure, headers, sending) {
     failure && failure(err);
   },
   headers,
+  //sending
   function(e) {
     var data = { progressValue: e.progress };
+    Ti.API.info(data);
     sending && sending(data);
   });
 };
@@ -552,6 +558,10 @@ var makeAuthenticatedRequest = function (config, success, failure, headers, send
     xhr.timeout = config.timeout;
   }
 
+  xhr.onsendstream = function(e) {
+    sending && sending(e);
+  };
+
   xhr.open(config.httpMethod, url);
 
   xhr.onerror = function(e) {
@@ -562,10 +572,6 @@ var makeAuthenticatedRequest = function (config, success, failure, headers, send
     Ti.API.error(config.params);
 
     failure(e);
-  };
-
-  xhr.onsendstream = function(e) {
-    sending && sending(e);
   };
 
   xhr.onload = function() {

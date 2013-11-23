@@ -886,7 +886,6 @@ var APP = {
   resumeObserver: function(_event) {
     APP.log("debug", "APP.resumeObserver");
 
-    //dupppUpload.processUpload();
     APP.eventsOpen.fetchEvents();
   },
   /**
