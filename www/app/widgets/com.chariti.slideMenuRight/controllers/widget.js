@@ -28,7 +28,6 @@ $.openCamera = function(nid) {
 
     success: function(event) {
 
-      APP.closeMenuRight();
       dupppUpload.addFile(event.media, nid, new Date().getTime(), user.uid);
 
     },

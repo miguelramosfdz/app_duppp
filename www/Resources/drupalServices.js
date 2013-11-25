@@ -205,6 +205,8 @@ var userLogin = function(username, password, success, failure, headers) {
         Ti.App.Properties.setString("Drupal-Cookie", cookie);
         Ti.API.debug("login saving new cookie " + cookie);
         Ti.App.Properties.setInt("userUid", responseData.user.uid);
+        Ti.App.Properties.setInt("userSessionId", responseData.sessid);
+        Ti.App.Properties.setInt("userSessionName", responseData.sesion_name);
         Ti.App.Properties.setString("X-CSRF-Token", null);
         getCsrfToken(function() {
             success && success(responseData.user);
@@ -256,6 +258,7 @@ var systemInfo = function(success, failure) {
             var responseData = JSON.parse(response);
             Ti.API.debug("system.connect session " + responseData.sessid);
             Ti.API.debug("system.connect user " + responseData.user.uid);
+            console.log(responseData);
             var cookie = responseData.session_name + "=" + responseData.sessid;
             Ti.App.Properties.setString("Drupal-Cookie", cookie);
             getCsrfToken(function() {
@@ -307,7 +310,6 @@ var makeAuthenticatedRequest = function(config, success, failure, headers, sendi
     trace += config.httpMethod + " " + url + "\n";
     config.timeout && (xhr.timeout = config.timeout);
     xhr.onsendstream = function(e) {
-        Ti.API.info(e);
         sending && sending(e);
     };
     xhr.open(config.httpMethod, url);

@@ -43,7 +43,7 @@ function Controller() {
     var drupalServices = require("drupalServices");
     $.init = function() {
         APP.log("debug", "explore.init | " + JSON.stringify(CONFIG));
-        $.retrieveData();
+        $.retrieveData("public");
         $.NavigationBar.setBackgroundColor(APP.Settings.colors.primary || "#000");
         true === CONFIG.isChild && $.NavigationBar.showBack();
         if (APP.Settings.useSlideMenu) {
@@ -86,7 +86,7 @@ function Controller() {
                     $.table.setAllowsSelection(true);
                     APP.closeLoading();
                 });
-            } else $.retrieveData("", e.value);
+            } else $.retrieveData("public", e.value);
             $.search.blur();
         }
     });

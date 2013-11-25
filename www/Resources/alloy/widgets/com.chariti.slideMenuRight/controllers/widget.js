@@ -52,7 +52,6 @@ function Controller() {
         };
         Ti.Media.showCamera({
             success: function(event) {
-                APP.closeMenuRight();
                 dupppUpload.addFile(event.media, nid, new Date().getTime(), user.uid);
             },
             error: function(error) {

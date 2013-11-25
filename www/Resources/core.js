@@ -7,7 +7,7 @@ var drupalServices = require("drupalServices");
 var APP = {
     ID: null,
     VERSION: null,
-    CVERSION: "2.3.1",
+    CVERSION: "2.3.3",
     LEGAL: {
         COPYRIGHT: null,
         TOS: null,
@@ -78,7 +78,7 @@ var APP = {
     },
     postBuild: function() {
         drupalServices.systemInfo(function(sessionData) {
-            if (0 !== sessionData.user.uid) {
+            if (0 !== sessionData.user.sessid) {
                 APP.LoginWindow.close();
                 APP.startApp();
             }
