@@ -3,19 +3,19 @@ var dupppUpload = require('dupppUpload');
 var medias = APP.media;
 var drupalServices = require('drupalServices');
 
-$.init = function() {
+$.init = function () {
 
 };
 
-$.clear = function() {
+$.clear = function () {
   $.Tabs.setData([]);
 };
 
-$.setIndex = function(_index) {
+$.setIndex = function (_index) {
   $.Tabs.selectRow(_index);
 };
 
-$.openCamera = function(nid) {
+$.openCamera = function (nid) {
 
   var user = {
     uid: Ti.App.Properties.getInt("userUid"),
@@ -26,14 +26,16 @@ $.openCamera = function(nid) {
 
   Ti.Media.showCamera({
 
-    success: function(event) {
+    success: function (event) {
 
       dupppUpload.addFile(event.media, nid, new Date().getTime(), user.uid);
 
     },
-    error: function(error) {
+    error: function (error) {
       // create alert
-      var a = Titanium.UI.createAlertDialog({title:'Video'});
+      var a = Titanium.UI.createAlertDialog({
+        title: 'Video'
+      });
 
       // set message
       if (error.code == Titanium.Media.NO_VIDEO) {
@@ -51,22 +53,22 @@ $.openCamera = function(nid) {
   });
 };
 
-$.openForm = function() {
+$.openForm = function () {
 
   var win = Alloy.createController('eventForm').getView('eventFormWindow');
 
   APP.addChild('eventForm', {}, true);
 };
 
-$.confirmDialog = function(_data) {
+$.confirmDialog = function (_data) {
   var alert = Titanium.UI.createAlertDialog({
-      title: 'Close',
-      message: 'Are you sure you want to close this event and make the film ?',
-      buttonNames: ['Yes', 'No'],
-      cancel: 1
+    title: 'Close',
+    message: 'Are you sure you want to close this event and make the film ?',
+    buttonNames: ['Yes', 'No'],
+    cancel: 1
   });
 
-  alert.addEventListener('click', function(e) {
+  alert.addEventListener('click', function (e) {
     //Clicked cancel, first check is for iphone, second for android
     if (e.cancel === e.index || e.cancel === true) {
       return;
@@ -75,15 +77,16 @@ $.confirmDialog = function(_data) {
     //now you can use parameter e to switch/case
 
     switch (e.index) {
-      case 0:
-        $.close(_data);
+    case 0:
+      $.close(_data);
       break;
 
       //This will never be reached, if you specified cancel for index 1
-      case 1: Titanium.API.info('Clicked button 1 (NO)');
+    case 1:
+      Titanium.API.info('Clicked button 1 (NO)');
       break;
 
-      default:
+    default:
       break;
     }
 
@@ -92,7 +95,7 @@ $.confirmDialog = function(_data) {
   alert.show();
 };
 
-$.close = function(_data) {
+$.close = function (_data) {
 
   medias.fetch();
 
@@ -104,11 +107,11 @@ $.close = function(_data) {
 
     drupalServices.closeNode(
       _data.nid,
-      function(data) {
+      function (data) {
         APP.closeLoading();
         Ti.API.fireEvent('eventCreated');
       },
-      function(data) {
+      function (data) {
         APP.closeLoading();
         alert('Sorry, your event cannot be closed.');
       }
@@ -119,7 +122,7 @@ $.close = function(_data) {
   }
 };
 
-$.addData = function(events) {
+$.addData = function (events) {
 
   $.tabs = [];
 
@@ -150,7 +153,7 @@ $.addData = function(events) {
   viewCreate.add(createLabel);
   create.add(viewCreate);
 
-  create.addEventListener("click", function(_event) {
+  create.addEventListener("click", function (_event) {
     $.openForm();
     APP.closeMenuRight();
   });
@@ -184,7 +187,7 @@ $.addData = function(events) {
 
   $.tabs.push(section1);
 
-  for(var i = 0; i < events.data.length; i++) {
+  for (var i = 0; i < events.data.length; i++) {
     var tab = Ti.UI.createTableViewRow({
       height: "40dp",
       backgroundcolor: "#111",
@@ -193,31 +196,31 @@ $.addData = function(events) {
     });
 
     var take = Titanium.UI.createButton({
-       title: 'Rec',
-       backgroundColor: "#c0392b",
-       backgroundImage: 'none',
-       right: 60,
-       width: 60,
-       font: {
-         fontSize: "17dp",
-         fontFamily: "Lato-Regular"
-       },
-       height: "30dp",
-       nid: events.data[i].nid
+      title: 'Rec',
+      backgroundColor: "#c0392b",
+      backgroundImage: 'none',
+      right: 60,
+      width: 60,
+      font: {
+        fontSize: "17dp",
+        fontFamily: "Lato-Regular"
+      },
+      height: "30dp",
+      nid: events.data[i].nid
     });
 
     var done = Titanium.UI.createButton({
-       title: 'Done',
-       backgroundColor: "#27ae60",
-       backgroundImage: 'none',
-       right: 5,
-       width: 50,
-       font: {
-         fontSize: "15dp",
-         fontFamily: "Lato-Regular"
-       },
-       height: "30dp",
-       nid: events.data[i].nid
+      title: 'Done',
+      backgroundColor: "#27ae60",
+      backgroundImage: 'none',
+      right: 5,
+      width: 50,
+      font: {
+        fontSize: "15dp",
+        fontFamily: "Lato-Regular"
+      },
+      height: "30dp",
+      nid: events.data[i].nid
     });
 
     take.addEventListener('click', function (_event) {
@@ -260,6 +263,6 @@ Ti.API.addEventListener('myEvents:fetched', function (data) {
 });
 
 // Move the UI down if iOS7+
-if(OS_IOS && APP.Device.versionMajor >= 7) {
+if (OS_IOS && APP.Device.versionMajor >= 7) {
   $.Tabs.top = "20dp";
 }

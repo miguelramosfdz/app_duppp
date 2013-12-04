@@ -6,13 +6,13 @@ var data = [],
   recents = APP.recent,
   drupalServices = require('drupalServices');
 
-$.init = function() {
+$.init = function () {
   APP.log("debug", "eventForm.init | " + JSON.stringify(CONFIG));
 
   recents.fetch();
 
   var users = recents.toJSON(),
-     data = prepareData(users);
+    data = prepareData(users);
 
   data.reverse();
 
@@ -20,14 +20,14 @@ $.init = function() {
 
   $.NavigationBar.setBackgroundColor(APP.Settings.colors.primary || "#000");
 
-  if(CONFIG.isChild === true) {
+  if (CONFIG.isChild === true) {
     $.NavigationBar.showBack();
   }
 
-  if(APP.Settings.useSlideMenu) {
+  if (APP.Settings.useSlideMenu) {
     $.NavigationBar.showBack();
     $.NavigationBar.showDone({
-      callback: function() {
+      callback: function () {
         $.addPeople();
       }
     });
@@ -45,9 +45,15 @@ $.init = function() {
 // Save the recent user selected to the database.
 function recentUsers(users) {
 
-  _.each(users, function(user) {
-    var model = Alloy.createModel('recent', {name: user.name, uid: user.uid, field_avatar: user.field_avatar});
-    var isExisting = recents.where({name: user.name});
+  _.each(users, function (user) {
+    var model = Alloy.createModel('recent', {
+      name: user.name,
+      uid: user.uid,
+      field_avatar: user.field_avatar
+    });
+    var isExisting = recents.where({
+      name: user.name
+    });
 
     if (isExisting.length === 0) {
       recents.add(model);
@@ -85,7 +91,7 @@ function prepareData(json) {
 
   var data = [];
 
-  json.forEach(function(user){
+  json.forEach(function (user) {
     if (parseInt(user.uid) !== Ti.App.Properties.getInt("userUid")) {
       // Keep only user different from current user.
       user.isNoReturn = true;
@@ -113,13 +119,13 @@ function prepareData(json) {
 var last_search = null;
 
 $.search.addEventListener('return', function (e) {
-  if (e.value !=  last_search) {
+  if (e.value != last_search) {
     last_search = e.value;
     APP.openLoading();
 
     drupalServices.searchUser(
       e.value,
-      function(users) {
+      function (users) {
 
         var data = prepareData(users);
 
@@ -139,7 +145,7 @@ $.table.addEventListener('click', storeUsers);
 ///////////////
 
 // Function to create an event
-$.addPeople = function() {
+$.addPeople = function () {
 
   APP.openLoading();
 
@@ -154,14 +160,13 @@ $.addPeople = function() {
     drupalServices.joinNode(
       join,
       CONFIG.nid,
-      function() {
+      function () {
         APP.closeLoading();
         APP.removeChild();
       }
     );
 
-  }
-  else {
+  } else {
     alert('You need to login first');
   }
 };

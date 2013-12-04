@@ -2,7 +2,7 @@ var APP = require("core");
 var CONFIG = arguments[0] || {};
 var drupalServices = require('drupalServices');
 
-$.init = function() {
+$.init = function () {
   APP.log("debug", "profile.init | " + JSON.stringify(CONFIG));
 
   $.NavigationBar.setBackgroundColor(APP.Settings.colors.primary || "#000");
@@ -10,9 +10,9 @@ $.init = function() {
   $.authorImage.image = CONFIG.field_avatar;
   $.followerCount.text = CONFIG.follower_count;
 
-  if(APP.Device.isHandheld) {
+  if (APP.Device.isHandheld) {
     $.NavigationBar.showBack({
-      callback: function(_event) {
+      callback: function (_event) {
         APP.removeAllChildren();
       }
     });
@@ -21,11 +21,11 @@ $.init = function() {
   $.retrieveData();
 };
 
-$.retrieveData = function() {
+$.retrieveData = function () {
 
   drupalServices.userRetrieve(
     CONFIG.uid,
-    function(data) {
+    function (data) {
 
       var value;
 
@@ -38,7 +38,7 @@ $.retrieveData = function() {
 
       $.NavigationBar.showFollow({
         text: value,
-        callback: function(_event) {
+        callback: function (_event) {
           $.follow(value);
         }
       });
@@ -48,7 +48,7 @@ $.retrieveData = function() {
       $.eventCount.text = data.user.event_count;
       $.author.text = data.user.name;
     },
-    function(data) {
+    function (data) {
       alert('error');
     }
   );
@@ -56,22 +56,22 @@ $.retrieveData = function() {
   drupalServices.userNodesList(
     CONFIG.uid,
     // Success
-    function(json) {
+    function (json) {
       $.handleData(json);
     },
     // Fail
-    function(data) {
+    function (data) {
       alert('error');
     }
   );
 };
 
-$.handleData = function(_data) {
+$.handleData = function (_data) {
   APP.log("debug", "profile.handleData");
 
   var rows = [];
 
-  _data.forEach(function(event){
+  _data.forEach(function (event) {
     // Add to the main view, only closed events
     if (event.field_event_closed_value === "1") {
       var newsItem = Alloy.createController('eventRow', event).getView();
@@ -86,7 +86,7 @@ $.handleData = function(_data) {
 
 };
 
-$.follow = function(value) {
+$.follow = function (value) {
 
   var data = {};
 
@@ -99,18 +99,18 @@ $.follow = function(value) {
   drupalServices.followUser(
     data,
     CONFIG.uid,
-    function(user) {
+    function (user) {
       if (value === 'Follow') {
         $.NavigationBar.rightLabel.title = 'Unfollow';
       } else {
         $.NavigationBar.rightLabel.title = 'Follow';
       }
     },
-    function(data) {
+    function (data) {
       alert('error');
     }
   );
-}
+};
 
 // Kick off the init
 $.init();

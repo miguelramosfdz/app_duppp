@@ -3,13 +3,13 @@ var APP = require('core');
 var CONFIG = arguments[0] || {};
 var isFirst = true;
 
-$.init = function() {
+$.init = function () {
   APP.log("debug", "event_event.init | " + JSON.stringify(CONFIG));
 
   $.NavigationBar.setBackgroundColor(APP.Settings.colors.primary || "#000");
 
   $.NavigationBar.showBack({
-    callback: function(_event) {
+    callback: function (_event) {
       APP.removeChild(true);
       $.textArea.blur();
     }
@@ -22,25 +22,25 @@ $.init = function() {
   $.retrieveData();
 };
 
-$.retrieveData = function() {
+$.retrieveData = function () {
   APP.openLoading();
   drupalServices.nodeRetrieveComments(
     CONFIG.nid,
-    function(json) {
+    function (json) {
       $.handleData(json);
       APP.closeLoading();
     },
-    function() {
+    function () {
       APP.closeLoading();
     }
   );
 };
 
-$.handleData = function(_data) {
+$.handleData = function (_data) {
   var tableData = [],
-      position;
+    position;
 
-  for(var key in _data){
+  for (var key in _data) {
     var newsItem = Alloy.createController('commentRow', _data[key]).getView();
     tableData.push(newsItem);
   }
@@ -51,15 +51,14 @@ $.handleData = function(_data) {
   $.table.scrollToIndex(position);
 };
 
-$.addComment = function(_data) {
+$.addComment = function (_data) {
 
   if (_data !== '' && _data !== 'Your comment') {
-    drupalServices.createComment(
-      {
+    drupalServices.createComment({
         'nid': CONFIG.nid,
         'subject': CONFIG.nid,
         'comment_body': {
-          'und':[{
+          'und': [{
             'value': _data
           }]
         }
@@ -71,7 +70,7 @@ $.addComment = function(_data) {
         $.textWrapper.bottom = 0;
         $.retrieveData();
       },
-      function() {
+      function () {
         alert('There was an error, try again.');
       }
     );
@@ -79,7 +78,7 @@ $.addComment = function(_data) {
 
 };
 
-$.textArea.addEventListener('focus', function() {
+$.textArea.addEventListener('focus', function () {
 
   if (isFirst) {
     $.textArea.value = '';
@@ -94,11 +93,11 @@ $.textArea.addEventListener('focus', function() {
   }
 });
 
-$.textArea.addEventListener('return', function() {
+$.textArea.addEventListener('return', function () {
   $.textWrapper.bottom = 0;
 });
 
-$.button.addEventListener('click', function() {
+$.button.addEventListener('click', function () {
   $.button.backgroundColor = '#16a085';
   $.addComment($.textArea.value.trim());
 });

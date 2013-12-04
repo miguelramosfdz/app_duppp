@@ -10,7 +10,7 @@ $.row.field_avatar = CONFIG.field_avatar;
 
 // Don't open profile page if isNoReturn is true.
 if (!CONFIG.isNoReturn) {
-  $.row.addEventListener('click', function(e){
+  $.row.addEventListener('click', function (e) {
     APP.addChild("profilePage", CONFIG);
   });
 }

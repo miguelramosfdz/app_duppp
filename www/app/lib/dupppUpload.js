@@ -10,7 +10,7 @@ var drupalServices = require('drupalServices'),
   medias = APP.media;
 
 // OS
-if(Ti.Platform.osname === 'iPhone' || Ti.Platform.osname === 'iPad') {
+if (Ti.Platform.osname === 'iPhone' || Ti.Platform.osname === 'iPad') {
   var ios = true;
 }
 
@@ -45,7 +45,7 @@ var uploadFile = function (media, contribution) {
         drupalServices.attachFile(
           node,
           data.nid,
-          function() {
+          function () {
             // Delete current row, if the video is uploaded.
             var model = medias.shift();
 
@@ -61,20 +61,20 @@ var uploadFile = function (media, contribution) {
               Titanium.API.fireEvent('uploadFinish');
             }
           },
-          function() {
+          function () {
             processed = false;
 
             // If the attach file get an error, try again.
             processUpload();
           },
           '',
-          function(json) {
+          function (json) {
             Titanium.API.fireEvent('uploadInProgress', json);
           }
         );
 
       },
-      function() {
+      function () {
         alert('There was an error, try again.');
       }
     );
@@ -105,11 +105,9 @@ var addFile = function (media, gid, date, uid) {
       type: 'contribution',
       language: 'und',
       'og_group_ref': {
-        'und': [
-          {
-            'target_id': gid
-          }
-        ]
+        'und': [{
+          'target_id': gid
+        }]
       },
       uid: uid,
       status: 1
@@ -125,7 +123,10 @@ var addFile = function (media, gid, date, uid) {
 
   contribution.mediaElement = file;
 
-  model = Alloy.createModel('media', {node: JSON.stringify(contribution.node), file: contribution.mediaElement});
+  model = Alloy.createModel('media', {
+    node: JSON.stringify(contribution.node),
+    file: contribution.mediaElement
+  });
   medias.add(model);
   model.save();
 
@@ -169,7 +170,6 @@ var processUpload = function () {
     }
   }
 
-
 };
 
 /**
@@ -186,7 +186,7 @@ function saveFile(_args) {
   var file;
 
   // Test if External Storage (Android only)
-  if(Ti.Filesystem.isExternalStoragePresent()){
+  if (Ti.Filesystem.isExternalStoragePresent()) {
     file = Ti.Filesystem.getFile(Ti.Filesystem.externalStorageDirectory, _args.filename);
   }
 
@@ -199,20 +199,19 @@ function saveFile(_args) {
   file.write(_args.file);
 
   // Debug: Test if file exist now
-  if(file.exists) {
+  if (file.exists) {
     Ti.API.info('[saveFile] Saved: YES! (' + file.nativePath + ')');
   } else {
     Ti.API.info('[saveFile] Saved: NO!');
   }
 
   // Return full path of file
-  if(ios && Ti.version <= '1.8.2') {
+  if (ios && Ti.version <= '1.8.2') {
     var iosPath = Ti.Filesystem.applicationDataDirectory + _args.filename;
-    iosPath = iosPath.replace('file://','app://');
+    iosPath = iosPath.replace('file://', 'app://');
 
     return iosPath;
-  }
-  else {
+  } else {
     return file.nativePath;
   }
 }

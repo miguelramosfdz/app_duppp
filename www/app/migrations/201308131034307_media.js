@@ -1,4 +1,4 @@
-migration.up = function(db) {
+migration.up = function (db) {
   db.createTable({
     "columns": {
       "id": "INTEGER PRIMARY KEY AUTOINCREMENT",
@@ -8,6 +8,6 @@ migration.up = function(db) {
   });
 };
 
-migration.down = function(db) {
+migration.down = function (db) {
   db.dropTable("media");
 };

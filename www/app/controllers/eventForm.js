@@ -1,19 +1,19 @@
 var APP = require('core');
 var CONFIG = arguments[0] || {};
 
-$.init = function() {
+$.init = function () {
   APP.log("debug", "eventForm.init | " + JSON.stringify(CONFIG));
 
   $.NavigationBar.setBackgroundColor(APP.Settings.colors.primary || "#000");
 
-  if(CONFIG.isChild === true) {
+  if (CONFIG.isChild === true) {
     $.NavigationBar.showBack();
   }
 
-  if(APP.Settings.useSlideMenu) {
+  if (APP.Settings.useSlideMenu) {
     $.NavigationBar.showMenu();
     $.NavigationBar.showNext({
-      callback: function() {
+      callback: function () {
 
         var user = {
           uid: Ti.App.Properties.getInt('userUid'),
@@ -38,7 +38,7 @@ $.init = function() {
             'und': switchPrivate
           },
           'field_event_date': {
-            'und':[{
+            'und': [{
               'show_todate': '0',
               'value': {
                 'month': '2',
@@ -62,7 +62,7 @@ $.init = function() {
   }
 };
 
-$.textArea.addEventListener('focus', function() {
+$.textArea.addEventListener('focus', function () {
   $.textArea.value = '';
 });
 

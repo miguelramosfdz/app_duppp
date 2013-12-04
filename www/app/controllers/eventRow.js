@@ -14,21 +14,21 @@ $.counterComment.text = args.comment_count ? args.comment_count + ' comments' : 
 $.counterLike.text = args.like_count ? args.like_count + ' likes' : '0 likes';
 $.counterDuppper.text = args.duppper_count ? args.duppper_count + ' dupppers' : '0 dupppers';
 
-$.init = function() {
+$.init = function () {
   $.initDialog();
 }
 
 // Open profile page when you click on the avatar image.
-$.author_image.addEventListener('singletap', function(e){
+$.author_image.addEventListener('singletap', function (e) {
   APP.addChild('profilePage', args);
 });
 
 // Open event page when you click on thumbnail.
-$.thumbnail.addEventListener('singletap', function(e){
+$.thumbnail.addEventListener('singletap', function (e) {
 
   videoPlayer = Titanium.Media.createVideoPlayer({
-    height : Ti.UI.FILL,
-    width : Ti.UI.FILL,
+    height: Ti.UI.FILL,
+    width: Ti.UI.FILL,
     backgroundColor: '#FFF'
   });
 
@@ -38,7 +38,7 @@ $.thumbnail.addEventListener('singletap', function(e){
   $.media.add(videoPlayer);
   videoPlayer.play();
 
-  videoPlayer.addEventListener('complete', function(e){
+  videoPlayer.addEventListener('complete', function (e) {
 
     $.media.remove(videoPlayer);
     $.media.add($.thumbnail);
@@ -47,19 +47,19 @@ $.thumbnail.addEventListener('singletap', function(e){
 
 });
 
-$.comment.addEventListener('click', function(e){
+$.comment.addEventListener('click', function (e) {
   APP.addChild('commentForm', args, true);
 });
 
-$.like.addEventListener('click', function(e){
+$.like.addEventListener('click', function (e) {
   $.addLike();
 });
 
-$.extra.addEventListener('click', function(e){
+$.extra.addEventListener('click', function (e) {
   dialog.show();
 });
 
-$.addLike = function() {
+$.addLike = function () {
   var data;
 
   if ($.like.title === 'Like') {
@@ -82,7 +82,7 @@ $.addLike = function() {
   );
 };
 
-$.initDialog = function() {
+$.initDialog = function () {
 
   var options = [];
   var mapping = [];
@@ -91,7 +91,6 @@ $.initDialog = function() {
     options.push("Share with users");
     mapping.push("share_users");
   }
-
 
   options.push("Cancel");
   mapping.push("cancel");
@@ -102,11 +101,11 @@ $.initDialog = function() {
     selectedIndex: options.length - 1
   });
 
-  dialog.addEventListener("click", function(_event) {
-    switch(mapping[_event.index]) {
-      case "share_users":
-        APP.addChild('share', args);
-        break;
+  dialog.addEventListener("click", function (_event) {
+    switch (mapping[_event.index]) {
+    case "share_users":
+      APP.addChild('share', args);
+      break;
     }
   });
 

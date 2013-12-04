@@ -1,14 +1,37 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 
   // Project configuration.
   grunt.initConfig({
 
     pkg: grunt.file.readJSON('package.json'),
 
+    jshint: {
+      all: ['Gruntfile.js', 'www/app/**/*.js'],
+      options: {
+        jshintrc: '.jshintrc'
+      }
+    },
+
+    jsbeautifier: {
+      modify: {
+        src: ['Gruntfile.js', 'www/app/**/*.js'],
+        options: {
+          config: '.jsbeautifyrc'
+        }
+      },
+      verify: {
+        src: ['Gruntfile.js', 'www/app/**/*.js'],
+        options: {
+          mode: 'VERIFY_ONLY',
+          config: '.jsbeautifyrc'
+        }
+      }
+    },
+
     scandium: {
       ios_sim: {
-        platform : 'ios',
-        project_dir : './www/',
+        platform: 'ios',
+        project_dir: './www/',
         options: {
           device_family: 'iphone',
           retina: true,
@@ -16,8 +39,8 @@ module.exports = function(grunt) {
         },
       },
       ios_device: {
-        platform : 'ios',
-        project_dir : './www/',
+        platform: 'ios',
+        project_dir: './www/',
         options: {
           distribution_name: 'Arthur Itey (628272242K)',
           pp_uuid: 'EFA13848-144D-46DE-9AB1-7FE785AEE428',
@@ -27,8 +50,8 @@ module.exports = function(grunt) {
         },
       },
       ios_adhoc: {
-        platform : 'ios',
-        project_dir : './www/',
+        platform: 'ios',
+        project_dir: './www/',
         log_level: 'info',
         options: {
           distribution_name: 'Arthur Itey (628272242K)',
@@ -40,8 +63,8 @@ module.exports = function(grunt) {
         },
       },
       ios_distrib: {
-        platform : 'ios',
-        project_dir : './www/',
+        platform: 'ios',
+        project_dir: './www/',
         log_level: 'info',
         options: {
           distribution_name: 'Arthur Itey (628272242K)',
@@ -58,11 +81,23 @@ module.exports = function(grunt) {
   });
 
   grunt.loadNpmTasks('grunt-scandium');
+  grunt.loadNpmTasks('grunt-jsbeautifier');
+  grunt.loadNpmTasks('grunt-contrib-jshint');
 
   // Default task(s).
   grunt.registerTask('default', ['scandium:ios_sim']);
   grunt.registerTask('device', ['scandium:ios_device']);
   grunt.registerTask('distrib', ['scandium:ios_distrib']);
   grunt.registerTask('adhoc', ['scandium:ios_adhoc']);
+
+  grunt.registerTask('clean', [
+    'jsbeautifier:modify',
+    'jshint'
+  ]);
+
+  grunt.registerTask('verify', [
+    'jsbeautifier:verify',
+    'jshint'
+  ]);
 
 };

@@ -1,10 +1,10 @@
 var APP = require("core");
 var CONFIG = arguments[0] || {};
 
-if(CONFIG.image) {
+if (CONFIG.image) {
   var image = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, CONFIG.image);
 
-  if(image.exists()) {
+  if (image.exists()) {
     image = image.nativePath;
   } else {
     image = "/data/" + CONFIG.image;
@@ -34,90 +34,90 @@ if(CONFIG.image) {
   });
 }
 
-$.addNavigation = function(_view) {
+$.addNavigation = function (_view) {
   $.Wrapper.add(_view);
 };
 
-$.setBackgroundColor = function(_color) {
+$.setBackgroundColor = function (_color) {
   $.Wrapper.backgroundColor = _color;
 };
 
-$.setTitle = function(_text) {
+$.setTitle = function (_text) {
   $.title.text = _text;
 };
 
-$.showBack = function(_params) {
+$.showBack = function (_params) {
   $.back.visible = true;
 
-  if(_params && typeof _params.callback !== "undefined") {
-    $.back.addEventListener("click",  _params.callback);
+  if (_params && typeof _params.callback !== "undefined") {
+    $.back.addEventListener("click", _params.callback);
   } else {
-    $.back.addEventListener("click",  function(_event) {
+    $.back.addEventListener("click", function (_event) {
       APP.removeChild();
     });
   }
 };
 
-$.showNext = function(_params) {
+$.showNext = function (_params) {
   $.next.visible = true;
 
-  $.next.addEventListener("click",  _params.callback);
+  $.next.addEventListener("click", _params.callback);
 };
 
-$.showLeft = function(_params) {
+$.showLeft = function (_params) {
   $.left.visible = true;
   $.leftImage.image = _params.image;
   $.left.addEventListener("click", _params.callback);
 };
 
-$.showRight = function(_params) {
+$.showRight = function (_params) {
   $.right.visible = true;
   $.rightImage.image = _params.image;
   $.right.addEventListener("click", _params.callback);
 };
 
-$.showMenu = function() {
+$.showMenu = function () {
   $.showLeft({
     image: WPATH("images/menu.png"),
     callback: APP.toggleMenu
   });
 };
 
-$.showSettings = function() {
+$.showSettings = function () {
   $.showRight({
     image: WPATH("images/settings.png"),
     callback: APP.openSettings
   });
 };
 
-$.showDone = function(_params) {
+$.showDone = function (_params) {
   $.showRight({
     image: WPATH("images/done.png"),
     callback: _params.callback
   });
 };
-$.showClose = function(_params) {
+$.showClose = function (_params) {
   $.showLeft({
     image: WPATH("images/action.png"),
     callback: _params.callback
   });
 };
 
-$.showAction = function(_params) {
+$.showAction = function (_params) {
   $.showRight({
     image: WPATH("images/action.png"),
     callback: _params.callback
   });
 };
 
-$.showCamera = function(_params) {
+$.showCamera = function (_params) {
   $.showRight({
     image: WPATH("images/photo2.png"),
     callback: APP.toggleMenuRight
   });
 };
 
-$.showFollow = function(_params) {
+$.showFollow = function (_params) {
   $.rightText.visible = true;
   $.rightLabel.title = _params.text;
   $.rightLabel.addEventListener("click", _params.callback);
@@ -126,7 +126,7 @@ $.showFollow = function(_params) {
 $.Wrapper.add($.title);
 
 // Move the UI down if iOS7+
-if(OS_IOS && APP.Device.versionMajor >= 7) {
+if (OS_IOS && APP.Device.versionMajor >= 7) {
   $.Wrapper.height = "67dp";
   $.overlay.top = "20dp";
 }

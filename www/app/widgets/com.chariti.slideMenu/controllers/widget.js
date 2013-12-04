@@ -1,6 +1,6 @@
 var APP = require("core");
 
-$.init = function(_params) {
+$.init = function (_params) {
   $.tabs = [];
 
   // Add the Settings tab
@@ -10,7 +10,7 @@ $.init = function(_params) {
     title: "Settings"
   });
 
-  for(var i = 0; i < _params.tabs.length; i++) {
+  for (var i = 0; i < _params.tabs.length; i++) {
     var tab = Ti.UI.createTableViewRow({
       id: _params.tabs[i].id,
       height: "47dp",
@@ -52,21 +52,21 @@ $.init = function(_params) {
   $.Tabs.setData($.tabs);
 };
 
-$.clear = function() {
+$.clear = function () {
   $.Tabs.setData([]);
 };
 
-$.setIndex = function(_index) {
+$.setIndex = function (_index) {
   $.Tabs.selectRow(_index);
 };
 
-$.Tabs.addEventListener("click", function(_event) {
-  if(typeof _event.index !== "undefined") {
+$.Tabs.addEventListener("click", function (_event) {
+  if (typeof _event.index !== "undefined") {
     $.setIndex(_event.index);
   }
 });
 
 // Move the UI down if iOS7+
-if(OS_IOS && APP.Device.versionMajor >= 7) {
+if (OS_IOS && APP.Device.versionMajor >= 7) {
   $.Tabs.top = "20dp";
 }

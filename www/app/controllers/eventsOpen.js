@@ -1,22 +1,22 @@
 var APP = require('core');
 var drupalServices = require('drupalServices'),
-    medias = APP.media,
-    data,
-    eventsRaw;
+  medias = APP.media,
+  data,
+  eventsRaw;
 
-$.fetchEvents = function() {
+$.fetchEvents = function () {
 
   if (APP.Network.online) {
 
     drupalServices.nodeList(
       'my_events',
       '',
-      function(json) {
+      function (json) {
         data = [];
         eventsRaw = [];
 
         // Add events to views.
-        json.forEach(function(event){
+        json.forEach(function (event) {
 
           // Keep only events open.
           if (event.field_event_closed === "0") {
@@ -30,7 +30,7 @@ $.fetchEvents = function() {
 
         Ti.API.fireEvent('myEvents:fetched', events);
       },
-      function(data) {
+      function (data) {
         $.fetchEvents();
       }
     );
@@ -40,7 +40,6 @@ $.fetchEvents = function() {
 Titanium.API.addEventListener('eventCreated', function (data) {
   $.fetchEvents();
 });
-
 
 Titanium.API.addEventListener('startUpload', function (data) {
 

@@ -6,16 +6,16 @@
 var drupalServices = require('drupalServices');
 var APP = require('core');
 
-function login(e){
+function login(e) {
 
   // Create an object to hold the data entered in the form
   drupalServices.userLogin(
     $.loginUsr.value,
     $.loginPwd.value,
-    function(data) {
+    function (data) {
 
       drupalServices.getToken(
-        function(_data) {
+        function (_data) {
           // Close the window.
           $.userLoginDuppp.close();
 
@@ -24,7 +24,7 @@ function login(e){
       );
 
     },
-    function(data) {
+    function (data) {
       alert('Error, contact the admin');
     }
   );
@@ -32,15 +32,14 @@ function login(e){
 
 function register() {
 
-	// Create an object to hold the data entered in the form
-  drupalServices.userRegister(
-    {
+  // Create an object to hold the data entered in the form
+  drupalServices.userRegister({
       name: $.usernameField.value,
       mail: $.emailField.value,
       pass: $.passwordRegisterField.value,
       status: 1
     },
-    function(data) {
+    function (data) {
 
       // Close the window.
       $.userRegisterDuppp.close();
@@ -58,16 +57,19 @@ function register() {
       a.duration = 200;
 
       // when this animation completes, scale to normal size
-      a.addEventListener('complete', function() {
+      a.addEventListener('complete', function () {
         var t2 = Titanium.UI.create2DMatrix();
         t2 = t2.scale(1.0);
-        $.userLoginDuppp.animate({transform:t2, duration:200});
+        $.userLoginDuppp.animate({
+          transform: t2,
+          duration: 200
+        });
 
       });
 
       $.userLoginDuppp.open(a);
     },
-    function(data) {
+    function (data) {
       alert(data.responseText.form_errors);
     }
   );
@@ -87,10 +89,13 @@ function openLoginDuppp() {
   a.duration = 200;
 
   // when this animation completes, scale to normal size
-  a.addEventListener('complete', function() {
+  a.addEventListener('complete', function () {
     var t2 = Titanium.UI.create2DMatrix();
     t2 = t2.scale(1.0);
-    $.userLoginDuppp.animate({transform:t2, duration:200});
+    $.userLoginDuppp.animate({
+      transform: t2,
+      duration: 200
+    });
 
   });
 
@@ -111,10 +116,13 @@ function openRegisterDuppp() {
   a.duration = 200;
 
   // when this animation completes, scale to normal size
-  a.addEventListener('complete', function() {
+  a.addEventListener('complete', function () {
     var t2 = Titanium.UI.create2DMatrix();
     t2 = t2.scale(1.0);
-    $.userRegisterDuppp.animate({transform:t2, duration:200});
+    $.userRegisterDuppp.animate({
+      transform: t2,
+      duration: 200
+    });
 
   });
 

@@ -103,7 +103,7 @@ var APP = {
   /**
    * Initializes the application
    */
-  init: function() {
+  init: function () {
     Ti.API.debug("APP.init");
 
     // Global system Events
@@ -112,8 +112,7 @@ var APP = {
     Ti.App.addEventListener("close", APP.exitObserver);
     Ti.App.addEventListener("resumed", APP.resumeObserver);
 
-
-    if(OS_ANDROID) {
+    if (OS_ANDROID) {
       APP.MainWindow.addEventListener("androidback", APP.backButtonObserver);
     }
 
@@ -133,17 +132,17 @@ var APP = {
   /**
    * Step after build.
    */
-  postBuild: function() {
+  postBuild: function () {
     drupalServices.systemInfo(
       //success
-      function(sessionData) {
+      function (sessionData) {
         if (sessionData.user.uid !== 0) {
           APP.LoginWindow.close();
           APP.startApp();
         }
       },
       //failure
-      function(error) {
+      function (error) {
         Ti.API.error('Fail');
       }
     );
@@ -151,7 +150,7 @@ var APP = {
   /**
    * Launch basic start.
    */
-  startApp: function() {
+  startApp: function () {
     // Open the main window
     APP.MainWindow.open();
     APP.eventsOpen.fetchEvents();
@@ -162,16 +161,16 @@ var APP = {
   /**
    * Determines the device characteristics
    */
-  determineDevice: function() {
-    if(OS_IOS) {
+  determineDevice: function () {
+    if (OS_IOS) {
       APP.Device.os = "IOS";
 
-      if(Ti.Platform.osname.toUpperCase() == "IPHONE") {
+      if (Ti.Platform.osname.toUpperCase() == "IPHONE") {
         APP.Device.name = "IPHONE";
-      } else if(Ti.Platform.osname.toUpperCase() == "IPAD") {
+      } else if (Ti.Platform.osname.toUpperCase() == "IPAD") {
         APP.Device.name = "IPAD";
       }
-    } else if(OS_ANDROID) {
+    } else if (OS_ANDROID) {
       APP.Device.os = "ANDROID";
 
       APP.Device.name = Ti.Platform.model.toUpperCase();
@@ -184,12 +183,12 @@ var APP = {
   /**
    * Loads in the appropriate controller and config data
    */
-  loadContent: function() {
+  loadContent: function () {
     APP.log("debug", "APP.loadContent");
 
     var contentFile = Ti.Filesystem.getFile(Ti.Filesystem.applicationDataDirectory, "app.json");
 
-    if(!contentFile.exists()) {
+    if (!contentFile.exists()) {
       contentFile = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory + "data/app.json");
     }
 
@@ -198,12 +197,12 @@ var APP = {
 
     try {
       data = JSON.parse(content.text);
-    } catch(_error) {
+    } catch (_error) {
       APP.log("error", "Unable to parse downloaded JSON, reverting to packaged JSON");
 
       contentFile = Ti.Filesystem.getFile(Ti.Filesystem.resourcesDirectory + "data/app.json");
 
-      if(contentFile.exists()) {
+      if (contentFile.exists()) {
         content = contentFile.read();
         data = JSON.parse(content.text);
       } else {
@@ -228,11 +227,11 @@ var APP = {
     APP.Plugins = data.plugins;
     APP.Nodes = data.tabs;
 
-    for(var i = 0, x = APP.Nodes.length; i < x; i++) {
+    for (var i = 0, x = APP.Nodes.length; i < x; i++) {
       APP.Nodes[i].index = i;
     }
 
-    if(typeof APP.Settings.useSlideMenu == "undefined") {
+    if (typeof APP.Settings.useSlideMenu == "undefined") {
       APP.Settings.useSlideMenu = false;
     }
   },
@@ -240,12 +239,12 @@ var APP = {
    * Builds out the tab group
    * @param {Boolean} [_rebuild] Whether this is a re-build or not
    */
-  build: function(_rebuild) {
+  build: function (_rebuild) {
     APP.log("debug", "APP.build");
 
     var tabs = [];
 
-    for(var i = 0, x = APP.Nodes.length; i < x; i++) {
+    for (var i = 0, x = APP.Nodes.length; i < x; i++) {
       tabs.push({
         id: i,
         title: APP.Nodes[i].title,
@@ -254,7 +253,7 @@ var APP = {
       });
     }
 
-    if(APP.Settings.useSlideMenu) {
+    if (APP.Settings.useSlideMenu) {
       APP.buildMenu(tabs, _rebuild);
       APP.buildMenuRight(tabs, _rebuild);
     } else {
@@ -266,7 +265,7 @@ var APP = {
    * @param {Array} [_tabs] The tabs to build
    * @param {Boolean} [_rebuild] Whether this is a re-build or not
    */
-  buildTabs: function(_tabs, _rebuild) {
+  buildTabs: function (_tabs, _rebuild) {
     APP.log("debug", "APP.buildTabs");
 
     APP.Tabs.init({
@@ -278,10 +277,10 @@ var APP = {
       }
     });
 
-    if(!_rebuild) {
+    if (!_rebuild) {
       // Add a handler for the tabs
-      APP.Tabs.Wrapper.addEventListener("click", function(_event) {
-        if(typeof _event.source.id !== "undefined" && typeof _event.source.id == "number") {
+      APP.Tabs.Wrapper.addEventListener("click", function (_event) {
+        if (typeof _event.source.id !== "undefined" && typeof _event.source.id == "number") {
           APP.handleNavigation(_event.source.id);
         }
       });
@@ -292,7 +291,7 @@ var APP = {
    * @param {Array} [_tabs] The tabs to build
    * @param {Boolean} [_rebuild] Whether this is a re-build or not
    */
-  buildMenu: function(_tabs, _rebuild) {
+  buildMenu: function (_tabs, _rebuild) {
     APP.log("debug", "APP.buildMenu");
 
     APP.SlideMenu.init({
@@ -305,14 +304,14 @@ var APP = {
     // Move everything down to take up the TabGroup space
     APP.ContentWrapper.bottom = "0dp";
 
-    if(!_rebuild) {
+    if (!_rebuild) {
       // Add a handler for the tabs
-      APP.SlideMenu.Tabs.addEventListener("click", function(_event) {
-        if(typeof _event.row.id !== "undefined" && typeof _event.row.id == "number") {
+      APP.SlideMenu.Tabs.addEventListener("click", function (_event) {
+        if (typeof _event.row.id !== "undefined" && typeof _event.row.id == "number") {
           APP.closeSettings();
 
           APP.handleNavigation(_event.row.id);
-        } else if(typeof _event.row.id !== "undefined" && _event.row.id == "settings") {
+        } else if (typeof _event.row.id !== "undefined" && _event.row.id == "settings") {
           APP.openSettings();
         }
 
@@ -321,9 +320,9 @@ var APP = {
     }
 
     // Listen for gestures on the main window to open/close the slide menu
-    APP.GlobalWrapper.addEventListener("swipe", function(_event) {
-      if(APP.SlideMenuEngaged && APP.SlideMenuRightEngaged) {
-        if(_event.direction == "right") {
+    APP.GlobalWrapper.addEventListener("swipe", function (_event) {
+      if (APP.SlideMenuEngaged && APP.SlideMenuRightEngaged) {
+        if (_event.direction == "right") {
 
           if (!APP.SlideMenuRightOpen && !APP.SlideMenuOpen) {
             APP.openMenu();
@@ -331,7 +330,7 @@ var APP = {
             APP.closeMenuRight();
           }
 
-        } else if(_event.direction == "left") {
+        } else if (_event.direction == "left") {
 
           if (!APP.SlideMenuRightOpen && !APP.SlideMenuOpen) {
             APP.openMenuRight();
@@ -342,7 +341,7 @@ var APP = {
       }
     });
   },
-  buildMenuRight: function(_tabs, _rebuild) {
+  buildMenuRight: function (_tabs, _rebuild) {
     APP.log("debug", "APP.buildMenuRight");
 
     APP.SlideMenuRight.init();
@@ -350,7 +349,7 @@ var APP = {
   /**
    * Re-builds the app with newly downloaded JSON configration file
    */
-  rebuild: function() {
+  rebuild: function () {
     APP.log("debug", "APP.rebuild");
 
     APP.SlideMenu.clear();
@@ -382,7 +381,7 @@ var APP = {
   /**
    * Kicks off the newly re-built application
    */
-  rebuildRestart: function() {
+  rebuildRestart: function () {
     APP.log("debug", "APP.rebuildRestart");
 
     APP.loadContent();
@@ -393,15 +392,15 @@ var APP = {
    * Global event handler to change screens
    * @param {String} [_id] The ID (index) of the tab being opened
    */
-  handleNavigation: function(_id) {
+  handleNavigation: function (_id) {
     APP.log("debug", "APP.handleNavigation | " + APP.Nodes[_id].type);
 
     // Requesting same screen as we're on
-    if(_id == APP.currentStack) {
+    if (_id == APP.currentStack) {
       // Do nothing
       return;
     } else {
-      if(APP.Settings.useSlideMenu) {
+      if (APP.Settings.useSlideMenu) {
         // Select the row for the requested item
         APP.SlideMenu.setIndex(_id);
       } else {
@@ -416,14 +415,14 @@ var APP = {
       APP.currentStack = _id;
 
       // Create new controller stack if it doesn't exist
-      if(typeof APP.controllerStacks[_id] === "undefined") {
+      if (typeof APP.controllerStacks[_id] === "undefined") {
         APP.controllerStacks[_id] = [];
       }
 
-      if(APP.Device.isTablet) {
+      if (APP.Device.isTablet) {
         APP.currentDetailStack = _id;
 
-        if(typeof APP.detailStacks[_id] === "undefined") {
+        if (typeof APP.detailStacks[_id] === "undefined") {
           APP.detailStacks[_id] = [];
         }
       }
@@ -438,12 +437,12 @@ var APP = {
       APP.hasDetail = false;
       APP.previousDetailScreen = null;
 
-      if(controllerStack.length > 0) {
+      if (controllerStack.length > 0) {
         // Retrieve the last screen
-        if(APP.Device.isTablet) {
+        if (APP.Device.isTablet) {
           screen = controllerStack[0];
 
-          if(screen.type == "tablet") {
+          if (screen.type == "tablet") {
             APP.hasDetail = true;
           }
         } else {
@@ -451,7 +450,7 @@ var APP = {
         }
 
         // Tell the parent screen it was added to the window
-        if(controllerStack[0].type == "tablet") {
+        if (controllerStack[0].type == "tablet") {
           controllerStack[0].fireEvent("APP:tabletScreenAdded");
         } else {
           controllerStack[0].fireEvent("APP:screenAdded");
@@ -462,22 +461,22 @@ var APP = {
         var tabletSupport = APP.Nodes[_id].tabletSupport;
 
         // TODO: Remove this. Find other way to determine if tablet version is available
-        if(APP.Device.isTablet) {
-          if(tabletSupport) {
+        if (APP.Device.isTablet) {
+          if (tabletSupport) {
             type = "tablet";
             APP.hasDetail = true;
           } else {
-            switch(type) {
-              case "article":
-              case "event":
-              case "facebook":
-              case "flickr":
-              case "explore":
-              case "myEvents":
-              case "activity":
-                type = "tablet";
-                APP.hasDetail = true;
-                break;
+            switch (type) {
+            case "article":
+            case "event":
+            case "facebook":
+            case "flickr":
+            case "explore":
+            case "myEvents":
+            case "activity":
+              type = "tablet";
+              APP.hasDetail = true;
+              break;
             }
           }
         }
@@ -488,7 +487,7 @@ var APP = {
         controllerStack.push(screen);
 
         // Tell the screen it was added to the window
-        if(screen.type == "tablet") {
+        if (screen.type == "tablet") {
           screen.fireEvent("APP:tabletScreenAdded");
         } else {
           screen.fireEvent("APP:screenAdded");
@@ -509,14 +508,14 @@ var APP = {
    * @param {Boolean} [_modal] Whether this is for the modal stack
    * @param {Boolean} [_sibling] Whether this is a sibling view
    */
-  addChild: function(_controller, _params, _modal, _sibling) {
+  addChild: function (_controller, _params, _modal, _sibling) {
     var stack;
 
     // Determine if stack is associated with a tab
-    if(_modal) {
+    if (_modal) {
       stack = APP.modalStack;
     } else {
-      if(APP.Device.isHandheld || !APP.hasDetail) {
+      if (APP.Device.isHandheld || !APP.hasDetail) {
         stack = APP.controllerStacks[APP.currentStack];
       } else {
         stack = APP.detailStacks[APP.currentDetailStack];
@@ -529,12 +528,12 @@ var APP = {
     // Add screen to the controller stack
     stack.push(screen);
 
-    if(_sibling) {
+    if (_sibling) {
       stack.splice(stack.length - 2, 1);
     }
 
     // Add the screen to the window
-    if(APP.Device.isHandheld || !APP.hasDetail || _modal) {
+    if (APP.Device.isHandheld || !APP.hasDetail || _modal) {
       APP.addScreen(screen);
     } else {
       APP.addDetailScreen(screen);
@@ -544,13 +543,13 @@ var APP = {
    * Removes a child screen
    * @param {Boolean} [_modal] Removes the child from the modal stack
    */
-  removeChild: function(_modal) {
+  removeChild: function (_modal) {
     var stack;
 
-    if(_modal) {
+    if (_modal) {
       stack = APP.modalStack;
     } else {
-      if(APP.Device.isTablet && APP.hasDetail) {
+      if (APP.Device.isTablet && APP.hasDetail) {
         stack = APP.detailStacks[APP.currentDetailStack];
       } else {
         stack = APP.controllerStacks[APP.currentStack];
@@ -563,17 +562,17 @@ var APP = {
 
     stack.pop();
 
-    if(stack.length === 0) {
+    if (stack.length === 0) {
       previousStack = APP.controllerStacks[APP.currentStack];
 
-      if(APP.Device.isHandheld || !APP.hasDetail) {
+      if (APP.Device.isHandheld || !APP.hasDetail) {
         previousScreen = previousStack[previousStack.length - 1];
 
         APP.addScreen(previousScreen);
       } else {
         previousScreen = previousStack[0];
 
-        if(_modal) {
+        if (_modal) {
           APP.addScreen(previousScreen);
         } else {
           APP.addDetailScreen(previousScreen);
@@ -582,10 +581,10 @@ var APP = {
     } else {
       previousScreen = stack[stack.length - 1];
 
-      if(APP.Device.isHandheld || !APP.hasDetail) {
+      if (APP.Device.isHandheld || !APP.hasDetail) {
         APP.addScreen(previousScreen);
       } else {
-        if(_modal) {
+        if (_modal) {
           APP.addScreen(previousScreen);
         } else {
           APP.addDetailScreen(previousScreen);
@@ -597,10 +596,10 @@ var APP = {
    * Removes all children screens
    * @param {Boolean} [_modal] Removes all children from the modal stack
    */
-  removeAllChildren: function(_modal) {
+  removeAllChildren: function (_modal) {
     var stack = _modal ? APP.modalStack : APP.controllerStacks[APP.currentStack];
 
-    for(var i = stack.length - 1; i > 0; i--) {
+    for (var i = stack.length - 1; i > 0; i--) {
       stack.pop();
     }
 
@@ -610,11 +609,11 @@ var APP = {
    * Global function to add a screen
    * @param {Object} [_screen] The screen to add
    */
-  addScreen: function(_screen) {
-    if(_screen) {
+  addScreen: function (_screen) {
+    if (_screen) {
       APP.ContentWrapper.add(_screen);
 
-      if(APP.previousScreen) {
+      if (APP.previousScreen) {
         APP.removeScreen(APP.previousScreen);
       }
 
@@ -625,8 +624,8 @@ var APP = {
    * Global function to remove a screen
    * @param {Object} [_screen] The screen to remove
    */
-  removeScreen: function(_screen) {
-    if(_screen) {
+  removeScreen: function (_screen) {
+    if (_screen) {
       APP.ContentWrapper.remove(_screen);
 
       APP.previousScreen = null;
@@ -638,10 +637,10 @@ var APP = {
    * @param {Object} [_params] An optional dictionary of parameters to pass to the controller
    * @param {Object} [_wrapper] The parent wrapper screen to fire events to
    */
-  addMasterScreen: function(_controller, _params, _wrapper) {
+  addMasterScreen: function (_controller, _params, _wrapper) {
     var screen = Alloy.createController(_controller, _params).getView();
 
-    _wrapper.addEventListener("APP:tabletScreenAdded", function(_event) {
+    _wrapper.addEventListener("APP:tabletScreenAdded", function (_event) {
       screen.fireEvent("APP:screenAdded");
     });
 
@@ -651,14 +650,14 @@ var APP = {
    * Adds a screen to the Detail window
    * @param {Object} [_screen] The screen to add
    */
-  addDetailScreen: function(_screen) {
-    if(_screen) {
+  addDetailScreen: function (_screen) {
+    if (_screen) {
       APP.Detail[APP.currentStack].add(_screen);
 
-      if(APP.previousDetailScreen && APP.previousDetailScreen != _screen) {
+      if (APP.previousDetailScreen && APP.previousDetailScreen != _screen) {
         var pop = true;
 
-        if(APP.detailStacks[APP.currentDetailStack][0].type == "PARENT" && _screen.type != "PARENT") {
+        if (APP.detailStacks[APP.currentDetailStack][0].type == "PARENT" && _screen.type != "PARENT") {
           pop = false;
         }
 
@@ -673,13 +672,13 @@ var APP = {
    * @param {Object} [_screen] The screen to remove
    * @param {Boolean} [_pop] Whether to pop the item off the controller stack
    */
-  removeDetailScreen: function(_screen, _pop) {
-    if(_screen) {
+  removeDetailScreen: function (_screen, _pop) {
+    if (_screen) {
       APP.Detail[APP.currentStack].remove(_screen);
 
       APP.previousDetailScreen = null;
 
-      if(_pop) {
+      if (_pop) {
         var stack = APP.detailStacks[APP.currentDetailStack];
 
         stack.splice(0, stack.length - 1);
@@ -689,7 +688,7 @@ var APP = {
   /**
    * Opens the Settings window
    */
-  openSettings: function() {
+  openSettings: function () {
     APP.log("debug", "APP.openSettings");
 
     APP.addChild("settings", {}, true);
@@ -697,7 +696,7 @@ var APP = {
   /**
    * Opens the Settings window
    */
-  openPhoto: function() {
+  openPhoto: function () {
     APP.log("debug", "APP.openPhoto");
 
     APP.addChild("actions", {}, false);
@@ -705,16 +704,16 @@ var APP = {
   /**
    * Closes all non-tab stacks
    */
-  closeSettings: function() {
-    if(APP.modalStack.length > 0) {
+  closeSettings: function () {
+    if (APP.modalStack.length > 0) {
       APP.removeChild(true);
     }
   },
   /**
    * Toggles the Slide Menu
    */
-  toggleMenu: function(_position) {
-    if(APP.SlideMenuOpen) {
+  toggleMenu: function (_position) {
+    if (APP.SlideMenuOpen) {
       APP.closeMenu();
     } else {
       APP.openMenu();
@@ -723,8 +722,8 @@ var APP = {
   /**
    * Toggles the Slide Menu Right
    */
-  toggleMenuRight: function(_position) {
-    if(APP.SlideMenuRightOpen) {
+  toggleMenuRight: function (_position) {
+    if (APP.SlideMenuRightOpen) {
       APP.closeMenuRight();
     } else {
       APP.openMenuRight();
@@ -733,7 +732,7 @@ var APP = {
   /**
    * Opens the Slide Menu
    */
-  openMenu: function() {
+  openMenu: function () {
     APP.SlideMenu.Wrapper.left = "0dp";
     APP.SlideMenu.Wrapper.zIndex = 3;
 
@@ -748,13 +747,13 @@ var APP = {
   /**
    * Closes the Slide Menu
    */
-  closeMenu: function() {
+  closeMenu: function () {
 
     APP.GlobalWrapper.animate({
       left: "0dp",
       duration: 250,
       curve: Ti.UI.ANIMATION_CURVE_EASE_IN_OUT
-    }, function() {
+    }, function () {
       APP.SlideMenu.Wrapper.zIndex = 0;
     });
 
@@ -763,7 +762,7 @@ var APP = {
   /**
    * Opens the Slide Menu Right
    */
-  openMenuRight: function() {
+  openMenuRight: function () {
     APP.SlideMenuRight.Wrapper.right = "0dp";
     APP.SlideMenuRight.Wrapper.zIndex = 3;
 
@@ -778,13 +777,13 @@ var APP = {
   /**
    * Closes the Slide Menu Right
    */
-  closeMenuRight: function() {
+  closeMenuRight: function () {
 
     APP.GlobalWrapper.animate({
       left: "0dp",
       duration: 250,
       curve: Ti.UI.ANIMATION_CURVE_EASE_IN_OUT
-    }, function() {
+    }, function () {
       APP.SlideMenuRight.Wrapper.zIndex = 0;
     });
 
@@ -793,11 +792,11 @@ var APP = {
   /**
    * Shows the loading screen
    */
-  openLoading: function() {
+  openLoading: function () {
     APP.cancelLoading = false;
 
-    setTimeout(function() {
-      if(!APP.cancelLoading) {
+    setTimeout(function () {
+      if (!APP.cancelLoading) {
         APP.loadingOpen = true;
 
         APP.GlobalWrapper.add(APP.Loading);
@@ -807,10 +806,10 @@ var APP = {
   /**
    * Closes the loading screen
    */
-  closeLoading: function() {
+  closeLoading: function () {
     APP.cancelLoading = true;
 
-    if(APP.loadingOpen) {
+    if (APP.loadingOpen) {
       APP.GlobalWrapper.remove(APP.Loading);
 
       APP.loadingOpen = false;
@@ -821,36 +820,36 @@ var APP = {
    * @param {String} _severity A severity type (debug, error, info, log, trace, warn)
    * @param {String} _text The text to log
    */
-  log: function(_severity, _text) {
-    switch(_severity.toLowerCase()) {
-      case "debug":
-        Ti.API.debug(_text);
-        break;
-      case "error":
-        Ti.API.error(_text);
-        break;
-      case "info":
-        Ti.API.info(_text);
-        break;
-      case "log":
-        Ti.API.log(_text);
-        break;
-      case "trace":
-        Ti.API.trace(_text);
-        break;
-      case "warn":
-        Ti.API.warn(_text);
-        break;
+  log: function (_severity, _text) {
+    switch (_severity.toLowerCase()) {
+    case "debug":
+      Ti.API.debug(_text);
+      break;
+    case "error":
+      Ti.API.error(_text);
+      break;
+    case "info":
+      Ti.API.info(_text);
+      break;
+    case "log":
+      Ti.API.log(_text);
+      break;
+    case "trace":
+      Ti.API.trace(_text);
+      break;
+    case "warn":
+      Ti.API.warn(_text);
+      break;
     }
   },
   /**
    * Global orientation event handler
    * @param {Object} _event Standard Titanium event callback
    */
-  orientationObserver: function(_event) {
+  orientationObserver: function (_event) {
     APP.log("debug", "APP.orientationObserver");
 
-    if(APP.Device.statusBarOrientation && APP.Device.statusBarOrientation == _event.orientation) {
+    if (APP.Device.statusBarOrientation && APP.Device.statusBarOrientation == _event.orientation) {
       return;
     }
 
@@ -864,7 +863,7 @@ var APP = {
    * Global network event handler
    * @param {Object} _event Standard Titanium event callback
    */
-  networkObserver: function(_event) {
+  networkObserver: function (_event) {
     APP.log("debug", "APP.networkObserver");
 
     APP.Network.type = _event.networkTypeName;
@@ -876,14 +875,14 @@ var APP = {
    * Exit event observer
    * @param {Object} _event Standard Titanium event callback
    */
-  exitObserver: function(_event) {
+  exitObserver: function (_event) {
     APP.log("debug", "APP.exitObserver");
   },
   /**
    * Resume event observer
    * @param {Object} _event Standard Titanium event callback
    */
-  resumeObserver: function(_event) {
+  resumeObserver: function (_event) {
     APP.log("debug", "APP.resumeObserver");
 
     APP.eventsOpen.fetchEvents();
@@ -892,23 +891,23 @@ var APP = {
    * Back button observer
    * @param {Object} _event Standard Titanium event callback
    */
-  backButtonObserver: function(_event) {
+  backButtonObserver: function (_event) {
     APP.log("debug", "APP.backButtonObserver");
 
-    if(APP.modalStack.length > 0) {
+    if (APP.modalStack.length > 0) {
       APP.removeChild(true);
 
       return;
     } else {
       var stack;
 
-      if(APP.Device.isHandheld || !APP.hasDetail) {
+      if (APP.Device.isHandheld || !APP.hasDetail) {
         stack = APP.controllerStacks[APP.currentStack];
       } else {
         stack = APP.detailStacks[APP.currentDetailStack];
       }
 
-      if(stack.length > 1) {
+      if (stack.length > 1) {
         APP.removeChild();
       } else {
         APP.MainWindow.close();

@@ -2,7 +2,7 @@ var APP = require('core');
 var CONFIG = arguments[0];
 var drupalServices = require('drupalServices');
 
-$.init = function() {
+$.init = function () {
   APP.log("debug", "activity.init | " + JSON.stringify(CONFIG));
 
   APP.openLoading();
@@ -11,11 +11,11 @@ $.init = function() {
 
   $.NavigationBar.setBackgroundColor(APP.Settings.colors.primary || "#000");
 
-  if(CONFIG.isChild === true) {
+  if (CONFIG.isChild === true) {
     $.NavigationBar.showBack();
   }
 
-  if(APP.Settings.useSlideMenu) {
+  if (APP.Settings.useSlideMenu) {
     $.NavigationBar.showMenu();
     $.NavigationBar.showCamera();
   } else {
@@ -23,26 +23,26 @@ $.init = function() {
   }
 };
 
-$.retrieveData = function() {
+$.retrieveData = function () {
   drupalServices.nodeList(
     'my_events',
     '',
-    function(data) {
+    function (data) {
       $.handleData(data);
       APP.closeLoading();
     },
-    function(data) {
+    function (data) {
       APP.closeLoading();
     }
   );
 };
 
-$.handleData = function(_data) {
+$.handleData = function (_data) {
   APP.log("debug", "event.handleData");
 
   var rows = [];
 
-  _data.forEach(function(event){
+  _data.forEach(function (event) {
     // Add to the main view, only closed events
     if (event.field_event_closed === "1") {
       var newsItem = Alloy.createController('eventRow', event).getView();
@@ -62,11 +62,11 @@ function myLoaderCallback(widgetCallback) {
   drupalServices.nodeList(
     'my_events',
     '',
-    function(data) {
+    function (data) {
       $.handleData(data);
       widgetCallback(true);
     },
-    function(data) {
+    function (data) {
       widgetCallback(true);
     }
   );
